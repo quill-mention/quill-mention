@@ -1,6 +1,7 @@
 <!doctype html>
 
 <html lang="en">
+
 <head>
   <meta charset="utf-8">
   <title>Quill Mention Demo</title>
@@ -20,15 +21,29 @@
   <script src="quill.mention.min.js"></script>
   <!-- Initialize Quill editor -->
   <script>
+    const values = [
+      { id: 1, username: 'Fredrik Sundqvist', status: 'Software Engineer', avatar: 'https://www.timeshighereducation.com/sites/default/files/byline_photos/default-avatar.png' },
+      { id: 2, username: 'Patrik Sjölin', status: 'Head of IT Development', avatar: 'https://www.timeshighereducation.com/sites/default/files/byline_photos/default-avatar.png' }
+    ];
     var quill = new Quill('#editor', {
       theme: 'snow',
       modules: {
         mention: {
-          defaultSuggestions: [{ username: 'Fredrik Sundqvist', status: 'Software Engineer', avatar: 'https://www.timeshighereducation.com/sites/default/files/byline_photos/default-avatar.png' }],
+          source: sourceCallback
         },
       }
     });
+
+    function sourceCallback(input) {
+      console.log(input);
+      if (input.length === 0) {
+        this.renderMenuList(values);
+      } else {
+        this.renderMenuList(null);
+      }
+    }
   </script>
- 
+
 </body>
+
 </html>

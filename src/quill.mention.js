@@ -4,6 +4,7 @@ import './blots/mention';
 
 class Mention {
   constructor(quill, options) {
+    console.log(options);
     this.isOpen = false;
     this.menuItemIndex = 0;
     this.atPos = null;
@@ -11,7 +12,7 @@ class Mention {
     this.values = [];
 
     this.quill = quill;
-    this.defaultSuggestions = options.defaultSuggestions;
+    this.source = options.source;
     this.maxLen = options.maxLen || 31;
 
     this.mentionContainer = document.createElement('div');
@@ -146,27 +147,6 @@ class Mention {
     }
   }
 
-  getUsersAndRenderMentionMenu(input) {
-    /* axios.get(url, {
-      cancelToken: new this.CancelToken((c) => {
-        this.cancel = c;
-      }),
-      params: {
-        username: input,
-      },
-    })
-      .then((response) => {
-        const users = [];
-        Object.keys(response.data).forEach((key) => {
-          const user = response.data[key];
-          users.push({ username: user.username, status: user.status, avatar: user.avatar });
-        });
-        this.renderMenuList(users);
-      })
-      .catch(); */
-    console.log(input);
-  }
-
   nextMenuItem() {
     this.menuItemIndex = (this.menuItemIndex + 1) % this.values.length;
     this.highlightMenuItem();
@@ -191,6 +171,7 @@ class Mention {
   onSomethingChange() {
     const range = this.quill.getSelection();
     const cursorPos = range.index;
+    console.log(cursorPos);
     const startPos = Math.max(0, cursorPos - this.maxLen);
     const beforeCursorPos = this.quill.getText(startPos, cursorPos - startPos);
     const atSignIndex = beforeCursorPos.lastIndexOf('@');
@@ -201,12 +182,7 @@ class Mention {
       const afterAtPos = atPos + 1;
       const textAfterAtPos = this.quill.getText(afterAtPos, cursorPos - afterAtPos);
       if (this.hasValidChars(textAfterAtPos)) {
-        console.log(textAfterAtPos);
-        if (textAfterAtPos.length === 0) {
-          this.renderMenuList(this.defaultSuggestions);
-        } else {
-          this.getUsersAndRenderMentionMenu(textAfterAtPos);
-        }
+        this.source(textAfterAtPos);
       } else {
         this.hideMentionMenu();
       }
