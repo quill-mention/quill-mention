@@ -11,11 +11,6 @@ yarn add quill-mention
 
 ## Quickstart
 ```javascript
-import Quill from 'quill';
-import Mention from 'quill-mention';
-
-Quill.register('modules/mention', Mention);
-
 const quill = new Quill(editor, {
     modules: {
         mention: {

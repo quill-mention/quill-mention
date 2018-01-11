@@ -1,5 +1,5 @@
 import './quill.mention.css';
-// import './blots/mention';
+import './blots/mention';
 
 
 class Mention {
@@ -11,7 +11,6 @@ class Mention {
     this.values = [];
 
     this.quill = quill;
-    this.jsonUrl = options.jsonUrl;
     this.defaultSuggestions = options.defaultSuggestions;
     this.maxLen = options.maxLen || 31;
 
@@ -86,7 +85,6 @@ class Mention {
   }
 
   hideMentionMenu() {
-    this.tryCancelToken();
     this.mentionContainer.style.display = 'none';
     this.isOpen = false;
   }
@@ -99,15 +97,18 @@ class Mention {
   }
 
   selectMenuItem() {
+    console.log('Select!');
     const range = this.quill.getSelection();
+    console.log(range);
     const { atPos } = this.atPos;
     const cursorPos = range.index;
+    console.log(cursorPos);
     const { username } = this.mentionList.childNodes[this.menuItemIndex].dataset.username;
     const text = `@${username}`;
-    this.quill.deleteText(atPos, cursorPos - atPos, this.quill.sources.API);
-    this.quill.insertEmbed(atPos, 'mention', text, this.quill.sources.API);
-    this.quill.insertText(atPos + 1, ' ', this.quill.sources.API);
-    this.quill.setSelection(atPos + 2, this.quill.sources.API);
+    this.quill.deleteText(atPos, cursorPos - atPos, Quill.sources.API);
+    this.quill.insertEmbed(atPos, 'mention', text, Quill.sources.API);
+    this.quill.insertText(atPos + 1, ' ', Quill.sources.API);
+    this.quill.setSelection(atPos + 2, Quill.sources.API);
     this.hideMentionMenu();
   }
 
@@ -146,8 +147,7 @@ class Mention {
   }
 
   getUsersAndRenderMentionMenu(input) {
-    const url = this.jsonUrl;
-    axios.get(url, {
+    /* axios.get(url, {
       cancelToken: new this.CancelToken((c) => {
         this.cancel = c;
       }),
@@ -163,7 +163,8 @@ class Mention {
         });
         this.renderMenuList(users);
       })
-      .catch();
+      .catch(); */
+    console.log(input);
   }
 
   nextMenuItem() {
@@ -200,9 +201,9 @@ class Mention {
       const afterAtPos = atPos + 1;
       const textAfterAtPos = this.quill.getText(afterAtPos, cursorPos - afterAtPos);
       if (this.hasValidChars(textAfterAtPos)) {
+        console.log(textAfterAtPos);
         if (textAfterAtPos.length === 0) {
           this.renderMenuList(this.defaultSuggestions);
-          this.tryCancelToken();
         } else {
           this.getUsersAndRenderMentionMenu(textAfterAtPos);
         }

@@ -10,10 +10,9 @@ module.exports = [
     output: {
       filename: 'quill.mention.min.js',
       path: path.resolve(__dirname, 'dist'),
-      publicPath: '/assets/',
     },
     devServer: {
-      contentBase: './dist',
+      contentBase: './src',
     },
     module: {
       rules: [
@@ -27,16 +26,6 @@ module.exports = [
               },
             }],
           }),
-        },
-        {
-          test: /\.js$/,
-          exclude: /(node_modules)/,
-          use: {
-            loader: 'babel-loader',
-            options: {
-              presets: ['@babel/preset-env'],
-            },
-          },
         },
       ],
     },

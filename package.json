@@ -33,8 +33,8 @@
     }
   },
   "scripts": {
-    "watch": "webpack --progress --watch",
-    "start": "webpack-dev-server --open",
+    "watch": "webpack --watch --progress",
+    "start": "webpack-dev-server --hot --open",
     "build": "webpack",
     "publish": "npm publish"
   },
