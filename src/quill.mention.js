@@ -4,10 +4,10 @@ import './blots/mention';
 
 class Mention {
   constructor(quill, options) {
-    console.log(options);
     this.isOpen = false;
     this.menuItemIndex = 0;
     this.atPos = null;
+    this.cursorPos = null;
     this.pattern = /^[a-zA-Z0-9_]*$/;
     this.values = [];
 
@@ -98,18 +98,11 @@ class Mention {
   }
 
   selectMenuItem() {
-    console.log('Select!');
-    const range = this.quill.getSelection();
-    console.log(range);
-    const { atPos } = this.atPos;
-    const cursorPos = range.index;
-    console.log(cursorPos);
-    const { username } = this.mentionList.childNodes[this.menuItemIndex].dataset.username;
-    const text = `@${username}`;
-    this.quill.deleteText(atPos, cursorPos - atPos, Quill.sources.API);
-    this.quill.insertEmbed(atPos, 'mention', text, Quill.sources.API);
-    this.quill.insertText(atPos + 1, ' ', Quill.sources.API);
-    this.quill.setSelection(atPos + 2, Quill.sources.API);
+    const text = this.mentionList.childNodes[this.menuItemIndex].dataset.username;
+    this.quill.deleteText(this.atPos, this.cursorPos - this.atPos, Quill.sources.API);
+    this.quill.insertEmbed(this.atPos, 'mention', text, Quill.sources.API);
+    this.quill.insertText(this.atPos + 1, ' ', Quill.sources.API);
+    this.quill.setSelection(this.atPos + 2, Quill.sources.API);
     this.hideMentionMenu();
   }
 
@@ -170,17 +163,16 @@ class Mention {
 
   onSomethingChange() {
     const range = this.quill.getSelection();
-    const cursorPos = range.index;
-    console.log(cursorPos);
-    const startPos = Math.max(0, cursorPos - this.maxLen);
-    const beforeCursorPos = this.quill.getText(startPos, cursorPos - startPos);
+    this.cursorPos = range.index;
+    const startPos = Math.max(0, this.cursorPos - this.maxLen);
+    const beforeCursorPos = this.quill.getText(startPos, this.cursorPos - startPos);
     const atSignIndex = beforeCursorPos.lastIndexOf('@');
     if (atSignIndex > -1) {
-      const atPos = cursorPos - (beforeCursorPos.length - atSignIndex);
+      const atPos = this.cursorPos - (beforeCursorPos.length - atSignIndex);
       this.atPos = atPos;
       this.setMentionMenuPosition(atPos);
       const afterAtPos = atPos + 1;
-      const textAfterAtPos = this.quill.getText(afterAtPos, cursorPos - afterAtPos);
+      const textAfterAtPos = this.quill.getText(afterAtPos, this.cursorPos - afterAtPos);
       if (this.hasValidChars(textAfterAtPos)) {
         this.source(textAfterAtPos);
       } else {
