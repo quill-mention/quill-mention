@@ -168,6 +168,7 @@ class Mention {
 
   onSomethingChange() {
     const range = this.quill.getSelection();
+    if (range == null) return;
     this.cursorPos = range.index;
     const startPos = Math.max(0, this.cursorPos - this.maxLen);
     const beforeCursorPos = this.quill.getText(startPos, this.cursorPos - startPos);
@@ -189,12 +190,14 @@ class Mention {
   }
 
   onTextChange(delta, oldDelta, source) {
+    console.log('onText!');
     if (source === 'user') {
       this.onSomethingChange();
     }
   }
 
   onSelectionChange(range) {
+    console.log('onSelection!');
     if (range && range.length === 0) {
       this.onSomethingChange();
     } else {
