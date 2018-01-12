@@ -22,25 +22,30 @@
   <!-- Initialize Quill editor -->
   <script>
     const values = [
-      { id: 1, username: 'Fredrik Sundqvist', status: 'Software Engineer', avatar: 'https://www.timeshighereducation.com/sites/default/files/byline_photos/default-avatar.png' },
-      { id: 2, username: 'Patrik Sjölin', status: 'Head of IT Development', avatar: 'https://www.timeshighereducation.com/sites/default/files/byline_photos/default-avatar.png' }
+      { id: 1, value: 'Fredrik Sundqvist', title: 'Software Engineer', profilePictureUrl: 'https://www.timeshighereducation.com/sites/default/files/byline_photos/default-avatar.png' },
+      { id: 2, value: 'Patrik Sjölin', title: 'Head of IT Development', profilePictureUrl: 'https://www.timeshighereducation.com/sites/default/files/byline_photos/default-avatar.png' }
     ];
     var quill = new Quill('#editor', {
       theme: 'snow',
       modules: {
         mention: {
-          source: sourceCallback
+          source: sourceCallback,
+          renderItem: renderItemCallback
         },
       }
     });
 
-    function sourceCallback(input) {
-      console.log(input);
-      if (input.length === 0) {
-        this.renderMenuList(values);
+    function sourceCallback(searchTerm) {
+      console.log(searchTerm);
+      if (searchTerm.length === 0) {
+        this.renderMenuList(values, searchTerm);
       } else {
-        this.renderMenuList(null);
+        this.renderMenuList(null, searchTerm);
       }
+    }
+
+    function renderItemCallback(data, searchTerm) {
+      return `<img src="${data.profilePictureUrl}">${data.value} <small>(${data.title})</small>`;
     }
   </script>
 

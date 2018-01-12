@@ -14,6 +14,7 @@ class Mention {
 
     this.quill = quill;
     this.source = options.source;
+    this.renderItem = options.renderItem;
     this.maxLen = options.maxLen || 31;
 
     this.mentionContainer = document.createElement('div');
@@ -98,11 +99,15 @@ class Mention {
     this.mentionList.childNodes[this.menuItemIndex].classList.add('selected');
   }
 
-  selectMenuItem() {
-    const data = {
+  getData() {
+    return {
       id: this.mentionList.childNodes[this.menuItemIndex].dataset.id,
-      value: this.mentionList.childNodes[this.menuItemIndex].dataset.value
+      value: this.mentionList.childNodes[this.menuItemIndex].dataset.value,
     };
+  }
+
+  selectMenuItem() {
+    const data = this.getData();
     this.quill.deleteText(this.atPos, this.cursorPos - this.atPos, Quill.sources.API);
     this.quill.insertEmbed(this.atPos, 'mention', data, Quill.sources.API);
     this.quill.insertText(this.atPos + 1, ' ', Quill.sources.API);
@@ -118,12 +123,7 @@ class Mention {
     this.selectMenuItem();
   }
 
-  // TODO: Fix item
-  renderItem(item) {
-    this.mentionList.appendChild(item);
-  }
-
-  renderMenuList(data) {
+  renderMenuList(data, searchTerm) {
     if (data && data.length > 0) {
       this.values = data;
       this.mentionList.innerHTML = '';
@@ -132,8 +132,8 @@ class Mention {
         li.className = 'ql-mention-list-item';
         li.dataset.index = i;
         li.dataset.id = data[i].id;
-        li.dataset.value = data[i].username;
-        li.innerHTML = `<img src="${data[i].avatar}">${data[i].username} <small>(${data[i].status})</small>`;
+        li.dataset.value = data[i].value;
+        li.innerHTML = this.renderItem(data[i], searchTerm);
         li.onclick = this.onMenuItemClick.bind(this);
         this.mentionList.appendChild(li);
       }
