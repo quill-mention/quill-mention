@@ -9,13 +9,13 @@ class Mention {
     this.itemIndex = 0;
     this.atPos = null;
     this.cursorPos = null;
-    this.pattern = /^[a-zA-Z0-9_]*$/;
     this.values = [];
 
     this.quill = quill;
     this.source = options.source;
     this.renderItem = options.renderItem;
-    this.maxLen = options.maxLen || 31;
+    this.maxLen = (options.maxLen || 30) + 1;
+    this.allowedChars = options.allowedChars || /^[a-zA-Z0-9_]*$/;
 
     this.mentionContainer = document.createElement('div');
     this.mentionContainer.className = 'ql-mention-list-container';
@@ -156,7 +156,7 @@ class Mention {
   }
 
   hasValidChars(s) {
-    return this.pattern.test(s);
+    return this.allowedChars.test(s);
   }
 
   setMentionListPosition(startIndex) {
