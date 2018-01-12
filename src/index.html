@@ -29,6 +29,7 @@
       theme: 'snow',
       modules: {
         mention: {
+          allowedChars: /^[A-Za-z\sÅÄÖåäö]+$/,
           source: function (searchTerm) {
             if (searchTerm.length === 0) {
               this.renderList(values, searchTerm);
