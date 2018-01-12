@@ -99,9 +99,12 @@ class Mention {
   }
 
   selectMenuItem() {
-    const text = this.mentionList.childNodes[this.menuItemIndex].dataset.username;
+    const data = {
+      id: this.mentionList.childNodes[this.menuItemIndex].dataset.id,
+      value: this.mentionList.childNodes[this.menuItemIndex].dataset.value
+    };
     this.quill.deleteText(this.atPos, this.cursorPos - this.atPos, Quill.sources.API);
-    this.quill.insertEmbed(this.atPos, 'mention', text, Quill.sources.API);
+    this.quill.insertEmbed(this.atPos, 'mention', data, Quill.sources.API);
     this.quill.insertText(this.atPos + 1, ' ', Quill.sources.API);
     this.quill.setSelection(this.atPos + 2, Quill.sources.API);
     this.hideMentionMenu();
@@ -128,7 +131,8 @@ class Mention {
         const li = document.createElement('li');
         li.className = 'ql-mention-list-item';
         li.dataset.index = i;
-        li.dataset.username = data[i].username;
+        li.dataset.id = data[i].id;
+        li.dataset.value = data[i].username;
         li.innerHTML = `<img src="${data[i].avatar}">${data[i].username} <small>(${data[i].status})</small>`;
         li.onclick = this.onMenuItemClick.bind(this);
         this.mentionList.appendChild(li);

@@ -2,10 +2,11 @@ const Embed = Quill.import('blots/embed');
 
 
 class MentionBlot extends Embed {
-  static create(value) {
+  static create(data) {
     const node = super.create();
-    node.innerHTML = value;
-    node.dataset.username = value.replace('@', '');
+    node.innerHTML = data.value;
+    node.dataset.id = data.id;
+    node.dataset.value = data.value;
     return node;
   }
 }
