@@ -6,7 +6,7 @@ import Keys from './constants/keys';
 class Mention {
   constructor(quill, options) {
     this.isOpen = false;
-    this.menuItemIndex = 0;
+    this.itemIndex = 0;
     this.atPos = null;
     this.cursorPos = null;
     this.pattern = /^[a-zA-Z0-9_]*$/;
@@ -52,7 +52,7 @@ class Mention {
 
   selectHandler() {
     if (this.isOpen) {
-      this.selectMenuItem();
+      this.selectItem();
       return false;
     }
     return true;
@@ -60,7 +60,7 @@ class Mention {
 
   escapeHandler() {
     if (this.isOpen) {
-      this.hideMentionMenu();
+      this.hideMentionList();
       return false;
     }
     return true;
@@ -68,7 +68,7 @@ class Mention {
 
   upHandler() {
     if (this.isOpen) {
-      this.prevMenuItem();
+      this.prevItem();
       return false;
     }
     return true;
@@ -76,54 +76,54 @@ class Mention {
 
   downHandler() {
     if (this.isOpen) {
-      this.nextMenuItem();
+      this.nextItem();
       return false;
     }
     return true;
   }
 
-  showMentionMenu() {
+  showMentionList() {
     this.mentionContainer.style.display = '';
     this.isOpen = true;
   }
 
-  hideMentionMenu() {
+  hideMentionList() {
     this.mentionContainer.style.display = 'none';
     this.isOpen = false;
   }
 
-  highlightMenuItem() {
+  highlightItem() {
     for (let i = 0; i < this.mentionList.childNodes.length; i += 1) {
       this.mentionList.childNodes[i].classList.remove('selected');
     }
-    this.mentionList.childNodes[this.menuItemIndex].classList.add('selected');
+    this.mentionList.childNodes[this.itemIndex].classList.add('selected');
   }
 
   getData() {
     return {
-      id: this.mentionList.childNodes[this.menuItemIndex].dataset.id,
-      value: this.mentionList.childNodes[this.menuItemIndex].dataset.value,
+      id: this.mentionList.childNodes[this.itemIndex].dataset.id,
+      value: this.mentionList.childNodes[this.itemIndex].dataset.value,
     };
   }
 
-  selectMenuItem() {
+  selectItem() {
     const data = this.getData();
     this.quill.deleteText(this.atPos, this.cursorPos - this.atPos, Quill.sources.API);
     this.quill.insertEmbed(this.atPos, 'mention', data, Quill.sources.API);
     this.quill.insertText(this.atPos + 1, ' ', Quill.sources.API);
     this.quill.setSelection(this.atPos + 2, Quill.sources.API);
-    this.hideMentionMenu();
+    this.hideMentionList();
   }
 
-  onMenuItemClick(e) {
+  onItemClick(e) {
     e.stopImmediatePropagation();
     e.preventDefault();
-    this.menuItemIndex = e.currentTarget.dataset.index;
-    this.highlightMenuItem();
-    this.selectMenuItem();
+    this.itemIndex = e.currentTarget.dataset.index;
+    this.highlightItem();
+    this.selectItem();
   }
 
-  renderMenuList(data, searchTerm) {
+  renderList(data, searchTerm) {
     if (data && data.length > 0) {
       this.values = data;
       this.mentionList.innerHTML = '';
@@ -134,32 +134,32 @@ class Mention {
         li.dataset.id = data[i].id;
         li.dataset.value = data[i].value;
         li.innerHTML = this.renderItem(data[i], searchTerm);
-        li.onclick = this.onMenuItemClick.bind(this);
+        li.onclick = this.onItemClick.bind(this);
         this.mentionList.appendChild(li);
       }
-      this.menuItemIndex = 0;
-      this.highlightMenuItem();
-      this.showMentionMenu();
+      this.itemIndex = 0;
+      this.highlightItem();
+      this.showMentionList();
     } else {
-      this.hideMentionMenu();
+      this.hideMentionList();
     }
   }
 
-  nextMenuItem() {
-    this.menuItemIndex = (this.menuItemIndex + 1) % this.values.length;
-    this.highlightMenuItem();
+  nextItem() {
+    this.itemIndex = (this.itemIndex + 1) % this.values.length;
+    this.highlightItem();
   }
 
-  prevMenuItem() {
-    this.menuItemIndex = ((this.menuItemIndex + this.values.length) - 1) % this.values.length;
-    this.highlightMenuItem();
+  prevItem() {
+    this.itemIndex = ((this.itemIndex + this.values.length) - 1) % this.values.length;
+    this.highlightItem();
   }
 
   hasValidChars(s) {
     return this.pattern.test(s);
   }
 
-  setMentionMenuPosition(startIndex) {
+  setMentionListPosition(startIndex) {
     const containerPos = this.quill.container.getBoundingClientRect();
     const indexPos = this.quill.getBounds(startIndex);
     this.mentionContainer.style.top = `${window.scrollY + containerPos.top + indexPos.bottom}px`;
@@ -175,16 +175,16 @@ class Mention {
     if (atSignIndex > -1) {
       const atPos = this.cursorPos - (beforeCursorPos.length - atSignIndex);
       this.atPos = atPos;
-      this.setMentionMenuPosition(atPos);
+      this.setMentionListPosition(atPos);
       const afterAtPos = atPos + 1;
       const textAfterAtPos = this.quill.getText(afterAtPos, this.cursorPos - afterAtPos);
       if (this.hasValidChars(textAfterAtPos)) {
         this.source(textAfterAtPos);
       } else {
-        this.hideMentionMenu();
+        this.hideMentionList();
       }
     } else {
-      this.hideMentionMenu();
+      this.hideMentionList();
     }
   }
 
@@ -198,7 +198,7 @@ class Mention {
     if (range && range.length === 0) {
       this.onSomethingChange();
     } else {
-      this.hideMentionMenu();
+      this.hideMentionList();
     }
   }
 }
