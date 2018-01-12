@@ -1,5 +1,6 @@
 import './quill.mention.css';
 import './blots/mention';
+import Keys from './constants/keys';
 
 
 class Mention {
@@ -26,25 +27,25 @@ class Mention {
     quill.on('selection-change', this.onSelectionChange.bind(this));
 
     quill.keyboard.addBinding({
-      key: 9,
+      key: Keys.TAB,
     }, this.selectHandler.bind(this));
     quill.keyboard.bindings[9].unshift(quill.keyboard.bindings[9].pop());
 
     quill.keyboard.addBinding({
-      key: 13,
+      key: Keys.ENTER,
     }, this.selectHandler.bind(this));
     quill.keyboard.bindings[13].unshift(quill.keyboard.bindings[13].pop());
 
     quill.keyboard.addBinding({
-      key: 27,
+      key: Keys.ESCAPE,
     }, this.escapeHandler.bind(this));
 
     quill.keyboard.addBinding({
-      key: 38,
+      key: Keys.UP,
     }, this.upHandler.bind(this));
 
     quill.keyboard.addBinding({
-      key: 40,
+      key: Keys.DOWN,
     }, this.downHandler.bind(this));
   }
 
