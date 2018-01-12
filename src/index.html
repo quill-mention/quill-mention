@@ -29,25 +29,22 @@
       theme: 'snow',
       modules: {
         mention: {
-          source: sourceCallback,
-          renderItem: renderItemCallback
+          source: function (searchTerm) {
+            if (searchTerm.length === 0) {
+              this.renderList(values, searchTerm);
+            } else {
+              const matches = [];
+              for (i = 0; i < values.length; i++)
+                if (~values[i].value.toLowerCase().indexOf(searchTerm)) matches.push(values[i]);
+              this.renderList(matches, searchTerm);
+            }
+          },
+          renderItem: function (data, searchTerm) {
+            return `<img src="${data.profilePictureUrl}">${data.value} <small>(${data.title})</small>`;
+          }
         },
       }
     });
-
-    function sourceCallback(searchTerm) {
-      console.log(searchTerm);
-      if (searchTerm.length === 0) {
-        this.renderList(values, searchTerm);
-      } else {
-        const matches = [];
-        this.renderList(matches, searchTerm);
-      }
-    }
-
-    function renderItemCallback(data, searchTerm) {
-      return `<img src="${data.profilePictureUrl}">${data.value} <small>(${data.title})</small>`;
-    }
   </script>
 
 </body>
