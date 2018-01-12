@@ -14,7 +14,8 @@ class Mention {
     this.quill = quill;
     this.source = options.source;
     this.renderItem = options.renderItem;
-    this.maxLen = (options.maxLen || 30) + 1;
+    this.minChars = (options.minChars) || 0;
+    this.maxChars = (options.maxChars || 30) + 1;
     this.allowedChars = options.allowedChars || /^[a-zA-Z0-9_]*$/;
 
     this.mentionContainer = document.createElement('div');
@@ -170,7 +171,7 @@ class Mention {
     const range = this.quill.getSelection();
     if (range == null) return;
     this.cursorPos = range.index;
-    const startPos = Math.max(0, this.cursorPos - this.maxLen);
+    const startPos = Math.max(0, this.cursorPos - this.maxChars);
     const beforeCursorPos = this.quill.getText(startPos, this.cursorPos - startPos);
     const atSignIndex = beforeCursorPos.lastIndexOf('@');
     if (atSignIndex > -1) {
@@ -179,7 +180,7 @@ class Mention {
       this.setMentionListPosition(atPos);
       const afterAtPos = atPos + 1;
       const textAfterAtPos = this.quill.getText(afterAtPos, this.cursorPos - afterAtPos);
-      if (this.hasValidChars(textAfterAtPos)) {
+      if (textAfterAtPos.length >= this.minChars && this.hasValidChars(textAfterAtPos)) {
         this.source(textAfterAtPos);
       } else {
         this.hideMentionList();
