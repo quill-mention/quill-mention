@@ -14,7 +14,7 @@ class Mention {
     this.quill = quill;
     this.source = options.source;
     this.renderItem = options.renderItem;
-    this.minChars = (options.minChars) || 0;
+    this.minChars = options.minChars || 0;
     this.maxChars = (options.maxChars || 30) + 1;
     this.allowedChars = options.allowedChars || /^[a-zA-Z0-9_]*$/;
 
