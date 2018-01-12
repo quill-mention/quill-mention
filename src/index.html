@@ -40,7 +40,8 @@
       if (searchTerm.length === 0) {
         this.renderList(values, searchTerm);
       } else {
-        this.renderList(null, searchTerm);
+        const matches = [];
+        this.renderList(matches, searchTerm);
       }
     }
 

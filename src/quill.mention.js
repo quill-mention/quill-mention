@@ -99,7 +99,7 @@ class Mention {
     this.mentionList.childNodes[this.itemIndex].classList.add('selected');
   }
 
-  getData() {
+  getItemData() {
     return {
       id: this.mentionList.childNodes[this.itemIndex].dataset.id,
       value: this.mentionList.childNodes[this.itemIndex].dataset.value,
@@ -107,7 +107,7 @@ class Mention {
   }
 
   selectItem() {
-    const data = this.getData();
+    const data = this.getItemData();
     this.quill.deleteText(this.atPos, this.cursorPos - this.atPos, Quill.sources.API);
     this.quill.insertEmbed(this.atPos, 'mention', data, Quill.sources.API);
     this.quill.insertText(this.atPos + 1, ' ', Quill.sources.API);
