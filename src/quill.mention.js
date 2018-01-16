@@ -178,8 +178,7 @@ class Mention {
       const atPos = this.cursorPos - (beforeCursorPos.length - atSignIndex);
       this.atPos = atPos;
       this.setMentionListPosition(atPos);
-      const afterAtPos = atPos + 1;
-      const textAfterAtPos = this.quill.getText(afterAtPos, this.cursorPos - afterAtPos);
+      const textAfterAtPos = beforeCursorPos.substring(atSignIndex + 1);
       if (textAfterAtPos.length >= this.minChars && this.hasValidChars(textAfterAtPos)) {
         this.source(textAfterAtPos);
       } else {
