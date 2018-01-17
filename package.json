@@ -1,6 +1,6 @@
 {
   "name": "quill-mention",
-  "version": "0.0.3",
+  "version": "0.1.0",
   "description": "@mentions for the Quill rich text editor",
   "main": "dist/main.js",
   "repository": "https://github.com/afconsult/quill-mention.git",
