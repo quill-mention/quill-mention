@@ -15,6 +15,8 @@
 
   <!-- Create the editor container -->
   <div id="editor"></div>
+  <p style="height: 400px;">The editor below will show the mentions list in a drop <em>up</em></p>
+  <div id="editor2"></div>
 
   <!-- Include the Quill library -->
   <script src="https://cdn.quilljs.com/1.3.4/quill.js"></script>
@@ -25,7 +27,8 @@
       { id: 1, value: 'Fredrik Sundqvist', title: 'Software Engineer', profilePictureUrl: 'https://www.timeshighereducation.com/sites/default/files/byline_photos/default-avatar.png' },
       { id: 2, value: 'Patrik Sjölin', title: 'Head of IT Development', profilePictureUrl: 'https://www.timeshighereducation.com/sites/default/files/byline_photos/default-avatar.png' }
     ];
-    var quill = new Quill('#editor', {
+
+    const options = {
       theme: 'snow',
       modules: {
         mention: {
@@ -45,7 +48,10 @@
           }
         },
       }
-    });
+    }
+
+    const quill = new Quill('#editor', options);
+    const quill2 = new Quill('#editor2', options);
   </script>
 
 </body>

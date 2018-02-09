@@ -18,12 +18,15 @@ class Mention {
     this.maxChars = (options.maxChars || 30) + 1;
     this.allowedChars = options.allowedChars || /^[a-zA-Z0-9_]*$/;
 
+    this.mentionList = document.createElement('ul');
+    this.mentionList.className = 'ql-mention-list';
+
     this.mentionContainer = document.createElement('div');
     this.mentionContainer.className = 'ql-mention-list-container';
     this.mentionContainer.style.cssText = 'display: none; position: absolute;';
-    this.mentionContainer.innerHTML = '<ul id="ql-mention-list" class="ql-mention-list"></ul>';
-    document.body.appendChild(this.mentionContainer);
-    this.mentionList = document.getElementById('ql-mention-list');
+    this.mentionContainer.appendChild(this.mentionList)
+
+    this.quill.container.appendChild(this.mentionContainer)
 
     quill.on('text-change', this.onTextChange.bind(this));
     quill.on('selection-change', this.onSelectionChange.bind(this));
@@ -160,11 +163,28 @@ class Mention {
     return this.allowedChars.test(s);
   }
 
-  setMentionListPosition(startIndex) {
+  setMentionListPosition(atSignIndex) {
     const containerPos = this.quill.container.getBoundingClientRect();
-    const indexPos = this.quill.getBounds(startIndex);
-    this.mentionContainer.style.top = `${window.scrollY + containerPos.top + indexPos.bottom}px`;
-    this.mentionContainer.style.left = `${window.scrollX + containerPos.left + indexPos.left}px`;
+    const atSignBounds = this.quill.getBounds(atSignIndex);
+
+    if ((atSignBounds.left + 230) > this.quill.container.offsetWidth) {
+      this.mentionContainer.style.left = "auto";
+      this.mentionContainer.style.right = 0;
+    } else {
+      this.mentionContainer.style.left = atSignBounds.left + "px";
+    }
+
+    let windowHeight = window.innerHeight;
+    let editorPos = this.quill.container.getBoundingClientRect().top;
+
+    if (editorPos > windowHeight / 2) {
+      this.mentionContainer.style.top = "auto";
+      this.mentionContainer.style.bottom = atSignBounds.top + atSignBounds.height + 15 + "px";
+    } else {
+      this.mentionContainer.style.top = atSignBounds.top + atSignBounds.height + 15 + "px";
+      this.mentionContainer.style.bottom = "auto";
+    }
+    this.mentionContainer.style.zIndex = 99;
   }
 
   onSomethingChange() {
