@@ -164,25 +164,25 @@ class Mention {
   }
 
   setMentionListPosition(atSignIndex) {
-    const containerPos = this.quill.container.getBoundingClientRect();
     const atSignBounds = this.quill.getBounds(atSignIndex);
 
     if ((atSignBounds.left + 230) > this.quill.container.offsetWidth) {
-      this.mentionContainer.style.left = "auto";
+      this.mentionContainer.style.left = 'auto';
       this.mentionContainer.style.right = 0;
     } else {
-      this.mentionContainer.style.left = atSignBounds.left + "px";
+      this.mentionContainer.style.left = atSignBounds.left + 'px';
+      this.mentionContainer.style.right = 'auto';
     }
 
-    let windowHeight = window.innerHeight;
-    let editorPos = this.quill.container.getBoundingClientRect().top;
+    const windowHeight = window.innerHeight;
+    const editorPos = this.quill.container.getBoundingClientRect().top;
 
     if (editorPos > windowHeight / 2) {
-      this.mentionContainer.style.top = "auto";
-      this.mentionContainer.style.bottom = atSignBounds.top + atSignBounds.height + 15 + "px";
+      this.mentionContainer.style.top = 'auto';
+      this.mentionContainer.style.bottom = atSignBounds.top + atSignBounds.height + 15 + 'px';
     } else {
-      this.mentionContainer.style.top = atSignBounds.top + atSignBounds.height + 15 + "px";
-      this.mentionContainer.style.bottom = "auto";
+      this.mentionContainer.style.top = atSignBounds.top + atSignBounds.height + 15 + 'px';
+      this.mentionContainer.style.bottom = 'auto';
     }
     this.mentionContainer.style.zIndex = 99;
   }
