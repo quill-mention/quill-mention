@@ -22,9 +22,12 @@ class Mention {
     this.mentionContainer = document.createElement('div');
     this.mentionContainer.className = 'ql-mention-list-container';
     this.mentionContainer.style.cssText = 'display: none; position: absolute;';
-    this.mentionContainer.innerHTML = '<ul id="ql-mention-list" class="ql-mention-list"></ul>';
+
+    this.mentionList = document.createElement('ul');
+    this.mentionList.className = 'ql-mention-list';
+    this.mentionContainer.appendChild(this.mentionList);
+
     document.body.appendChild(this.mentionContainer);
-    this.mentionList = document.getElementById('ql-mention-list');
 
     quill.on('text-change', this.onTextChange.bind(this));
     quill.on('selection-change', this.onSelectionChange.bind(this));
