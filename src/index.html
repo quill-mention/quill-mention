@@ -15,6 +15,7 @@
 
   <!-- Create the editor container -->
   <div id="editor"></div>
+  <div id="editor2"></div>
 
   <!-- Include the Quill library -->
   <script src="https://cdn.quilljs.com/1.3.4/quill.js"></script>
@@ -46,6 +47,27 @@
         },
       }
     });
+    var quill2 = new Quill('#editor2', {
+        theme: 'snow',
+        modules: {
+          mention: {
+            allowedChars: /^[A-Za-z\sÅÄÖåäö]*$/,
+            source: function (searchTerm) {
+              if (searchTerm.length === 0) {
+                this.renderList(values, searchTerm);
+              } else {
+                const matches = [];
+                for (i = 0; i < values.length; i++)
+                  if (~values[i].value.toLowerCase().indexOf(searchTerm)) matches.push(values[i]);
+                this.renderList(matches, searchTerm);
+              }
+            },
+            renderItem: function (data, searchTerm) {
+              return `<img src="${data.profilePictureUrl}">${data.value} <small>(${data.title})</small>`;
+            }
+          },
+        }
+      });
   </script>
 
 </body>
