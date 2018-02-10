@@ -88,8 +88,8 @@ class Mention {
   }
 
   showMentionList() {
-    this.mentionContainer.style.display = '';
     this.mentionContainer.style.visibility = 'hidden';
+    this.mentionContainer.style.display = '';
     this.setMentionContainerPosition();
     this.isOpen = true;
   }
