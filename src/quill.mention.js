@@ -1,6 +1,7 @@
 import './quill.mention.css';
 import './blots/mention';
 import Keys from './constants/keys';
+import Utilities from './helpers/utilities';
 
 
 class Mention {
@@ -85,6 +86,8 @@ class Mention {
 
   showMentionList() {
     this.mentionContainer.style.display = '';
+    this.mentionContainer.style.visibility = 'hidden';
+    this.setMentionListPosition();
     this.isOpen = true;
   }
 
@@ -160,11 +163,20 @@ class Mention {
     return this.allowedChars.test(s);
   }
 
-  setMentionListPosition(startIndex) {
+  setMentionListPosition() {
     const containerPos = this.quill.container.getBoundingClientRect();
-    const indexPos = this.quill.getBounds(startIndex);
-    this.mentionContainer.style.top = `${window.scrollY + containerPos.top + indexPos.bottom}px`;
-    this.mentionContainer.style.left = `${window.scrollX + containerPos.left + indexPos.left}px`;
+    const atPos = this.quill.getBounds(this.atPos);
+    let topPos = window.scrollY + containerPos.top + atPos.bottom;
+    let leftPos = window.scrollX + containerPos.left + atPos.left;
+    if (topPos + this.mentionContainer.offsetHeight > Utilities.getHeight()) {
+      topPos = (window.scrollY + containerPos.top + atPos.top) - this.mentionContainer.offsetHeight;
+    }
+    if (leftPos + this.mentionContainer.offsetWidth > Utilities.getWidth()) {
+      leftPos = Utilities.getWidth() - this.mentionContainer.offsetWidth;
+    }
+    this.mentionContainer.style.top = `${topPos}px`;
+    this.mentionContainer.style.left = `${leftPos}px`;
+    this.mentionContainer.style.visibility = 'visible';
   }
 
   onSomethingChange() {
@@ -177,7 +189,6 @@ class Mention {
     if (atSignIndex > -1) {
       const atPos = this.cursorPos - (beforeCursorPos.length - atSignIndex);
       this.atPos = atPos;
-      this.setMentionListPosition(atPos);
       const textAfterAtPos = beforeCursorPos.substring(atSignIndex + 1);
       if (textAfterAtPos.length >= this.minChars && this.hasValidChars(textAfterAtPos)) {
         this.source(textAfterAtPos);
