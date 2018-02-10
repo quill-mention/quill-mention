@@ -90,7 +90,7 @@ class Mention {
   showMentionList() {
     this.mentionContainer.style.display = '';
     this.mentionContainer.style.visibility = 'hidden';
-    this.setMentionListPosition();
+    this.setMentionContainerPosition();
     this.isOpen = true;
   }
 
@@ -166,16 +166,16 @@ class Mention {
     return this.allowedChars.test(s);
   }
 
-  setMentionListPosition() {
+  setMentionContainerPosition() {
     const containerPos = this.quill.container.getBoundingClientRect();
     const atPos = this.quill.getBounds(this.atPos);
     let topPos = window.scrollY + containerPos.top + atPos.bottom;
     let leftPos = window.scrollX + containerPos.left + atPos.left;
-    if (topPos + this.mentionContainer.offsetHeight > Utilities.getHeight()) {
+    if (topPos + this.mentionContainer.offsetHeight > Utilities.getWindowHeight()) {
       topPos = (window.scrollY + containerPos.top + atPos.top) - this.mentionContainer.offsetHeight;
     }
-    if (leftPos + this.mentionContainer.offsetWidth > Utilities.getWidth()) {
-      leftPos = Utilities.getWidth() - this.mentionContainer.offsetWidth;
+    if (leftPos + this.mentionContainer.offsetWidth > Utilities.getWindowWidth()) {
+      leftPos = Utilities.getWindowWidth() - this.mentionContainer.offsetWidth;
     }
     this.mentionContainer.style.top = `${topPos}px`;
     this.mentionContainer.style.left = `${leftPos}px`;

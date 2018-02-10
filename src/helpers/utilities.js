@@ -1,5 +1,5 @@
 export default class Utilities {
-  static getWidth() {
+  static getWindowWidth() {
     return Math.max(
       document.body.scrollWidth,
       document.documentElement.scrollWidth,
@@ -9,7 +9,7 @@ export default class Utilities {
     );
   }
 
-  static getHeight() {
+  static getWindowHeight() {
     return Math.max(
       document.body.scrollHeight,
       document.documentElement.scrollHeight,
