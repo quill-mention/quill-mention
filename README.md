@@ -25,12 +25,12 @@ const quill = new Quill(editor, {
 });
 ```
 
-### Available settings
-| Setting        | Default        | Description  |
+### Settings
+| Property       | Default        | Description  |
 | -------------- | -------------- | ------------ |
-| `allowedChars` | `[a-zA-Z0-9_]` |              |
-| `minValue`     | `0`            |              |
-| `maxValue`     | `31`           |              |
+| `minChars`     | `0`            | Minimum number of characters after @-sign triggering a search request |
+| `maxChars`     | `31`           | Maximum number of characters after @-sign triggering a search request |
+| `allowedChars` | `[a-zA-Z0-9_]` | Allowed characters in search term triggering a search request using regular expressions |
 
 
 ## Authors
