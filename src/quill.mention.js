@@ -173,8 +173,8 @@ class Mention {
     if (topPos + this.mentionContainer.offsetHeight > window.scrollY + window.innerHeight) {
       topPos = (window.scrollY + containerPos.top + atPos.top) - this.mentionContainer.offsetHeight;
     }
-    if (leftPos + this.mentionContainer.offsetWidth > window.scrollX + window.innerWidth) {
-      leftPos = window.innerWidth - this.mentionContainer.offsetWidth;
+    if (leftPos + this.mentionContainer.offsetWidth > window.scrollX + document.documentElement.clientWidth) {
+      leftPos = (window.scrollX + document.documentElement.clientWidth) - this.mentionContainer.offsetWidth;
     }
     this.mentionContainer.style.top = `${topPos}px`;
     this.mentionContainer.style.left = `${leftPos}px`;
