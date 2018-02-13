@@ -170,10 +170,10 @@ class Mention {
     const atPos = this.quill.getBounds(this.atPos);
     let topPos = window.scrollY + containerPos.top + atPos.bottom;
     let leftPos = window.scrollX + containerPos.left + atPos.left;
-    if (topPos + this.mentionContainer.offsetHeight > window.innerHeight) {
+    if (topPos + this.mentionContainer.offsetHeight > window.scrollY + window.innerHeight) {
       topPos = (window.scrollY + containerPos.top + atPos.top) - this.mentionContainer.offsetHeight;
     }
-    if (leftPos + this.mentionContainer.offsetWidth > window.innerWidth) {
+    if (leftPos + this.mentionContainer.offsetWidth > window.scrollX + window.innerWidth) {
       leftPos = window.innerWidth - this.mentionContainer.offsetWidth;
     }
     this.mentionContainer.style.top = `${topPos}px`;
