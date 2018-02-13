@@ -26,11 +26,12 @@ const quill = new Quill(editor, {
 ```
 
 ### Settings
-| Property       | Default        | Description  |
-| -------------- | -------------- | ------------ |
-| `minChars`     | `0`            | Minimum number of characters after @-sign triggering a search request |
-| `maxChars`     | `31`           | Maximum number of characters after @-sign triggering a search request |
-| `allowedChars` | `[a-zA-Z0-9_]` | Allowed characters in search term triggering a search request using regular expressions |
+| Property             | Default        | Description  |
+| -------------------- | -------------- | ------------ |
+| `source(searchTerm)` | `null`         | Required callback |
+| `allowedChars`       | `[a-zA-Z0-9_]` | Allowed characters in search term triggering a search request using regular expressions |
+| `minChars`           | `0`            | Minimum number of characters after the @ symbol triggering a search request |
+| `maxChars`           | `31`           | Maximum number of characters after the @ symbol triggering a search request |
 
 
 ## Authors
