@@ -1,7 +1,6 @@
 import './quill.mention.css';
 import './blots/mention';
 import Keys from './constants/keys';
-import Utilities from './helpers/utilities';
 
 
 class Mention {
@@ -88,8 +87,8 @@ class Mention {
   }
 
   showMentionList() {
-    this.mentionContainer.style.display = '';
     this.mentionContainer.style.visibility = 'hidden';
+    this.mentionContainer.style.display = '';
     this.setMentionContainerPosition();
     this.isOpen = true;
   }
@@ -171,11 +170,11 @@ class Mention {
     const atPos = this.quill.getBounds(this.atPos);
     let topPos = window.scrollY + containerPos.top + atPos.bottom;
     let leftPos = window.scrollX + containerPos.left + atPos.left;
-    if (topPos + this.mentionContainer.offsetHeight > Utilities.getWindowHeight()) {
+    if (topPos + this.mentionContainer.offsetHeight > window.innerHeight) {
       topPos = (window.scrollY + containerPos.top + atPos.top) - this.mentionContainer.offsetHeight;
     }
-    if (leftPos + this.mentionContainer.offsetWidth > Utilities.getWindowWidth()) {
-      leftPos = Utilities.getWindowWidth() - this.mentionContainer.offsetWidth;
+    if (leftPos + this.mentionContainer.offsetWidth > window.innerWidth) {
+      leftPos = window.innerWidth - this.mentionContainer.offsetWidth;
     }
     this.mentionContainer.style.top = `${topPos}px`;
     this.mentionContainer.style.left = `${leftPos}px`;

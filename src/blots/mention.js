@@ -1,5 +1,6 @@
 const Embed = Quill.import('blots/embed');
 
+
 class MentionBlot extends Embed {
   static create(data) {
     const node = super.create();
