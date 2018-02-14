@@ -20,9 +20,9 @@ yarn add quill-mention
 ### Example
 ```javascript
 const values = [
-      { id: 1, value: 'Fredrik Sundqvist', title: 'Software Engineer', profilePictureUrl: 'https://www.gravatar.com/avatar/0?d=mm&f=y' },
-      { id: 2, value: 'Patrik Sjölin', title: 'Head of IT Development', profilePictureUrl: 'https://www.gravatar.com/avatar/0?d=mm&f=y' }
-    ];
+    { id: 1, value: 'Fredrik Sundqvist', title: 'Software Engineer', profilePictureUrl: 'https://www.gravatar.com/avatar/0?d=mm&f=y' },
+    { id: 2, value: 'Patrik Sjölin', title: 'Head of IT Development', profilePictureUrl: 'https://www.gravatar.com/avatar/0?d=mm&f=y' }
+];
 const quill = new Quill(editor, {
     modules: {
         mention: {
