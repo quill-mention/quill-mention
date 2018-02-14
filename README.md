@@ -3,6 +3,9 @@
 
 Quill Mention is a module to provide @mentions functionality for the [Quill](https://quilljs.com/) rich text editor.
 
+## Demo
+https://afconsult.github.io/quill-mention/
+
 ## Getting Started
 ### Install
 Install with npm:
@@ -14,7 +17,7 @@ Install with [Yarn](https://yarnpkg.com/en/):
 yarn add quill-mention
 ```
 
-### Quickstart
+### Example
 ```javascript
 const quill = new Quill(editor, {
     modules: {
@@ -28,7 +31,8 @@ const quill = new Quill(editor, {
 ### Settings
 | Property             | Default        | Description  |
 | -------------------- | -------------- | ------------ |
-| `source(searchTerm)` | `null`         | Required callback |
+| `source(searchTerm)` | `null`         | Required callback function to handle the search term and connect it to a data source for matches. The data source can be a local source or an ajax request. The callback should call `this.renderList(matches, searchTerm);` with matches of JSON Objects in an array to show the result for the user. The JSON Objects should have `id` and `value` but can also have other values to be used in `renderItem` for custom display.  |
+| `renderItem(data, searchTerm)` | `null` | Required
 | `allowedChars`       | `[a-zA-Z0-9_]` | Allowed characters in search term triggering a search request using regular expressions |
 | `minChars`           | `0`            | Minimum number of characters after the @ symbol triggering a search request |
 | `maxChars`           | `31`           | Maximum number of characters after the @ symbol triggering a search request |
