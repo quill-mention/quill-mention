@@ -37,7 +37,7 @@
             } else {
               const matches = [];
               for (i = 0; i < values.length; i++)
-                if (~values[i].value.toLowerCase().indexOf(searchTerm)) matches.push(values[i]);
+                if (~values[i].value.toLowerCase().indexOf(searchTerm.toLowerCase())) matches.push(values[i]);
               this.renderList(matches, searchTerm);
             }
           },
@@ -55,7 +55,7 @@
               } else {
                 const matches = [];
                 for (i = 0; i < values.length; i++)
-                  if (~values[i].value.toLowerCase().indexOf(searchTerm)) matches.push(values[i]);
+                  if (~values[i].value.toLowerCase().indexOf(searchTerm.toLowerCase())) matches.push(values[i]);
                 this.renderList(matches, searchTerm);
               }
             },
