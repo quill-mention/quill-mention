@@ -31,8 +31,8 @@ const quill = new Quill(editor, {
 ### Settings
 | Property             | Default        | Description  |
 | -------------------- | -------------- | ------------ |
-| `source(searchTerm)` | `null`         | Required callback function to handle the search term and connect it to a data source for matches. The data source can be a local source or an ajax request. The callback should call `this.renderList(matches, searchTerm);` with matches of JSON Objects in an array to show the result for the user. The JSON Objects should have `id` and `value` but can also have other values to be used in `renderItem` for custom display.  |
-| `renderItem(data, searchTerm)` | `null` | Required
+| `source(searchTerm)` | `null`         | Required callback function to handle the search term and connect it to a data source for matches. The data source can be a local source or an ajax request. The callback should call `this.renderList(matches, searchTerm);` with matches of JSON Objects in an array to show the result for the user. The JSON Objects should have `id` and `value` but can also have other values to be used in `renderItem` for custom display. |
+| `renderItem(data, searchTerm)` | `null` | Required callback function to render each of the matches from the source to the user. The callback gets two arguments: <ul><li>`data` with an individual JSON Object from the array of matches (`this.renderList(matches, searchTerm);`)</li><li>`searchTerm` that can be used to bold or underline the matching words in the `data` JSON Object</li></ul> |
 | `allowedChars`       | `[a-zA-Z0-9_]` | Allowed characters in search term triggering a search request using regular expressions |
 | `minChars`           | `0`            | Minimum number of characters after the @ symbol triggering a search request |
 | `maxChars`           | `31`           | Maximum number of characters after the @ symbol triggering a search request |
