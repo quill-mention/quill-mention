@@ -12,11 +12,19 @@ class Mention {
     this.values = [];
 
     this.quill = quill;
-    this.source = options.source;
-    this.renderItem = options.renderItem;
-    this.minChars = options.minChars || 0;
-    this.maxChars = (options.maxChars || 30) + 1;
-    this.allowedChars = options.allowedChars || /^[a-zA-Z0-9_]*$/;
+
+    this.options = {
+      source: null,
+      renderItem(item) {
+        return `${item.value}`;
+      },
+      allowedChars: /^[a-zA-Z0-9_]*$/,
+      minChars: 0,
+      maxChars: 31,
+      renderList: this.renderList.bind(this),
+    };
+
+    Object.assign(this.options, options);
 
     this.mentionContainer = document.createElement('div');
     this.mentionContainer.className = 'ql-mention-list-container';
@@ -139,7 +147,7 @@ class Mention {
         li.dataset.index = i;
         li.dataset.id = data[i].id;
         li.dataset.value = data[i].value;
-        li.innerHTML = this.renderItem(data[i], searchTerm);
+        li.innerHTML = this.options.renderItem(data[i], searchTerm);
         li.onclick = this.onItemClick.bind(this);
         this.mentionList.appendChild(li);
       }
@@ -162,7 +170,7 @@ class Mention {
   }
 
   hasValidChars(s) {
-    return this.allowedChars.test(s);
+    return this.options.allowedChars.test(s);
   }
 
   setMentionContainerPosition() {
@@ -185,15 +193,15 @@ class Mention {
     const range = this.quill.getSelection();
     if (range == null) return;
     this.cursorPos = range.index;
-    const startPos = Math.max(0, this.cursorPos - this.maxChars);
+    const startPos = Math.max(0, this.cursorPos - this.options.maxChars);
     const beforeCursorPos = this.quill.getText(startPos, this.cursorPos - startPos);
     const atSignIndex = beforeCursorPos.lastIndexOf('@');
     if (atSignIndex > -1) {
       const atPos = this.cursorPos - (beforeCursorPos.length - atSignIndex);
       this.atPos = atPos;
       const textAfterAtPos = beforeCursorPos.substring(atSignIndex + 1);
-      if (textAfterAtPos.length >= this.minChars && this.hasValidChars(textAfterAtPos)) {
-        this.source(textAfterAtPos);
+      if (textAfterAtPos.length >= this.options.minChars && this.hasValidChars(textAfterAtPos)) {
+        this.options.source(textAfterAtPos, this.renderList);
       } else {
         this.hideMentionList();
       }

@@ -20,8 +20,8 @@ yarn add quill-mention
 ### Example
 ```javascript
 const values = [
-    { id: 1, value: 'Fredrik Sundqvist', title: 'Software Engineer', profilePictureUrl: 'https://www.gravatar.com/avatar/0?d=mm&f=y' },
-    { id: 2, value: 'Patrik Sjölin', title: 'Head of IT Development', profilePictureUrl: 'https://www.gravatar.com/avatar/0?d=mm&f=y' }
+    { id: 1, value: 'Fredrik Sundqvist' },
+    { id: 2, value: 'Patrik Sjölin' }
 ];
 const quill = new Quill(editor, {
     modules: {
@@ -37,9 +37,6 @@ const quill = new Quill(editor, {
               this.renderList(matches, searchTerm);
             }
           },
-          renderItem: function (data, searchTerm) {
-            return `<img src="${data.profilePictureUrl}">${data.value} <small>(${data.title})</small>`;
-          }
         },
     }
 });
@@ -48,8 +45,8 @@ const quill = new Quill(editor, {
 ### Settings
 | Property             | Default        | Description  |
 | -------------------- | -------------- | ------------ |
-| `source(searchTerm)` | `null`         | Required callback function to handle the search term and connect it to a data source for matches. The data source can be a local source or an ajax request. The callback should call `this.renderList(matches, searchTerm);` with matches of JSON Objects in an array to show the result for the user. The JSON Objects should have `id` and `value` but can also have other values to be used in `renderItem` for custom display. |
-| `renderItem(data, searchTerm)` | `null` | Required callback function to render each of the matches from the source to the user. The callback gets two arguments: <ul><li>`data` with an individual JSON Object from the array of matches (`this.renderList(matches, searchTerm);`)</li><li>`searchTerm` that can be used to bold or underline the matching words in the `data` JSON Object</li></ul> |
+| `source(searchTerm)` | `null`         | Required callback function to handle the search term and connect it to a data source for matches. The data source can be a local source or an AJAX request. The callback should call `this.renderList(matches, searchTerm);` with matches of JSON Objects in an array to show the result for the user. The JSON Objects should have `id` and `value` but can also have other values to be used in `renderItem` for custom display. |
+| `renderItem(item)` | `function` | A function that gives you control over how each matches from source are displayed. |
 | `allowedChars`       | `[a-zA-Z0-9_]` | Allowed characters in search term triggering a search request using regular expressions |
 | `minChars`           | `0`            | Minimum number of characters after the @ symbol triggering a search request |
 | `maxChars`           | `31`           | Maximum number of characters after the @ symbol triggering a search request |
