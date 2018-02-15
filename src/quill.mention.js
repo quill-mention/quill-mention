@@ -21,6 +21,8 @@ class Mention {
       allowedChars: /^[a-zA-Z0-9_]*$/,
       minChars: 0,
       maxChars: 31,
+      offsetTop: 2,
+      offsetLeft: 0,
       renderList: this.renderList.bind(this),
     };
 
@@ -176,13 +178,13 @@ class Mention {
   setMentionContainerPosition() {
     const containerPos = this.quill.container.getBoundingClientRect();
     const atPos = this.quill.getBounds(this.atPos);
-    let topPos = window.scrollY + containerPos.top + atPos.bottom;
-    let leftPos = window.scrollX + containerPos.left + atPos.left;
+    let topPos = window.scrollY + containerPos.top + atPos.bottom + this.options.offsetTop;
+    let leftPos = window.scrollX + containerPos.left + atPos.left + this.options.offsetLeft;
     if (topPos + this.mentionContainer.offsetHeight > window.scrollY + window.innerHeight) {
-      topPos = (window.scrollY + containerPos.top + atPos.top) - this.mentionContainer.offsetHeight;
+      topPos = (window.scrollY + containerPos.top + atPos.top) - (this.mentionContainer.offsetHeight + this.options.offsetTop);
     }
     if (leftPos + this.mentionContainer.offsetWidth > window.scrollX + document.documentElement.clientWidth) {
-      leftPos = (window.scrollX + document.documentElement.clientWidth) - this.mentionContainer.offsetWidth;
+      leftPos = (window.scrollX + document.documentElement.clientWidth) - (this.mentionContainer.offsetWidth + this.options.offsetLeft);
     }
     this.mentionContainer.style.top = `${topPos}px`;
     this.mentionContainer.style.left = `${leftPos}px`;

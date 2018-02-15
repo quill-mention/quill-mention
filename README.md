@@ -46,10 +46,12 @@ const quill = new Quill(editor, {
 | Property             | Default        | Description  |
 | -------------------- | -------------- | ------------ |
 | `source(searchTerm)` | `null`         | Required callback function to handle the search term and connect it to a data source for matches. The data source can be a local source or an AJAX request. The callback should call `this.renderList(matches, searchTerm);` with matches of JSON Objects in an array to show the result for the user. The JSON Objects should have `id` and `value` but can also have other values to be used in `renderItem` for custom display. |
-| `renderItem(item)` | `function` | A function that gives you control over how matches from source are displayed. |
+| `renderItem(item)`   | `function`     | A function that gives you control over how matches from source are displayed. |
 | `allowedChars`       | `[a-zA-Z0-9_]` | Allowed characters in search term triggering a search request using regular expressions |
 | `minChars`           | `0`            | Minimum number of characters after the @ symbol triggering a search request |
 | `maxChars`           | `31`           | Maximum number of characters after the @ symbol triggering a search request |
+| `offsetTop`          | `2`            | Additional top offset of the mention container position |
+| `offsetLeft`         | `0`            | Additional left offset of the mention container position |
 
 
 ## Authors
