@@ -20,25 +20,25 @@ yarn add quill-mention
 ### Example
 ```javascript
 const values = [
-    { id: 1, value: 'Fredrik Sundqvist' },
-    { id: 2, value: 'Patrik Sjölin' }
+  { id: 1, value: 'Fredrik Sundqvist' },
+  { id: 2, value: 'Patrik Sjölin' }
 ];
 const quill = new Quill(editor, {
-    modules: {
-        mention: {
-          allowedChars: /^[A-Za-z\sÅÄÖåäö]*$/,
-          source: function (searchTerm) {
-            if (searchTerm.length === 0) {
-              this.renderList(values, searchTerm);
-            } else {
-              const matches = [];
-              for (i = 0; i < values.length; i++)
-                if (~values[i].value.toLowerCase().indexOf(searchTerm)) matches.push(values[i]);
+  modules: {
+    mention: {
+      allowedChars: /^[A-Za-z\sÅÄÖåäö]*$/,
+      source: function (searchTerm) {
+        if (searchTerm.length === 0) {
+          this.renderList(values, searchTerm);
+        } else {
+          const matches = [];
+          for (i = 0; i < values.length; i++)
+            if (~values[i].value.toLowerCase().indexOf(searchTerm)) matches.push(values[i]);
               this.renderList(matches, searchTerm);
-            }
-          },
-        },
-    }
+        }
+      },
+    },
+  }
 });
 ```
 
