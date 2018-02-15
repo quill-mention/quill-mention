@@ -34,7 +34,7 @@ const quill = new Quill(editor, {
           const matches = [];
           for (i = 0; i < values.length; i++)
             if (~values[i].value.toLowerCase().indexOf(searchTerm)) matches.push(values[i]);
-              this.renderList(matches, searchTerm);
+          this.renderList(matches, searchTerm);
         }
       },
     },
