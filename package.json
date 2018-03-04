@@ -1,11 +1,16 @@
 {
   "name": "quill-mention",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "@mentions for the Quill rich text editor",
-  "main": "dist/main.js",
+  "main": "dist/quill.mention.min.js",
   "repository": "https://github.com/afconsult/quill-mention.git",
   "author": "Fredrik Sundqvist <fsundqvist@gmail.com>",
   "license": "MIT",
+  "files": [
+    "dist",
+    "LICENSE",
+    "README.md"
+  ],
   "devDependencies": {
     "css-loader": "^0.28.8",
     "eslint": "^4.15.0",
