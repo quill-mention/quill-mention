@@ -1,3 +1,5 @@
+import Quill from 'quill';
+
 const Embed = Quill.import('blots/embed');
 
 
@@ -17,8 +19,8 @@ class MentionBlot extends Embed {
   static value(domNode) {
     return {
       id: domNode.dataset.id,
-      value: domNode.dataset.value
-    }
+      value: domNode.dataset.value,
+    };
   }
 }
 

@@ -14,6 +14,9 @@ module.exports = [
     devServer: {
       contentBase: './src',
     },
+    externals: {
+      quill: 'Quill',
+    },
     module: {
       rules: [
         {
@@ -26,6 +29,13 @@ module.exports = [
               },
             }],
           }),
+        },
+        {
+          test: /\.js$/,
+          exclude: /node_modules/,
+          use: {
+            loader: 'babel-loader',
+          },
         },
       ],
     },
