@@ -192,13 +192,13 @@ class Mention {
     let topPos = window.scrollY + containerPos.top + atPos.bottom + this.options.offsetTop;
     let leftPos = window.scrollX + containerPos.left + atPos.left + this.options.offsetLeft;
     if (this.containerBottomIsNotVisible(topPos)) {
-      const overAtPos = (window.scrollY + containerPos.top + atPos.top);
-      const containerHeight = (this.mentionContainer.offsetHeight + this.options.offsetTop);
+      const overAtPos = window.scrollY + containerPos.top + atPos.top;
+      const containerHeight = this.mentionContainer.offsetHeight + this.options.offsetTop;
       topPos = overAtPos - containerHeight;
     }
     if (this.containerRightIsNotVisible(leftPos)) {
-      const containerWidth = (this.mentionContainer.offsetWidth + this.options.offsetLeft);
-      const browserWidth = (window.scrollX + document.documentElement.clientWidth);
+      const containerWidth = this.mentionContainer.offsetWidth + this.options.offsetLeft;
+      const browserWidth = window.scrollX + document.documentElement.clientWidth;
       leftPos = browserWidth - containerWidth;
     }
     this.mentionContainer.style.top = `${topPos}px`;
