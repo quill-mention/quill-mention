@@ -177,28 +177,28 @@ class Mention {
   }
 
   containerBottomIsNotVisible(topPos) {
-    return topPos + this.mentionContainer.offsetHeight > window.scrollY + window.innerHeight;
+    return topPos + this.mentionContainer.offsetHeight > window.pageYOffset + window.innerHeight;
   }
 
   containerRightIsNotVisible(leftPos) {
     const rightPos = leftPos + this.mentionContainer.offsetWidth;
-    const browserWidth = window.scrollX + document.documentElement.clientWidth;
+    const browserWidth = window.pageXOffset + document.documentElement.clientWidth;
     return rightPos > browserWidth;
   }
 
   setMentionContainerPosition() {
     const containerPos = this.quill.container.getBoundingClientRect();
     const atPos = this.quill.getBounds(this.atPos);
-    let topPos = window.scrollY + containerPos.top + atPos.bottom + this.options.offsetTop;
-    let leftPos = window.scrollX + containerPos.left + atPos.left + this.options.offsetLeft;
+    let topPos = window.pageYOffset + containerPos.top + atPos.bottom + this.options.offsetTop;
+    let leftPos = window.pageXOffset + containerPos.left + atPos.left + this.options.offsetLeft;
     if (this.containerBottomIsNotVisible(topPos)) {
-      const overAtPos = window.scrollY + containerPos.top + atPos.top;
-      const containerHeight = this.mentionContainer.offsetHeight + this.options.offsetTop;
+      const overAtPos = (window.pageYOffset + containerPos.top + atPos.top);
+      const containerHeight = (this.mentionContainer.offsetHeight + this.options.offsetTop);
       topPos = overAtPos - containerHeight;
     }
     if (this.containerRightIsNotVisible(leftPos)) {
-      const containerWidth = this.mentionContainer.offsetWidth + this.options.offsetLeft;
-      const browserWidth = window.scrollX + document.documentElement.clientWidth;
+      const containerWidth = (this.mentionContainer.offsetWidth + this.options.offsetLeft);
+      const browserWidth = (window.pageXOffset + document.documentElement.clientWidth);
       leftPos = browserWidth - containerWidth;
     }
     this.mentionContainer.style.top = `${topPos}px`;
