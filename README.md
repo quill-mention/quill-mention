@@ -1,5 +1,6 @@
 # Quill Mention
-[![npm](https://img.shields.io/npm/v/quill-mention.svg)]() [![npm](https://img.shields.io/npm/l/quill-mention.svg)]()
+[![npm version](https://badge.fury.io/js/quill-mention.svg)](https://badge.fury.io/js/quill-mention)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 Quill Mention is a module to provide @mentions functionality for the [Quill](https://quilljs.com/) rich text editor.
 
