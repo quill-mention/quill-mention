@@ -114,6 +114,7 @@ class Mention {
       this.mentionList.childNodes[i].classList.remove('selected');
     }
     this.mentionList.childNodes[this.itemIndex].classList.add('selected');
+    this.mentionContainer.scrollTop = (this.itemIndex * this.mentionList.childNodes[this.itemIndex].offsetHeight);
   }
 
   getItemData() {
