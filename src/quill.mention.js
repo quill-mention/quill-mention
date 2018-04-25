@@ -25,6 +25,7 @@ class Mention {
       offsetTop: 2,
       offsetLeft: 0,
       renderList: this.renderList.bind(this),
+      disableSelection: false
     };
 
     Object.assign(this.options, options);
@@ -66,11 +67,10 @@ class Mention {
   }
 
   selectHandler() {
-    if (this.isOpen) {
+    if (this.isOpen && !this.options.disableSelection) {
       this.selectItem();
-      return false;
-    }
-    return true;
+    } 
+    return !this.isOpen;
   }
 
   escapeHandler() {
@@ -153,7 +153,7 @@ class Mention {
         li.dataset.id = data[i].id;
         li.dataset.value = data[i].value;
         li.innerHTML = this.options.renderItem(data[i], searchTerm);
-        li.onclick = this.onItemClick.bind(this);
+        li.onclick = (!this.options.disableSelection ? this.onItemClick.bind(this) : null);
         this.mentionList.appendChild(li);
       }
       this.itemIndex = 0;
@@ -238,7 +238,7 @@ class Mention {
   onSelectionChange(range) {
     if (range && range.length === 0) {
       this.onSomethingChange();
-    } else {
+    } else if (!this.options.disableSelection) {
       this.hideMentionList();
     }
   }
