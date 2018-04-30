@@ -13,6 +13,7 @@ class MentionBlot extends Embed {
     node.innerHTML += data.value;
     node.dataset.id = data.id;
     node.dataset.value = data.value;
+    node.dataset.denotationChar = data.denotationChar;
     return node;
   }
 
@@ -20,6 +21,7 @@ class MentionBlot extends Embed {
     return {
       id: domNode.dataset.id,
       value: domNode.dataset.value,
+      denotationChar: domNode.dataset.denotationChar,
     };
   }
 }
