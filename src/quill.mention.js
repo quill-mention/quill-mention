@@ -238,7 +238,7 @@ class Mention {
       this.mentionCharPos = mentionCharPos;
       const textAfter = beforeCursorPos.substring(mentionCharIndex + 1);
       if (textAfter.length >= this.options.minChars && this.hasValidChars(textAfter)) {
-        this.options.source(textAfter, this.renderList, beforeCursorPos[mentionCharPos]);
+        this.options.source(textAfter, this.renderList, beforeCursorPos[mentionCharIndex]);
       } else {
         this.hideMentionList();
       }
