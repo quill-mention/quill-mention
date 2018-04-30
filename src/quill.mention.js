@@ -123,6 +123,7 @@ class Mention {
     return {
       id: this.mentionList.childNodes[this.itemIndex].dataset.id,
       value: this.mentionList.childNodes[this.itemIndex].dataset.value,
+      denotationChar: this.mentionList.childNodes[this.itemIndex].dataset.value,
     };
   }
 
@@ -154,6 +155,7 @@ class Mention {
         li.dataset.index = i;
         li.dataset.id = data[i].id;
         li.dataset.value = data[i].value;
+        li.dataset.denotationChar = data[i].denotationChar;
         li.innerHTML = this.options.renderItem(data[i], searchTerm);
         li.onclick = this.onItemClick.bind(this);
         this.mentionList.appendChild(li);
