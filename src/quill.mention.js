@@ -226,17 +226,17 @@ class Mention {
     const startPos = Math.max(0, this.cursorPos - this.options.maxChars);
     const beforeCursorPos = this.quill.getText(startPos, this.cursorPos - startPos);
     const mentionCharIndex = this.options.mentionDenotationChars.reduce((prev, cur) => {
-      const previousIndex = !Number.isNaN(Number(prev)) ? prev : -1;
+      const previousIndex = prev;
       const mentionIndex = beforeCursorPos.lastIndexOf(cur);
 
       return mentionIndex > previousIndex ? mentionIndex : previousIndex;
-    });
+    }, -1);
     if (mentionCharIndex > -1) {
       const mentionCharPos = this.cursorPos - (beforeCursorPos.length - mentionCharIndex);
       this.mentionCharPos = mentionCharPos;
       const textAfter = beforeCursorPos.substring(mentionCharIndex + 1);
       if (textAfter.length >= this.options.minChars && this.hasValidChars(textAfter)) {
-        this.options.source(textAfter, this.renderList);
+        this.options.source(textAfter, this.renderList, beforeCursorPos[mentionCharPos]);
       } else {
         this.hideMentionList();
       }
