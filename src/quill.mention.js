@@ -123,7 +123,7 @@ class Mention {
     return {
       id: this.mentionList.childNodes[this.itemIndex].dataset.id,
       value: this.mentionList.childNodes[this.itemIndex].dataset.value,
-      denotationChar: this.mentionList.childNodes[this.itemIndex].dataset.value,
+      denotationChar: this.mentionList.childNodes[this.itemIndex].dataset.denotationChar,
     };
   }
 
