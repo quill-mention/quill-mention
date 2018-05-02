@@ -5,7 +5,7 @@
 Quill Mention is a module to provide @mentions functionality for the [Quill](https://quilljs.com/) rich text editor.
 
 ## Demo
-https://afconsult.github.io/quill-mention/
+https://afconsult.github.io/projects/quill-mention/
 
 ## Getting Started
 ### Install
