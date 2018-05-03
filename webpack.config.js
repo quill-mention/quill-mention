@@ -14,9 +14,6 @@ module.exports = [
     devServer: {
       contentBase: './src',
     },
-    externals: {
-      quill: 'Quill',
-    },
     module: {
       rules: [
         {
