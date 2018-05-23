@@ -11,6 +11,7 @@ class Mention {
     this.mentionCharPos = null;
     this.cursorPos = null;
     this.values = [];
+    this.openMentionListDenotationChar = null;
 
     this.quill = quill;
 
@@ -155,7 +156,7 @@ class Mention {
         li.dataset.index = i;
         li.dataset.id = data[i].id;
         li.dataset.value = data[i].value;
-        li.dataset.denotationChar = data[i].denotationChar;
+        li.dataset.denotationChar = this.openMentionListDenotationChar;
         li.innerHTML = this.options.renderItem(data[i], searchTerm);
         li.onclick = this.onItemClick.bind(this);
         this.mentionList.appendChild(li);
@@ -163,6 +164,7 @@ class Mention {
       this.itemIndex = 0;
       this.highlightItem();
       this.showMentionList();
+      this.openMentionListDenotationChar = null;
     } else {
       this.hideMentionList();
     }
@@ -238,7 +240,8 @@ class Mention {
       this.mentionCharPos = mentionCharPos;
       const textAfter = beforeCursorPos.substring(mentionCharIndex + 1);
       if (textAfter.length >= this.options.minChars && this.hasValidChars(textAfter)) {
-        this.options.source(textAfter, this.renderList, beforeCursorPos[mentionCharIndex]);
+        this.openMentionListDenotationChar = beforeCursorPos[mentionCharIndex];
+        this.options.source(textAfter, this.renderList, this.openMentionListDenotationChar);
       } else {
         this.hideMentionList();
       }
