@@ -23,33 +23,46 @@ yarn add quill-mention
 
 ### Example
 ```javascript
-const values = [
+const atValues = [
   { id: 1, value: 'Fredrik Sundqvist' },
   { id: 2, value: 'Patrik Sjölin' }
 ];
-const quill = new Quill(editor, {
-  modules: {
-    mention: {
-      allowedChars: /^[A-Za-z\sÅÄÖåäö]*$/,
-      source: function (searchTerm) {
-        if (searchTerm.length === 0) {
-          this.renderList(values, searchTerm);
-        } else {
-          const matches = [];
-          for (i = 0; i < values.length; i++)
-            if (~values[i].value.toLowerCase().indexOf(searchTerm)) matches.push(values[i]);
-          this.renderList(matches, searchTerm);
-        }
-      },
-    },
-  }
-});
+const hashValues = [
+  { id: 3, value: 'Fredrik Sundqvist 2' },
+  { id: 4, value: 'Patrik Sjölin 2' }
+]
+const quill = new Quill('#editor', {
+      modules: {
+        mention: {
+          allowedChars: /^[A-Za-z\sÅÄÖåäö]*$/,
+          mentionDenotationChars: ["@", "#"],
+          source: function (searchTerm, renderList, mentionChar) {
+            let values;
+
+            if (mentionChar === "@") {
+              values = atValues;
+            } else {
+              values = hashValues;
+            }
+            
+            if (searchTerm.length === 0) {
+              renderList(values, searchTerm);
+            } else {
+              const matches = [];
+              for (i = 0; i < values.length; i++)
+                if (~values[i].value.toLowerCase().indexOf(searchTerm.toLowerCase())) matches.push(values[i]);
+              renderList(matches, searchTerm);
+            }
+          },
+        },
+      }
+    });
 ```
 
 ### Settings
 | Property             | Default        | Description  |
 | -------------------- | -------------- | ------------ |
-| `source(searchTerm, renderList, mentionChar)` | `null`         | Required callback function to handle the search term and connect it to a data source for matches. The data source can be a local source or an AJAX request. The callback should call `this.renderList(matches, searchTerm);` with matches of JSON Objects in an array to show the result for the user. The JSON Objects should have `id` and `value` but can also have other values to be used in `renderItem` for custom display. |
+| `source(searchTerm, renderList, mentionChar)` | `null`         | Required callback function to handle the search term and connect it to a data source for matches. The data source can be a local source or an AJAX request. The callback should call `renderList(matches, searchTerm);` with matches of JSON Objects in an array to show the result for the user. The JSON Objects should have `id` and `value` but can also have other values to be used in `renderItem` for custom display. |
 | `renderItem(item)`   | `function`     | A function that gives you control over how matches from source are displayed. |
 | `allowedChars`       | `[a-zA-Z0-9_]` | Allowed characters in search term triggering a search request using regular expressions |
 | `minChars`           | `0`            | Minimum number of characters after the @ symbol triggering a search request |

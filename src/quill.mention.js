@@ -25,14 +25,9 @@ class Mention {
       maxChars: 31,
       offsetTop: 2,
       offsetLeft: 0,
-      renderList: this.renderList.bind(this),
     };
 
-    // Preventing users from overriding renderList
-    const optionsNoRenderList = Object.assign({}, options);
-    delete optionsNoRenderList.renderList;
-
-    Object.assign(this.options, optionsNoRenderList);
+    Object.assign(this.options, options);
 
     this.mentionContainer = document.createElement('div');
     this.mentionContainer.className = 'ql-mention-list-container';
@@ -243,9 +238,7 @@ class Mention {
       const textAfter = beforeCursorPos.substring(mentionCharIndex + 1);
       if (textAfter.length >= this.options.minChars && this.hasValidChars(textAfter)) {
         const mentionChar = beforeCursorPos[mentionCharIndex];
-        const boundRenderList = this.renderList.bind(this, mentionChar);
-        const context = Object.assign({}, this.options, { renderList: boundRenderList });
-        this.options.source.bind(context)(textAfter, boundRenderList, mentionChar);
+        this.options.source(textAfter, this.renderList.bind(this, mentionChar), mentionChar);
       } else {
         this.hideMentionList();
       }
