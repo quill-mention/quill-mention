@@ -11,7 +11,6 @@ class Mention {
     this.mentionCharPos = null;
     this.cursorPos = null;
     this.values = [];
-    this.openMentionListDenotationChar = null;
 
     this.quill = quill;
 
@@ -29,7 +28,11 @@ class Mention {
       renderList: this.renderList.bind(this),
     };
 
-    Object.assign(this.options, options);
+    // Preventing users from overriding renderList
+    const optionsNoRenderList = Object.assign({}, options);
+    delete optionsNoRenderList.renderList;
+
+    Object.assign(this.options, optionsNoRenderList);
 
     this.mentionContainer = document.createElement('div');
     this.mentionContainer.className = 'ql-mention-list-container';
@@ -146,7 +149,7 @@ class Mention {
     this.selectItem();
   }
 
-  renderList(data, searchTerm) {
+  renderList(mentionChar, data, searchTerm) {
     if (data && data.length > 0) {
       this.values = data;
       this.mentionList.innerHTML = '';
@@ -156,7 +159,7 @@ class Mention {
         li.dataset.index = i;
         li.dataset.id = data[i].id;
         li.dataset.value = data[i].value;
-        li.dataset.denotationChar = this.openMentionListDenotationChar;
+        li.dataset.denotationChar = mentionChar;
         li.innerHTML = this.options.renderItem(data[i], searchTerm);
         li.onclick = this.onItemClick.bind(this);
         this.mentionList.appendChild(li);
@@ -164,7 +167,6 @@ class Mention {
       this.itemIndex = 0;
       this.highlightItem();
       this.showMentionList();
-      this.openMentionListDenotationChar = null;
     } else {
       this.hideMentionList();
     }
@@ -240,8 +242,10 @@ class Mention {
       this.mentionCharPos = mentionCharPos;
       const textAfter = beforeCursorPos.substring(mentionCharIndex + 1);
       if (textAfter.length >= this.options.minChars && this.hasValidChars(textAfter)) {
-        this.openMentionListDenotationChar = beforeCursorPos[mentionCharIndex];
-        this.options.source(textAfter, this.renderList, this.openMentionListDenotationChar);
+        const mentionChar = beforeCursorPos[mentionCharIndex];
+        const boundRenderList = this.renderList.bind(this, mentionChar);
+        const context = Object.assign({}, this.options, { renderList: boundRenderList });
+        this.options.source.bind(context)(textAfter, boundRenderList, mentionChar);
       } else {
         this.hideMentionList();
       }

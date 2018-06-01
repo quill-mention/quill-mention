@@ -50,6 +50,7 @@
       modules: {
         mention: {
           allowedChars: /^[A-Za-z\sÅÄÖåäö]*$/,
+          mentionDenotationChars: ["@", "#"],
           source: function (searchTerm) {
             if (searchTerm.length === 0) {
               this.renderList(values, searchTerm);
