@@ -16,7 +16,7 @@ class Mention {
 
     this.options = {
       source: null,
-      renderItem(item) {
+      renderItem(item, searchTerm) {
         return `${item.value}`;
       },
       mentionDenotationChars: ['@'],
