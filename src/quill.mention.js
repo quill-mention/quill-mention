@@ -1,22 +1,33 @@
+import Quill from 'quill';
+import Keys from './constants/keys';
 import './quill.mention.css';
 import './blots/mention';
-import Keys from './constants/keys';
 
 
 class Mention {
   constructor(quill, options) {
     this.isOpen = false;
     this.itemIndex = 0;
-    this.atPos = null;
+    this.mentionCharPos = null;
     this.cursorPos = null;
     this.values = [];
 
     this.quill = quill;
-    this.source = options.source;
-    this.renderItem = options.renderItem;
-    this.minChars = options.minChars || 0;
-    this.maxChars = (options.maxChars || 30) + 1;
-    this.allowedChars = options.allowedChars || /^[a-zA-Z0-9_]*$/;
+
+    this.options = {
+      source: null,
+      renderItem(item, searchTerm) {
+        return `${item.value}`;
+      },
+      mentionDenotationChars: ['@'],
+      allowedChars: /^[a-zA-Z0-9_]*$/,
+      minChars: 0,
+      maxChars: 31,
+      offsetTop: 2,
+      offsetLeft: 0,
+    };
+
+    Object.assign(this.options, options);
 
     this.mentionContainer = document.createElement('div');
     this.mentionContainer.className = 'ql-mention-list-container';
@@ -103,21 +114,25 @@ class Mention {
       this.mentionList.childNodes[i].classList.remove('selected');
     }
     this.mentionList.childNodes[this.itemIndex].classList.add('selected');
+    const itemHeight = this.mentionList.childNodes[this.itemIndex].offsetHeight;
+    this.mentionContainer.scrollTop = this.itemIndex * itemHeight;
   }
 
   getItemData() {
     return {
       id: this.mentionList.childNodes[this.itemIndex].dataset.id,
       value: this.mentionList.childNodes[this.itemIndex].dataset.value,
+      denotationChar: this.mentionList.childNodes[this.itemIndex].dataset.denotationChar,
     };
   }
 
   selectItem() {
     const data = this.getItemData();
-    this.quill.deleteText(this.atPos, this.cursorPos - this.atPos, Quill.sources.API);
-    this.quill.insertEmbed(this.atPos, 'mention', data, Quill.sources.API);
-    this.quill.insertText(this.atPos + 1, ' ', Quill.sources.API);
-    this.quill.setSelection(this.atPos + 2, Quill.sources.API);
+    this.quill
+      .deleteText(this.mentionCharPos, this.cursorPos - this.mentionCharPos, Quill.sources.API);
+    this.quill.insertEmbed(this.mentionCharPos, 'mention', data, Quill.sources.API);
+    this.quill.insertText(this.mentionCharPos + 1, ' ', Quill.sources.API);
+    this.quill.setSelection(this.mentionCharPos + 2, Quill.sources.API);
     this.hideMentionList();
   }
 
@@ -129,7 +144,7 @@ class Mention {
     this.selectItem();
   }
 
-  renderList(data, searchTerm) {
+  renderList(mentionChar, data, searchTerm) {
     if (data && data.length > 0) {
       this.values = data;
       this.mentionList.innerHTML = '';
@@ -139,7 +154,8 @@ class Mention {
         li.dataset.index = i;
         li.dataset.id = data[i].id;
         li.dataset.value = data[i].value;
-        li.innerHTML = this.renderItem(data[i], searchTerm);
+        li.dataset.denotationChar = mentionChar;
+        li.innerHTML = this.options.renderItem(data[i], searchTerm);
         li.onclick = this.onItemClick.bind(this);
         this.mentionList.appendChild(li);
       }
@@ -162,19 +178,42 @@ class Mention {
   }
 
   hasValidChars(s) {
-    return this.allowedChars.test(s);
+    return this.options.allowedChars.test(s);
+  }
+
+  containerBottomIsNotVisible(topPos) {
+    return topPos + this.mentionContainer.offsetHeight > window.pageYOffset + window.innerHeight;
+  }
+
+  containerRightIsNotVisible(leftPos) {
+    const rightPos = leftPos + this.mentionContainer.offsetWidth;
+    const browserWidth = window.pageXOffset + document.documentElement.clientWidth;
+    return rightPos > browserWidth;
   }
 
   setMentionContainerPosition() {
     const containerPos = this.quill.container.getBoundingClientRect();
-    const atPos = this.quill.getBounds(this.atPos);
-    let topPos = window.scrollY + containerPos.top + atPos.bottom;
-    let leftPos = window.scrollX + containerPos.left + atPos.left;
-    if (topPos + this.mentionContainer.offsetHeight > window.scrollY + window.innerHeight) {
-      topPos = (window.scrollY + containerPos.top + atPos.top) - this.mentionContainer.offsetHeight;
+    const mentionCharPos = this.quill.getBounds(this.mentionCharPos);
+
+    let topPos = window.pageYOffset +
+      containerPos.top +
+      mentionCharPos.bottom +
+      this.options.offsetTop;
+
+    let leftPos = window.pageXOffset +
+      containerPos.left +
+      mentionCharPos.left +
+      this.options.offsetLeft;
+
+    if (this.containerBottomIsNotVisible(topPos)) {
+      const overMentionCharPos = window.pageYOffset + containerPos.top + mentionCharPos.top;
+      const containerHeight = this.mentionContainer.offsetHeight + this.options.offsetTop;
+      topPos = overMentionCharPos - containerHeight;
     }
-    if (leftPos + this.mentionContainer.offsetWidth > window.scrollX + document.documentElement.clientWidth) {
-      leftPos = (window.scrollX + document.documentElement.clientWidth) - this.mentionContainer.offsetWidth;
+    if (this.containerRightIsNotVisible(leftPos)) {
+      const containerWidth = this.mentionContainer.offsetWidth + this.options.offsetLeft;
+      const browserWidth = window.pageXOffset + document.documentElement.clientWidth;
+      leftPos = browserWidth - containerWidth;
     }
     this.mentionContainer.style.top = `${topPos}px`;
     this.mentionContainer.style.left = `${leftPos}px`;
@@ -185,15 +224,21 @@ class Mention {
     const range = this.quill.getSelection();
     if (range == null) return;
     this.cursorPos = range.index;
-    const startPos = Math.max(0, this.cursorPos - this.maxChars);
+    const startPos = Math.max(0, this.cursorPos - this.options.maxChars);
     const beforeCursorPos = this.quill.getText(startPos, this.cursorPos - startPos);
-    const atSignIndex = beforeCursorPos.lastIndexOf('@');
-    if (atSignIndex > -1) {
-      const atPos = this.cursorPos - (beforeCursorPos.length - atSignIndex);
-      this.atPos = atPos;
-      const textAfterAtPos = beforeCursorPos.substring(atSignIndex + 1);
-      if (textAfterAtPos.length >= this.minChars && this.hasValidChars(textAfterAtPos)) {
-        this.source(textAfterAtPos);
+    const mentionCharIndex = this.options.mentionDenotationChars.reduce((prev, cur) => {
+      const previousIndex = prev;
+      const mentionIndex = beforeCursorPos.lastIndexOf(cur);
+
+      return mentionIndex > previousIndex ? mentionIndex : previousIndex;
+    }, -1);
+    if (mentionCharIndex > -1) {
+      const mentionCharPos = this.cursorPos - (beforeCursorPos.length - mentionCharIndex);
+      this.mentionCharPos = mentionCharPos;
+      const textAfter = beforeCursorPos.substring(mentionCharIndex + 1);
+      if (textAfter.length >= this.options.minChars && this.hasValidChars(textAfter)) {
+        const mentionChar = beforeCursorPos[mentionCharIndex];
+        this.options.source(textAfter, this.renderList.bind(this, mentionChar), mentionChar);
       } else {
         this.hideMentionList();
       }
