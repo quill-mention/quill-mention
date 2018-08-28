@@ -25,6 +25,7 @@ class Mention {
       maxChars: 31,
       offsetTop: 2,
       offsetLeft: 0,
+      isolateCharacter: false,
     };
 
     Object.assign(this.options, options);
@@ -233,6 +234,10 @@ class Mention {
       return mentionIndex > previousIndex ? mentionIndex : previousIndex;
     }, -1);
     if (mentionCharIndex > -1) {
+      if (this.options.isolateCharacter && !(mentionCharIndex == 0 || !!beforeCursorPos[mentionCharIndex - 1].match(/\s/g))) {
+        this.hideMentionList();
+        return;
+      }
       const mentionCharPos = this.cursorPos - (beforeCursorPos.length - mentionCharIndex);
       this.mentionCharPos = mentionCharPos;
       const textAfter = beforeCursorPos.substring(mentionCharIndex + 1);
