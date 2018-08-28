@@ -63,6 +63,7 @@
         mention: {
           allowedChars: /^[A-Za-z\sÅÄÖåäö]*$/,
           mentionDenotationChars: ["@", "#"],
+          isolateCharacter: true,
           source: function (searchTerm, renderList, mentionChar) {
             let values;
 
