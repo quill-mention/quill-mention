@@ -70,6 +70,7 @@ const quill = new Quill('#editor', {
 | `offsetTop`          | `2`            | Additional top offset of the mention container position |
 | `offsetLeft`         | `0`            | Additional left offset of the mention container position |
 | `mentionDenotationChars` | `["@"]`    | Specifies which characters will cause the mention autocomplete to open
+| `isolateCharacter`   | `false`        | Whether or not the denotation character(s) should be isolated. For example, to avoid mentioning in an email.
 
 
 ## Authors
