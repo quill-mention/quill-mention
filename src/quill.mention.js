@@ -192,6 +192,10 @@ class Mention {
   }
 
   containerRightIsNotVisible(leftPos) {
+    if (this.options.fixMentionsToQuill) {
+      return false;
+    }
+
     const rightPos = leftPos + this.mentionContainer.offsetWidth;
     const browserWidth = window.pageXOffset + document.documentElement.clientWidth;
     return rightPos > browserWidth;
