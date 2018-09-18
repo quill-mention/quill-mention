@@ -112,13 +112,13 @@ class Mention {
     this.isOpen = false;
   }
 
-  highlightItem(scrollItemToTop = true) {
+  highlightItem(scrollItemInView = true) {
     for (let i = 0; i < this.mentionList.childNodes.length; i += 1) {
       this.mentionList.childNodes[i].classList.remove('selected');
     }
     this.mentionList.childNodes[this.itemIndex].classList.add('selected');
 
-    if (scrollItemToTop) {
+    if (scrollItemInView) {
       const itemHeight = this.mentionList.childNodes[this.itemIndex].offsetHeight;
       const itemPos = this.itemIndex * itemHeight;
       const containerTop = this.mentionContainer.scrollTop;
