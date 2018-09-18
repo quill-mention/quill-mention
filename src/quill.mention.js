@@ -36,7 +36,7 @@ class Mention {
     this.mentionContainer.style.cssText = 'display: none; position: absolute;';
 
     if (this.options.fixMentionsToQuill) {
-      this.mentionContainer.style.width = 'inherit';
+      this.mentionContainer.style.width = 'auto';
     }
 
     this.mentionList = document.createElement('ul');
