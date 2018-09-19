@@ -27,6 +27,7 @@ class Mention {
       offsetTop: 2,
       offsetLeft: 0,
       isolateCharacter: false,
+      fixMentionsToQuill: false,
     };
 
     Object.assign(this.options, options);
@@ -35,6 +36,10 @@ class Mention {
     this.mentionContainer.className = 'ql-mention-list-container';
     this.mentionContainer.style.cssText = 'display: none; position: absolute;';
     this.mentionContainer.onmousemove = this.onContainerMouseMove.bind(this);
+
+    if (this.options.fixMentionsToQuill) {
+      this.mentionContainer.style.width = 'auto';
+    }
 
     this.mentionList = document.createElement('ul');
     this.mentionList.className = 'ql-mention-list';
@@ -222,6 +227,10 @@ class Mention {
   }
 
   containerRightIsNotVisible(leftPos) {
+    if (this.options.fixMentionsToQuill) {
+      return false;
+    }
+
     const rightPos = leftPos + this.mentionContainer.offsetWidth;
     const browserWidth = window.pageXOffset + document.documentElement.clientWidth;
     return rightPos > browserWidth;
@@ -232,27 +241,41 @@ class Mention {
     const mentionCharPos = this.quill.getBounds(this.mentionCharPos);
 
     let topPos = window.pageYOffset +
-      containerPos.top +
-      mentionCharPos.bottom +
       this.options.offsetTop;
 
     let leftPos = window.pageXOffset +
       containerPos.left +
-      mentionCharPos.left +
       this.options.offsetLeft;
 
+    if (this.options.fixMentionsToQuill) {
+      topPos += containerPos.bottom;
+      const rightPos = window.outerWidth - containerPos.right;
+      this.mentionContainer.style.right = `${rightPos}px`;
+    } else {
+      leftPos += mentionCharPos.left;
+      topPos += containerPos.top + mentionCharPos.bottom;
+    }
+
     if (this.containerBottomIsNotVisible(topPos)) {
-      const overMentionCharPos = window.pageYOffset + containerPos.top + mentionCharPos.top;
       const containerHeight = this.mentionContainer.offsetHeight + this.options.offsetTop;
+      let overMentionCharPos = window.pageYOffset + containerPos.top;
+
+      if (!this.options.fixMentionsToQuill) {
+        overMentionCharPos += mentionCharPos.top;
+      }
+
       topPos = overMentionCharPos - containerHeight;
     }
+
     if (this.containerRightIsNotVisible(leftPos)) {
       const containerWidth = this.mentionContainer.offsetWidth + this.options.offsetLeft;
       const browserWidth = window.pageXOffset + document.documentElement.clientWidth;
       leftPos = browserWidth - containerWidth;
     }
+
     this.mentionContainer.style.top = `${topPos}px`;
     this.mentionContainer.style.left = `${leftPos}px`;
+
     this.mentionContainer.style.visibility = 'visible';
   }
 
