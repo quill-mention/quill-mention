@@ -14,8 +14,8 @@ class MentionBlot extends Embed {
     node.dataset.id = data.id;
     node.dataset.value = data.value;
     node.dataset.denotationChar = data.denotationChar;
-    if (data.anchor) {
-      node.dataset.anchor = data.anchor;
+    if (data.link) {
+      node.dataset.link = data.link;
     }
     return node;
   }
@@ -24,7 +24,7 @@ class MentionBlot extends Embed {
     return {
       id: domNode.dataset.id,
       value: domNode.dataset.value,
-      anchor: domNode.dataset.anchor || null,
+      link: domNode.dataset.link || null,
       denotationChar: domNode.dataset.denotationChar,
     };
   }

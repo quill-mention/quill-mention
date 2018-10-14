@@ -140,13 +140,13 @@ class Mention {
   }
 
   getItemData() {
-    const itemAnchor = this.mentionList.childNodes[this.itemIndex].dataset.anchor;
+    const itemLink = this.mentionList.childNodes[this.itemIndex].dataset.link;
     return {
       id: this.mentionList.childNodes[this.itemIndex].dataset.id,
-      value: itemAnchor ?
-        `<a href="${itemAnchor}" target="_blank">${this.mentionList.childNodes[this.itemIndex].dataset.value}` :
+      value: itemLink ?
+        `<a href="${itemLink}" target="_blank">${this.mentionList.childNodes[this.itemIndex].dataset.value}` :
         this.mentionList.childNodes[this.itemIndex].dataset.value,
-      anchor: itemAnchor || null,
+      link: itemLink || null,
       denotationChar: this.mentionList.childNodes[this.itemIndex].dataset.denotationChar,
     };
   }
@@ -197,8 +197,8 @@ class Mention {
         li.dataset.id = data[i].id;
         li.dataset.value = data[i].value;
         li.dataset.denotationChar = mentionChar;
-        if (data[i].anchor) {
-          li.dataset.anchor = data[i].anchor;
+        if (data[i].link) {
+          li.dataset.link = data[i].link;
         }
         li.innerHTML = this.options.renderItem(data[i], searchTerm);
         li.onmouseenter = this.onItemMouseEnter.bind(this);
