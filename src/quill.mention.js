@@ -42,10 +42,6 @@ class Mention {
     this.mentionContainer.style.cssText = 'display: none; position: absolute;';
     this.mentionContainer.onmousemove = this.onContainerMouseMove.bind(this);
 
-    if (this.options.fixMentionsToQuill) {
-      this.mentionContainer.style.width = 'auto';
-    }
-
     this.mentionList = document.createElement('ul');
     this.mentionList.className = 'ql-mention-list';
     this.mentionContainer.appendChild(this.mentionList);
