@@ -140,9 +140,13 @@ class Mention {
   }
 
   getItemData() {
+    const itemLink = this.mentionList.childNodes[this.itemIndex].dataset.link;
     return {
       id: this.mentionList.childNodes[this.itemIndex].dataset.id,
-      value: this.mentionList.childNodes[this.itemIndex].dataset.value,
+      value: itemLink ?
+        `<a href="${itemLink}" target="_blank">${this.mentionList.childNodes[this.itemIndex].dataset.value}` :
+        this.mentionList.childNodes[this.itemIndex].dataset.value,
+      link: itemLink || null,
       denotationChar: this.mentionList.childNodes[this.itemIndex].dataset.denotationChar,
     };
   }
@@ -193,6 +197,9 @@ class Mention {
         li.dataset.id = data[i].id;
         li.dataset.value = data[i].value;
         li.dataset.denotationChar = mentionChar;
+        if (data[i].link) {
+          li.dataset.link = data[i].link;
+        }
         li.innerHTML = this.options.renderItem(data[i], searchTerm);
         li.onmouseenter = this.onItemMouseEnter.bind(this);
         li.onclick = this.onItemClick.bind(this);
