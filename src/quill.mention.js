@@ -33,14 +33,14 @@ class Mention {
 
     Object.assign(this.options, options);
 
-    if (this.options.defaultMenuOrientation !== 'top' && this.options.defaultMenuOrientation !== 'bottom') {
-      this.options.defaultMenuOrientation = 'bottom';
-    }
-
     this.mentionContainer = document.createElement('div');
     this.mentionContainer.className = 'ql-mention-list-container';
     this.mentionContainer.style.cssText = 'display: none; position: absolute;';
     this.mentionContainer.onmousemove = this.onContainerMouseMove.bind(this);
+
+    if (this.options.fixMentionsToQuill) {
+      this.mentionContainer.style.width = 'auto';
+    }
 
     this.mentionList = document.createElement('ul');
     this.mentionList.className = 'ql-mention-list';
