@@ -11,18 +11,19 @@ class MentionBlot extends Embed {
     denotationChar.innerHTML = data.denotationChar;
     node.appendChild(denotationChar);
     node.innerHTML += data.value;
-    node.dataset.id = data.id;
-    node.dataset.value = data.value;
-    node.dataset.denotationChar = data.denotationChar;
-    return node;
+    return MentionBlot.setDataValues(node, data);
+  }
+
+  static setDataValues(element, data) {
+    const domNode = element;
+    Object.keys(data).forEach((key) => {
+      domNode.dataset[key] = data[key];
+    });
+    return domNode;
   }
 
   static value(domNode) {
-    return {
-      id: domNode.dataset.id,
-      value: domNode.dataset.value,
-      denotationChar: domNode.dataset.denotationChar,
-    };
+    return domNode.dataset;
   }
 }
 
