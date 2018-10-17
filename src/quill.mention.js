@@ -189,6 +189,14 @@ class Mention {
     this.selectItem();
   }
 
+  static attachDataValues(element, data) {
+    const mention = element;
+    Object.keys(data[0]).forEach((key, index) => {
+      mention.dataset[key] = data[index][key];
+    });
+    return mention;
+  }
+
   renderList(mentionChar, data, searchTerm) {
     if (data && data.length > 0) {
       this.values = data;
@@ -197,13 +205,11 @@ class Mention {
         const li = document.createElement('li');
         li.className = 'ql-mention-list-item';
         li.dataset.index = i;
-        li.dataset.id = data[i].id;
-        li.dataset.value = data[i].value;
-        li.dataset.denotationChar = mentionChar;
         li.innerHTML = this.options.renderItem(data[i], searchTerm);
         li.onmouseenter = this.onItemMouseEnter.bind(this);
+        li.dataset.denotationChar = mentionChar;
         li.onclick = this.onItemClick.bind(this);
-        this.mentionList.appendChild(li);
+        this.mentionList.appendChild(Mention.attachDataValues(li, data));
       }
       this.itemIndex = 0;
       this.highlightItem();
