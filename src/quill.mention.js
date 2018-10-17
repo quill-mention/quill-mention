@@ -145,11 +145,13 @@ class Mention {
   }
 
   getItemData() {
-    return {
-      id: this.mentionList.childNodes[this.itemIndex].dataset.id,
-      value: this.mentionList.childNodes[this.itemIndex].dataset.value,
-      denotationChar: this.mentionList.childNodes[this.itemIndex].dataset.denotationChar,
-    };
+    const datasetKeys = Object.keys(this.mentionList.childNodes[this.itemIndex].dataset);
+    datasetKeys.forEach((key) => {
+      if (!this.options.dataAttributes.includes(key)) {
+        delete this.mentionList.childNodes[this.itemIndex].dataset[key];
+      }
+    });
+    return this.mentionList.childNodes[this.itemIndex].dataset;
   }
 
   onContainerMouseMove() {
