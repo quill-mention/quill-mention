@@ -28,9 +28,14 @@ class Mention {
       offsetLeft: 0,
       isolateCharacter: false,
       fixMentionsToQuill: false,
+      dataAttributes: ['id', 'value', 'denotationChar'],
     };
 
-    Object.assign(this.options, options);
+    Object.assign(this.options, options, {
+      dataAttributes: Array.isArray(options.dataAttributes)
+        ? this.options.dataAttributes.concat(options.dataAttributes)
+        : this.options.dataAttributes,
+    });
 
     this.mentionContainer = document.createElement('div');
     this.mentionContainer.className = 'ql-mention-list-container';
