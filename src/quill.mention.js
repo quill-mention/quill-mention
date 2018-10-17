@@ -28,7 +28,8 @@ class Mention {
       offsetLeft: 0,
       isolateCharacter: false,
       fixMentionsToQuill: false,
-      dataAttributes: ['id', 'value', 'denotationChar'],
+      defaultMenuOrientation: 'bottom',
+      dataAttributes: ['id', 'value', 'denotationChar', 'link'],
     };
 
     Object.assign(this.options, options, {
@@ -50,7 +51,7 @@ class Mention {
     this.mentionList.className = 'ql-mention-list';
     this.mentionContainer.appendChild(this.mentionList);
 
-    document.body.appendChild(this.mentionContainer);
+    this.quill.container.appendChild(this.mentionContainer);
 
     quill.on('text-change', this.onTextChange.bind(this));
     quill.on('selection-change', this.onSelectionChange.bind(this));
@@ -145,12 +146,12 @@ class Mention {
   }
 
   getItemData() {
-    const datasetKeys = Object.keys(this.mentionList.childNodes[this.itemIndex].dataset);
-    datasetKeys.forEach((key) => {
-      if (!this.options.dataAttributes.includes(key)) {
-        delete this.mentionList.childNodes[this.itemIndex].dataset[key];
-      }
-    });
+    const { link } = this.mentionList.childNodes[this.itemIndex].dataset;
+    const hasLinkValue = typeof link !== 'undefined';
+
+    if (hasLinkValue) {
+      this.mentionList.childNodes[this.itemIndex].dataset.value = `<a href="${link}" target="_blank">${this.mentionList.childNodes[this.itemIndex].dataset.value}`;
+    }
     return this.mentionList.childNodes[this.itemIndex].dataset;
   }
 
@@ -189,10 +190,14 @@ class Mention {
     this.selectItem();
   }
 
-  static attachDataValues(element, data) {
+  attachDataValues(element, data) {
     const mention = element;
-    Object.keys(data[0]).forEach((key, index) => {
-      mention.dataset[key] = data[index][key];
+    Object.keys(data).forEach((key) => {
+      if (this.options.dataAttributes.includes(key)) {
+        mention.dataset[key] = data[key];
+      } else {
+        delete mention.dataset[key];
+      }
     });
     return mention;
   }
@@ -209,7 +214,7 @@ class Mention {
         li.onmouseenter = this.onItemMouseEnter.bind(this);
         li.dataset.denotationChar = mentionChar;
         li.onclick = this.onItemClick.bind(this);
-        this.mentionList.appendChild(Mention.attachDataValues(li, data));
+        this.mentionList.appendChild(this.attachDataValues(li, data[i]));
       }
       this.itemIndex = 0;
       this.highlightItem();
@@ -235,16 +240,17 @@ class Mention {
     return this.options.allowedChars.test(s);
   }
 
-  containerBottomIsNotVisible(topPos) {
-    return topPos + this.mentionContainer.offsetHeight > window.pageYOffset + window.innerHeight;
+  containerBottomIsNotVisible(topPos, containerPos) {
+    const mentionContainerBottom = topPos + this.mentionContainer.offsetHeight + containerPos.top;
+    return mentionContainerBottom > window.pageYOffset + window.innerHeight;
   }
 
-  containerRightIsNotVisible(leftPos) {
+  containerRightIsNotVisible(leftPos, containerPos) {
     if (this.options.fixMentionsToQuill) {
       return false;
     }
 
-    const rightPos = leftPos + this.mentionContainer.offsetWidth;
+    const rightPos = leftPos + this.mentionContainer.offsetWidth + containerPos.left;
     const browserWidth = window.pageXOffset + document.documentElement.clientWidth;
     return rightPos > browserWidth;
   }
@@ -252,38 +258,64 @@ class Mention {
   setMentionContainerPosition() {
     const containerPos = this.quill.container.getBoundingClientRect();
     const mentionCharPos = this.quill.getBounds(this.mentionCharPos);
+    const containerHeight = this.mentionContainer.offsetHeight;
 
-    let topPos = window.pageYOffset +
-      this.options.offsetTop;
+    let topPos = this.options.offsetTop;
+    let leftPos = this.options.offsetLeft;
 
-    let leftPos = window.pageXOffset +
-      containerPos.left +
-      this.options.offsetLeft;
-
+    // handle horizontal positioning
     if (this.options.fixMentionsToQuill) {
-      topPos += containerPos.bottom;
-      const rightPos = window.outerWidth - containerPos.right;
+      const rightPos = 0;
       this.mentionContainer.style.right = `${rightPos}px`;
     } else {
       leftPos += mentionCharPos.left;
-      topPos += containerPos.top + mentionCharPos.bottom;
     }
 
-    if (this.containerBottomIsNotVisible(topPos)) {
-      const containerHeight = this.mentionContainer.offsetHeight + this.options.offsetTop;
-      let overMentionCharPos = window.pageYOffset + containerPos.top;
+    if (this.containerRightIsNotVisible(leftPos, containerPos)) {
+      const containerWidth = this.mentionContainer.offsetWidth + this.options.offsetLeft;
+      const quillWidth = containerPos.width;
+      leftPos = quillWidth - containerWidth;
+    }
 
-      if (!this.options.fixMentionsToQuill) {
-        overMentionCharPos += mentionCharPos.top;
+    // handle vertical positioning
+    if (this.options.defaultMenuOrientation === 'top') {
+      // Attempt to align the mention container with the top of the quill editor
+      if (this.options.fixMentionsToQuill) {
+        topPos = -1 * (containerHeight + this.options.offsetTop);
+      } else {
+        topPos = mentionCharPos.top - (containerHeight + this.options.offsetTop);
       }
 
-      topPos = overMentionCharPos - containerHeight;
-    }
+      // default to bottom if the top is not visible
+      if (topPos + containerPos.top <= 0) {
+        let overMentionCharPos = this.options.offsetTop;
 
-    if (this.containerRightIsNotVisible(leftPos)) {
-      const containerWidth = this.mentionContainer.offsetWidth + this.options.offsetLeft;
-      const browserWidth = window.pageXOffset + document.documentElement.clientWidth;
-      leftPos = browserWidth - containerWidth;
+        if (this.options.fixMentionsToQuill) {
+          overMentionCharPos += containerPos.height;
+        } else {
+          overMentionCharPos += mentionCharPos.bottom;
+        }
+
+        topPos = overMentionCharPos;
+      }
+    } else {
+      // Attempt to align the mention container with the bottom of the quill editor
+      if (this.options.fixMentionsToQuill) {
+        topPos += containerPos.height;
+      } else {
+        topPos += mentionCharPos.bottom;
+      }
+
+      // default to the top if the bottom is not visible
+      if (this.containerBottomIsNotVisible(topPos, containerPos)) {
+        let overMentionCharPos = this.options.offsetTop * -1;
+
+        if (!this.options.fixMentionsToQuill) {
+          overMentionCharPos += mentionCharPos.top;
+        }
+
+        topPos = overMentionCharPos - containerHeight;
+      }
     }
 
     this.mentionContainer.style.top = `${topPos}px`;
