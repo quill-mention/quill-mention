@@ -44,7 +44,7 @@ const quill = new Quill('#editor', {
             } else {
               values = hashValues;
             }
-            
+
             if (searchTerm.length === 0) {
               renderList(values, searchTerm);
             } else {
@@ -72,6 +72,7 @@ const quill = new Quill('#editor', {
 | `mentionDenotationChars` | `["@"]`    | Specifies which characters will cause the mention autocomplete to open
 | `isolateCharacter`   | `false`        | Whether or not the denotation character(s) should be isolated. For example, to avoid mentioning in an email.
 | `fixMentionsToQuill` | `false`        | When set to true, the mentions menu will be rendered above or below the quill container. Otherwise, the mentions menu will track the denotation character(s);
+| `dataAttributes` | `null`        | A list of data values you wish to be past from your list data to the html node. (`id, value, denotationChar` are included by default).
 
 
 ## Authors
