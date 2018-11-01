@@ -337,7 +337,7 @@ class Mention {
       return mentionIndex > previousIndex ? mentionIndex : previousIndex;
     }, -1);
     if (mentionCharIndex > -1) {
-      if (this.options.isolateCharacter && !(mentionCharIndex == 0 || !!beforeCursorPos[mentionCharIndex - 1].match(/\s/g))) {
+      if (this.options.isolateCharacter && !(mentionCharIndex === 0 || !!beforeCursorPos[mentionCharIndex - 1].match(/\s/g))) {
         this.hideMentionList();
         return;
       }
