@@ -29,9 +29,14 @@ class Mention {
       isolateCharacter: false,
       fixMentionsToQuill: false,
       defaultMenuOrientation: 'bottom',
+      dataAttributes: ['id', 'value', 'denotationChar', 'link'],
     };
 
-    Object.assign(this.options, options);
+    Object.assign(this.options, options, {
+      dataAttributes: Array.isArray(options.dataAttributes)
+        ? this.options.dataAttributes.concat(options.dataAttributes)
+        : this.options.dataAttributes,
+    });
 
     this.mentionContainer = document.createElement('div');
     this.mentionContainer.className = 'ql-mention-list-container';
@@ -141,15 +146,13 @@ class Mention {
   }
 
   getItemData() {
-    const itemLink = this.mentionList.childNodes[this.itemIndex].dataset.link;
-    return {
-      id: this.mentionList.childNodes[this.itemIndex].dataset.id,
-      value: itemLink ?
-        `<a href="${itemLink}" target="_blank">${this.mentionList.childNodes[this.itemIndex].dataset.value}` :
-        this.mentionList.childNodes[this.itemIndex].dataset.value,
-      link: itemLink || null,
-      denotationChar: this.mentionList.childNodes[this.itemIndex].dataset.denotationChar,
-    };
+    const { link } = this.mentionList.childNodes[this.itemIndex].dataset;
+    const hasLinkValue = typeof link !== 'undefined';
+
+    if (hasLinkValue) {
+      this.mentionList.childNodes[this.itemIndex].dataset.value = `<a href="${link}" target="_blank">${this.mentionList.childNodes[this.itemIndex].dataset.value}`;
+    }
+    return this.mentionList.childNodes[this.itemIndex].dataset;
   }
 
   onContainerMouseMove() {
@@ -187,6 +190,18 @@ class Mention {
     this.selectItem();
   }
 
+  attachDataValues(element, data) {
+    const mention = element;
+    Object.keys(data).forEach((key) => {
+      if (this.options.dataAttributes.includes(key)) {
+        mention.dataset[key] = data[key];
+      } else {
+        delete mention.dataset[key];
+      }
+    });
+    return mention;
+  }
+
   renderList(mentionChar, data, searchTerm) {
     if (data && data.length > 0) {
       this.values = data;
@@ -195,16 +210,11 @@ class Mention {
         const li = document.createElement('li');
         li.className = 'ql-mention-list-item';
         li.dataset.index = i;
-        li.dataset.id = data[i].id;
-        li.dataset.value = data[i].value;
-        li.dataset.denotationChar = mentionChar;
-        if (data[i].link) {
-          li.dataset.link = data[i].link;
-        }
         li.innerHTML = this.options.renderItem(data[i], searchTerm);
         li.onmouseenter = this.onItemMouseEnter.bind(this);
+        li.dataset.denotationChar = mentionChar;
         li.onclick = this.onItemClick.bind(this);
-        this.mentionList.appendChild(li);
+        this.mentionList.appendChild(this.attachDataValues(li, data[i]));
       }
       this.itemIndex = 0;
       this.highlightItem();

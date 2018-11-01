@@ -42,32 +42,33 @@
   <!-- Initialize Quill editor -->
   <script>
     const atValues = [
-      { "id": "5a97b2a402de91c5b6c3e8a4", "value": "Josie Rice", "link": "http://www.josierice.com" },
-      { "id": "5a97b2a464a8ff2d0996d2ef", "value": "Elva Bowman", "link": "mailto:elva@bowman.com" },
-      { "id": "5a97b2a4ecb768a2092a298b", "value": "Ella Cochran", "link": "http://www.ellacochran.com" },
-      { "id": "5a97b2a418b984d2aff97657", "value": "Knowles Walls", "link": "mailto:knowles@walls.com" },
-      { "id": "5a97b2a4436c2c9acc6b5ad0", "value": "Hanson Webb", "link": "http://www.hansonwebb.com" },
-      { "id": "5a97b2a4436c2c9acc6b5ad1", "value": "Maria Cruz", "link": "mailto:maria@cruz.com" },
-      { "id": "5a97b2a4436c2c9acc6b5ad2", "value": "Pablo Escobar", "link": "http://www.pabloescobar.com" },
-      { "id": "5a97b2a4436c2c9acc6b5ad3", "value": "Richard Smith", "link": "mailto:richard@smith.com" }
+      { "id": "5a97b2a402de91c5b6c3e8a4", "value": "Josie Rice", "link": "http://www.josierice.com", "myCustomProperty": "custom value" },
+      { "id": "5a97b2a464a8ff2d0996d2ef", "value": "Elva Bowman", "link": "mailto:elva@bowman.com", "myCustomProperty": "custom value" },
+      { "id": "5a97b2a4ecb768a2092a298b", "value": "Ella Cochran", "link": "http://www.ellacochran.com", "myCustomProperty": "custom value" },
+      { "id": "5a97b2a418b984d2aff97657", "value": "Knowles Walls", "link": "mailto:knowles@walls.com", "myCustomProperty": "custom value" },
+      { "id": "5a97b2a4436c2c9acc6b5ad0", "value": "Hanson Webb", "link": "http://www.hansonwebb.com", "myCustomProperty": "custom value" },
+      { "id": "5a97b2a4436c2c9acc6b5ad1", "value": "Maria Cruz", "link": "mailto:maria@cruz.com", "myCustomProperty": "custom value" },
+      { "id": "5a97b2a4436c2c9acc6b5ad2", "value": "Pablo Escobar", "link": "http://www.pabloescobar.com", "myCustomProperty": "custom value" },
+      { "id": "5a97b2a4436c2c9acc6b5ad3", "value": "Richard Smith", "link": "mailto:richard@smith.com", "myCustomProperty": "custom value" }
     ];
 
     const hashValues = [
-      { "id": "5a97b2a402de91c5b6c3e8a5", "value": "Josie Price" },
-      { "id": "5a97b2a464a8ff2d0996d2eg", "value": "Elva Showman" },
-      { "id": "5a97b2a4ecb768a2092a298c", "value": "Ella Coach" },
-      { "id": "5a97b2a418b984d2aff97658", "value": "Knowles Walis" },
-      { "id": "5a97b2a4436c2c9acc6b5ad1", "value": "Hanson Webster" },
-      { "id": "5a97b2a4436c2c9acc6b5ad2", "value": "Maria Cruiser" },
-      { "id": "5a97b2a4436c2c9acc6b5ad3", "value": "Pablo Escobeer" },
-      { "id": "5a97b2a4436c2c9acc6b5ad4", "value": "Richard Schmidt" }
+      { "id": "5a97b2a402de91c5b6c3e8a5", "value": "Josie Price", "myCustomProperty": "custom value" },
+      { "id": "5a97b2a464a8ff2d0996d2eg", "value": "Elva Showman", "myCustomProperty": "custom value" },
+      { "id": "5a97b2a4ecb768a2092a298c", "value": "Ella Coach", "myCustomProperty": "custom value" },
+      { "id": "5a97b2a418b984d2aff97658", "value": "Knowles Walis", "myCustomProperty": "custom value" },
+      { "id": "5a97b2a4436c2c9acc6b5ad1", "value": "Hanson Webster", "myCustomProperty": "custom value" },
+      { "id": "5a97b2a4436c2c9acc6b5ad2", "value": "Maria Cruiser", "myCustomProperty": "custom value" },
+      { "id": "5a97b2a4436c2c9acc6b5ad3", "value": "Pablo Escobeer", "myCustomProperty": "custom value" },
+      { "id": "5a97b2a4436c2c9acc6b5ad4", "value": "Richard Schmidt", "myCustomProperty": "custom value" }
     ]
-    
+
     var quill = new Quill('#editor', {
       modules: {
         mention: {
           allowedChars: /^[A-Za-z\sÅÄÖåäö]*$/,
           mentionDenotationChars: ["@", "#"],
+          dataAttributes: ['myCustomProperty'],
           source: function (searchTerm, renderList, mentionChar) {
             let values;
 
@@ -76,7 +77,7 @@
             } else {
               values = hashValues;
             }
-            
+
             if (searchTerm.length === 0) {
               renderList(values, searchTerm);
             } else {
