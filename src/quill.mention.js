@@ -30,6 +30,12 @@ class Mention {
       fixMentionsToQuill: false,
       defaultMenuOrientation: 'bottom',
       dataAttributes: ['id', 'value', 'denotationChar', 'link'],
+      onOpen() {
+        return true;
+      },
+      onClose() {
+        return true;
+      }
     };
 
     Object.assign(this.options, options, {
@@ -115,12 +121,13 @@ class Mention {
     this.mentionContainer.style.visibility = 'hidden';
     this.mentionContainer.style.display = '';
     this.setMentionContainerPosition();
-    this.isOpen = true;
+    this.setIsOpen(true);
+    
   }
 
   hideMentionList() {
     this.mentionContainer.style.display = 'none';
-    this.isOpen = false;
+    this.setIsOpen(false);
   }
 
   highlightItem(scrollItemInView = true) {
@@ -253,6 +260,17 @@ class Mention {
     const rightPos = leftPos + this.mentionContainer.offsetWidth + containerPos.left;
     const browserWidth = window.pageXOffset + document.documentElement.clientWidth;
     return rightPos > browserWidth;
+  }
+
+  setIsOpen(isOpen) {
+    if (this.isOpen != isOpen) {
+      if (isOpen) {
+        this.options.onOpen();
+      } else {
+        this.options.onClose();
+      }
+      this.isOpen = isOpen;
+    }
   }
 
   setMentionContainerPosition() {
