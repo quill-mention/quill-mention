@@ -30,6 +30,7 @@ class Mention {
       fixMentionsToQuill: false,
       defaultMenuOrientation: 'bottom',
       dataAttributes: ['id', 'value', 'denotationChar', 'link'],
+      linkTarget: '_blank',
       onOpen() {
         return true;
       },
@@ -157,7 +158,7 @@ class Mention {
     const hasLinkValue = typeof link !== 'undefined';
 
     if (hasLinkValue) {
-      this.mentionList.childNodes[this.itemIndex].dataset.value = `<a href="${link}" target="_blank">${this.mentionList.childNodes[this.itemIndex].dataset.value}`;
+      this.mentionList.childNodes[this.itemIndex].dataset.value = `<a href="${link}" target=${this.options.linkTarget}>${this.mentionList.childNodes[this.itemIndex].dataset.value}`;
     }
     return this.mentionList.childNodes[this.itemIndex].dataset;
   }

@@ -76,6 +76,7 @@ const quill = new Quill('#editor', {
 | `dataAttributes`     | `['id', 'value', 'denotationChar', 'link']`  | A list of data values you wish to be passed from your list data to the html node. (`id, value, denotationChar, link` are included by default).
 | `onOpen`             | `function`     | Callback when mention dropdown is open.
 | `onClose`            | `function`     | Callback when mention dropdown is closed.
+| `linkTarget`         | `'_blank'`       | Link target for mentions with a link
 
 
 ## Authors
