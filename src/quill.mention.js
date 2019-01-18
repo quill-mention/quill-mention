@@ -30,7 +30,8 @@ class Mention {
       isolateCharacter: false,
       fixMentionsToQuill: false,
       defaultMenuOrientation: 'bottom',
-      dataAttributes: ['id', 'value', 'denotationChar', 'link'],
+      dataAttributes: ['id', 'value', 'denotationChar', 'link', 'target'],
+      linkTarget: '_blank',
       onOpen() {
         return true;
       },
@@ -156,9 +157,9 @@ class Mention {
   getItemData() {
     const { link } = this.mentionList.childNodes[this.itemIndex].dataset;
     const hasLinkValue = typeof link !== 'undefined';
-
+    const itemTarget = this.mentionList.childNodes[this.itemIndex].dataset.target;
     if (hasLinkValue) {
-      this.mentionList.childNodes[this.itemIndex].dataset.value = `<a href="${link}" target="_blank">${this.mentionList.childNodes[this.itemIndex].dataset.value}`;
+      this.mentionList.childNodes[this.itemIndex].dataset.value = `<a href="${link}" target=${itemTarget || this.options.linkTarget}>${this.mentionList.childNodes[this.itemIndex].dataset.value}`;
     }
     return this.mentionList.childNodes[this.itemIndex].dataset;
   }
