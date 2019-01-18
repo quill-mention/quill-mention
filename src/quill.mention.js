@@ -3,6 +3,7 @@ import Keys from './constants/keys';
 import './quill.mention.css';
 import './blots/mention';
 
+const numberIsNaN = require('./imports/numberisnan.js');
 
 class Mention {
   constructor(quill, options) {
@@ -184,7 +185,7 @@ class Mention {
 
     const index = Number(e.target.dataset.index);
 
-    if (!Number.isNaN(index) && index !== this.itemIndex) {
+    if (!numberIsNaN(index) && index !== this.itemIndex) {
       this.itemIndex = index;
       this.highlightItem(false);
     }
@@ -201,7 +202,7 @@ class Mention {
   attachDataValues(element, data) {
     const mention = element;
     Object.keys(data).forEach((key) => {
-      if (this.options.dataAttributes.includes(key)) {
+      if (this.options.dataAttributes.indexOf(key) > -1) {
         mention.dataset[key] = data[key];
       } else {
         delete mention.dataset[key];
