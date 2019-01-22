@@ -27,6 +27,13 @@
   text-decoration: none;
 }
 
+.ql-mention-action {
+  background-color: #456789;
+  color: white;
+  margin: 0 -22px;
+  padding: 0 22px;
+}
+
 .mention {
   height: 24px;
   width: 65px;
