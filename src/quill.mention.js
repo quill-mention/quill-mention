@@ -185,7 +185,7 @@ class Mention {
       return;
     }
 
-    this.isertItem(data);
+    this.insertItem(data);
   }
 
   insertItem(data) {
