@@ -27,11 +27,19 @@
   text-decoration: none;
 }
 
-.ql-mention-action {
-  background-color: #456789;
+.ql-mention-list-item-action {
   color: white;
-  margin: 0 -22px;
-  padding: 0 22px;
+  background-color: #456789;
+  cursor: pointer;
+  height: 44px;
+  line-height: 44px;
+  font-size: 16px;
+  padding: 0 20px;
+  vertical-align: middle;
+}
+
+.ql-mention-list-item-action.selected {
+  background-color: #345678;
 }
 
 .mention {

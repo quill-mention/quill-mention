@@ -102,7 +102,6 @@
       }
     });
 
-
     var quillAction = new Quill('#editor-action-button', {
         modules: {
             mention: {
@@ -111,7 +110,7 @@
                 dataAttributes: ['myCustomProperty'],
                 renderItem(item, searchTerm) {
                     if (item.hasOwnProperty('query')) {
-                        return `<div class="ql-mention-action">Create \"<i>${searchTerm}</i>\"</div>`;
+                        return `<div>Create \"<i>${searchTerm}</i>\"</div>`;
                     }
                     return item.value;
                 },

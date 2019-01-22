@@ -234,9 +234,17 @@ class Mention {
     if (data && data.length > 0) {
       this.values = data;
       this.mentionList.innerHTML = '';
+
       for (let i = 0; i < data.length; i += 1) {
+        const { query } = data[i];
+        let className;
+        if (query === null || query === undefined) {
+          className = 'ql-mention-list-item';
+        } else {
+          className = 'ql-mention-list-item-action';
+        }
         const li = document.createElement('li');
-        li.className = 'ql-mention-list-item';
+        li.className = className;
         li.dataset.index = i;
         li.innerHTML = this.options.renderItem(data[i], searchTerm);
         li.onmouseenter = this.onItemMouseEnter.bind(this);
