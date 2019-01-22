@@ -21,6 +21,9 @@ class Mention {
       renderItem(item, searchTerm) {
         return `${item.value}`;
       },
+      beforeInsert(item, insertItem) {
+        return item;
+      },
       mentionDenotationChars: ['@'],
       allowedChars: /^[a-zA-Z0-9_]*$/,
       minChars: 0,
@@ -30,14 +33,14 @@ class Mention {
       isolateCharacter: false,
       fixMentionsToQuill: false,
       defaultMenuOrientation: 'bottom',
-      dataAttributes: ['id', 'value', 'denotationChar', 'link', 'target'],
+      dataAttributes: ['id', 'value', 'denotationChar', 'link', 'target', 'query'],
       linkTarget: '_blank',
       onOpen() {
         return true;
       },
       onClose() {
         return true;
-      }
+      },
     };
 
     Object.assign(this.options, options, {
@@ -124,7 +127,6 @@ class Mention {
     this.mentionContainer.style.display = '';
     this.setMentionContainerPosition();
     this.setIsOpen(true);
-    
   }
 
   hideMentionList() {
@@ -169,7 +171,24 @@ class Mention {
   }
 
   selectItem() {
-    const data = this.getItemData();
+    const tmpData = this.getItemData();
+    const data = this.options.beforeInsert(
+      tmpData,
+      (asyncData) => {
+        const toInsert = asyncData;
+        toInsert.denotationChar = tmpData.denotationChar;
+        this.insertItem(toInsert);
+      },
+    );
+
+    if (data === null) {
+      return;
+    }
+
+    this.isertItem(data);
+  }
+
+  insertItem(data) {
     this.quill
       .deleteText(this.mentionCharPos, this.cursorPos - this.mentionCharPos, Quill.sources.API);
     this.quill.insertEmbed(this.mentionCharPos, 'mention', data, Quill.sources.API);
