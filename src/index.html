@@ -107,6 +107,7 @@
             mention: {
                 allowedChars: /^[A-Za-z\sÅÄÖåäö]*$/,
                 mentionDenotationChars: ["@", "#"],
+                showDenotationChar: false,
                 dataAttributes: ['myCustomProperty'],
                 renderItem(item, searchTerm) {
                     if (item.hasOwnProperty('query')) {

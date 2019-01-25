@@ -25,6 +25,7 @@ class Mention {
         return item;
       },
       mentionDenotationChars: ['@'],
+      showDenotationChar: true,
       allowedChars: /^[a-zA-Z0-9_]*$/,
       minChars: 0,
       maxChars: 31,
@@ -189,9 +190,13 @@ class Mention {
   }
 
   insertItem(data) {
+    const render = data;
+    if (!this.options.showDenotationChar) {
+      render.denotationChar = '';
+    }
     this.quill
       .deleteText(this.mentionCharPos, this.cursorPos - this.mentionCharPos, Quill.sources.API);
-    this.quill.insertEmbed(this.mentionCharPos, 'mention', data, Quill.sources.API);
+    this.quill.insertEmbed(this.mentionCharPos, 'mention', render, Quill.sources.API);
     this.quill.insertText(this.mentionCharPos + 1, ' ', Quill.sources.API);
     this.quill.setSelection(this.mentionCharPos + 2, Quill.sources.API);
     this.hideMentionList();
