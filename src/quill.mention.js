@@ -181,16 +181,14 @@ class Mention {
         this.insertItem(toInsert);
       },
     );
-
-    if (data === null) {
-      return;
-    }
-
     this.insertItem(data);
   }
 
   insertItem(data) {
     const render = data;
+    if (render === null) {
+      return;
+    }
     if (!this.options.showDenotationChar) {
       render.denotationChar = '';
     }
