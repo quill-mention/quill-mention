@@ -72,12 +72,13 @@ const quill = new Quill('#editor', {
 | `mentionDenotationChars` | `["@"]`    | Specifies which characters will cause the mention autocomplete to open
 | `isolateCharacter`   | `false`        | Whether or not the denotation character(s) should be isolated. For example, to avoid mentioning in an email.
 | `fixMentionsToQuill` | `false`        | When set to true, the mentions menu will be rendered above or below the quill container. Otherwise, the mentions menu will track the denotation character(s);
+|`showDenotationChar` | `true` | Whether to show the used denotation character in the mention item or not
 | `defaultMenuOrientation` | `'bottom'` | Options are `'bottom'` and `'top'`. Determines what the default orientation of the menu will be. Quill-mention will attempt to render the menu either above or below the editor. If `'top'` is provided as a value, and there is not enough space above the editor, the menu will be rendered below. Vice versa, if there is not enough space below the editor, and `'bottom'` is provided as a value (or no value is provided at all), the menu will be rendered above the editor.
-| `dataAttributes`     | `['id', 'value', 'denotationChar', 'link', 'target']`  | A list of data values you wish to be passed from your list data to the html node. (`id, value, denotationChar, link, target` are included by default).
+| `dataAttributes`     | `['id', 'value', 'denotationChar', 'link', 'target', 'query']`  | A list of data values you wish to be passed from your list data to the html node. (`id, value, denotationChar, link, target, query` are included by default).
 | `onOpen`             | `function`     | Callback when mention dropdown is open.
 | `onClose`            | `function`     | Callback when mention dropdown is closed.
+|`beforeInsert(item, insertItem)` | `function` | Callback before the item gets inserted (also to check *which* item has been clicked). If `null` is returned, the `item` won't be added to the editor but can be later on using `insertItem(item)`. <br><br>**Important:**<br>Return `item` if it should be inserted, `null` to prevent it. Use `insertItem(item)` to insert it later.
 | `linkTarget`         | `'_blank'`       | Link target for mentions with a link
-
 
 ## Authors
 
