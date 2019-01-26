@@ -179,7 +179,7 @@ class Mention {
         const toInsert = asyncData;
         toInsert.denotationChar = tmpData.denotationChar;
         this.insertItem(toInsert);
-      },
+      }
     );
     this.insertItem(data);
   }
