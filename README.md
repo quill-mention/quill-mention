@@ -79,7 +79,9 @@ const quill = new Quill('#editor', {
 | `onClose`            | `function`     | Callback when mention dropdown is closed.
 |`onSelect(item, insertItem)` | `function` | Callback for a selected item. When overriding this method, `insertItem` should be used to insert `item` to the editor. This makes async requests possible.
 | `linkTarget`         | `'_blank'`       | Link target for mentions with a link
-
+| `listItemClass` |  `'ql-mention-list-item'` | Style class to be used for list items (may be null)
+| `mentionContainerClass` |  `'ql-mention-list-container'` |  Style class to be used for the mention list container (may be null)
+| `mentionListClass` |  `'ql-mention-list'` |  Style class to be used for the mention list (may be null)
 ## Authors
 
 **Fredrik Sundqvist** ([MadSpindel](https://github.com/MadSpindel))
