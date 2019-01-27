@@ -55,7 +55,7 @@ class Mention {
     });
 
     this.mentionContainer = document.createElement('div');
-    this.mentionContainer.className = this.options.mentionContainerClass;
+    this.mentionContainer.className = this.options.mentionContainerClass ? this.options.mentionContainerClass : '';
     this.mentionContainer.style.cssText = 'display: none; position: absolute;';
     this.mentionContainer.onmousemove = this.onContainerMouseMove.bind(this);
 
@@ -64,7 +64,7 @@ class Mention {
     }
 
     this.mentionList = document.createElement('ul');
-    this.mentionList.className = this.options.mentionListClass;
+    this.mentionList.className = this.options.mentionListClass ? this.options.mentionListClass : '';
     this.mentionContainer.appendChild(this.mentionList);
 
     this.quill.container.appendChild(this.mentionContainer);
@@ -239,7 +239,7 @@ class Mention {
 
       for (let i = 0; i < data.length; i += 1) {
         const li = document.createElement('li');
-        li.className = this.options.listItemClass;
+        li.className = this.options.listItemClass ? this.options.listItemClass : '';
         li.dataset.index = i;
         li.innerHTML = this.options.renderItem(data[i], searchTerm);
         li.onmouseenter = this.onItemMouseEnter.bind(this);
