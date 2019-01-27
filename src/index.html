@@ -17,7 +17,7 @@
   <h2>Basic</h2>
   <div id="editor"></div>
 
-  <h2>Optional Action Button</h2>
+  <h2>Action Button & Custom Style</h2>
   <div id="editor-onselect"></div>
   <div id="action-data" style="margin: 8px;"></div>
 
@@ -37,7 +37,8 @@
 
     .ql-editor-disabled {
       border-radius: 6px;
-      background-color: #fafafa;
+      background-color: rgba(124, 0, 0, 0.2);
+      transition-duration: 0.5s;
     }
 
     .ql-editor:focus {
@@ -48,6 +49,30 @@
       max-height: 300px;
       overflow: auto;
     }
+
+    .cql-list-item {
+      cursor: crosshair;
+      color: #7c0000;
+      padding: 12px;
+      background-color: white;
+      transition-duration: 0.5s;
+    }
+
+    .cql-list-item:hover {
+      padding-left: 20px;
+      color: white;
+      background-color: #7c0000;
+      transition-duration: 0.5s;
+    }
+
+    .cql-list-item-action {
+      cursor: pointer;
+      padding: 12px;
+      color: white;
+      background-color: #7c0000;
+      border-top: 4px dashed white;
+    }
+
   </style>
   <!-- Initialize Quill editor -->
   <script>
@@ -124,15 +149,17 @@
     quillAction = new Quill('#editor-onselect', {
       modules: {
         mention: {
+          listItemClass: null,
+//          mentionListClass: null,
           allowedChars: /^[A-Za-z\sÅÄÖåäö]*$/,
           mentionDenotationChars: ["@", "#"],
           showDenotationChar: false,
           dataAttributes: ['query'],
           renderItem(item, searchTerm) {
             if (item.hasOwnProperty('query')) {
-              return `<div>Create \"<i>${searchTerm}</i>\"</div>`;
+              return `<div class="cql-list-item-action">Create \"<i>${searchTerm}</i>\"</div>`;
             }
-            return item.value;
+            return `<div class="cql-list-item">${item.value}</div>`;
           },
           onSelect(data, insertItem) {
             console.log('onSelect');

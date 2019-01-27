@@ -42,6 +42,10 @@ class Mention {
       onClose() {
         return true;
       },
+      // Style options
+      listItemClass: 'ql-mention-list-item',
+      mentionContainerClass: 'ql-mention-list-container',
+      mentionListClass: 'ql-mention-list',
     };
 
     Object.assign(this.options, options, {
@@ -51,7 +55,7 @@ class Mention {
     });
 
     this.mentionContainer = document.createElement('div');
-    this.mentionContainer.className = 'ql-mention-list-container';
+    this.mentionContainer.className = this.options.mentionContainerClass;
     this.mentionContainer.style.cssText = 'display: none; position: absolute;';
     this.mentionContainer.onmousemove = this.onContainerMouseMove.bind(this);
 
@@ -60,7 +64,7 @@ class Mention {
     }
 
     this.mentionList = document.createElement('ul');
-    this.mentionList.className = 'ql-mention-list';
+    this.mentionList.className = this.options.mentionListClass;
     this.mentionContainer.appendChild(this.mentionList);
 
     this.quill.container.appendChild(this.mentionContainer);
@@ -234,15 +238,8 @@ class Mention {
       this.mentionList.innerHTML = '';
 
       for (let i = 0; i < data.length; i += 1) {
-        // const { query } = data[i];
-        // let className;
-        // if (query === null || query === undefined) {
-        //   className = 'ql-mention-list-item';
-        // } else {
-        //   className = 'ql-mention-list-item-action';
-        // }
         const li = document.createElement('li');
-        li.className = 'ql-mention-list-item';
+        li.className = this.options.listItemClass;
         li.dataset.index = i;
         li.innerHTML = this.options.renderItem(data[i], searchTerm);
         li.onmouseenter = this.onItemMouseEnter.bind(this);
