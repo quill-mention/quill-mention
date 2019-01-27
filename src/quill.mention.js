@@ -34,7 +34,7 @@ class Mention {
       isolateCharacter: false,
       fixMentionsToQuill: false,
       defaultMenuOrientation: 'bottom',
-      dataAttributes: ['id', 'value', 'denotationChar', 'link', 'target', 'query'],
+      dataAttributes: ['id', 'value', 'denotationChar', 'link', 'target'],
       linkTarget: '_blank',
       onOpen() {
         return true;
@@ -234,15 +234,15 @@ class Mention {
       this.mentionList.innerHTML = '';
 
       for (let i = 0; i < data.length; i += 1) {
-        const { query } = data[i];
-        let className;
-        if (query === null || query === undefined) {
-          className = 'ql-mention-list-item';
-        } else {
-          className = 'ql-mention-list-item-action';
-        }
+        // const { query } = data[i];
+        // let className;
+        // if (query === null || query === undefined) {
+        //   className = 'ql-mention-list-item';
+        // } else {
+        //   className = 'ql-mention-list-item-action';
+        // }
         const li = document.createElement('li');
-        li.className = className;
+        li.className = 'ql-mention-list-item';
         li.dataset.index = i;
         li.innerHTML = this.options.renderItem(data[i], searchTerm);
         li.onmouseenter = this.onItemMouseEnter.bind(this);

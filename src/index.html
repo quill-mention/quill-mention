@@ -107,18 +107,19 @@
       }
     });
 
+    let quillAction = null;
+
     disable = function(id, value) {
       const editor = document.getElementById(id);
       if (value === false) {
         quillAction.enable(true);
         editor.classList.remove('ql-editor-disabled');
+        quillAction.setSelection(quillAction.getText().length, 0);
       } else {
         quillAction.enable(false);
         editor.classList.add('ql-editor-disabled');
       }
     };
-
-    let quillAction = null;
 
     quillAction = new Quill('#editor-onselect', {
       modules: {
@@ -126,7 +127,7 @@
           allowedChars: /^[A-Za-z\sÅÄÖåäö]*$/,
           mentionDenotationChars: ["@", "#"],
           showDenotationChar: false,
-          dataAttributes: ['myCustomProperty'],
+          dataAttributes: ['query'],
           renderItem(item, searchTerm) {
             if (item.hasOwnProperty('query')) {
               return `<div>Create \"<i>${searchTerm}</i>\"</div>`;
@@ -134,6 +135,8 @@
             return item.value;
           },
           onSelect(data, insertItem) {
+            console.log('onSelect');
+            console.log(data);
             if (data.hasOwnProperty('query')) {
               disable('editor-onselect', true);
               document.getElementById('action-data').innerHTML = `<span>Creating: ${data.query}</span>`;
