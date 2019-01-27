@@ -21,8 +21,8 @@ class Mention {
       renderItem(item, searchTerm) {
         return `${item.value}`;
       },
-      beforeInsert(item, insertItem) {
-        return item;
+      onSelect(item, insertItem) {
+        insertItem(item);
       },
       mentionDenotationChars: ['@'],
       showDenotationChar: true,
@@ -172,16 +172,11 @@ class Mention {
   }
 
   selectItem() {
-    const tmpData = this.getItemData();
-    const data = this.options.beforeInsert(
-      tmpData,
-      (asyncData) => {
-        const toInsert = asyncData;
-        toInsert.denotationChar = tmpData.denotationChar;
-        this.insertItem(toInsert);
-      }
-    );
-    this.insertItem(data);
+    const data = this.getItemData();
+    this.options.onSelect(data, (asyncData) => {
+      this.insertItem(asyncData);
+    });
+    this.hideMentionList();
   }
 
   insertItem(data) {

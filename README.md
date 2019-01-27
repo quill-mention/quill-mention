@@ -77,7 +77,7 @@ const quill = new Quill('#editor', {
 | `dataAttributes`     | `['id', 'value', 'denotationChar', 'link', 'target', 'query']`  | A list of data values you wish to be passed from your list data to the html node. (`id, value, denotationChar, link, target, query` are included by default).
 | `onOpen`             | `function`     | Callback when mention dropdown is open.
 | `onClose`            | `function`     | Callback when mention dropdown is closed.
-|`beforeInsert(item, insertItem)` | `function` | Callback before the item gets inserted (also to check *which* item has been clicked). If `null` is returned, the `item` won't be added to the editor but can be later on using `insertItem(item)`. <br><br>**Important:**<br>Return `item` if it should be inserted, `null` to prevent it. Use `insertItem(item)` to insert it later.
+|`onSelect(item, insertItem)` | `function` | Callback for a selected item. When overriding this method, `insertItem` should be used to insert `item` to the editor. This makes async requests possible.
 | `linkTarget`         | `'_blank'`       | Link target for mentions with a link
 
 ## Authors

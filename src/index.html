@@ -18,7 +18,7 @@
   <div id="editor"></div>
 
   <h2>Optional Action Button</h2>
-  <div id="editor-action-button"></div>
+  <div id="editor-onselect"></div>
   <div id="action-data" style="margin: 8px;"></div>
 
   <!-- Include the Quill library -->
@@ -33,6 +33,11 @@
     .ql-editor {
       border: 1px solid #A3A3A3;
       border-radius: 6px;
+    }
+
+    .ql-editor-disabled {
+      border-radius: 6px;
+      background-color: #fafafa;
     }
 
     .ql-editor:focus {
@@ -102,50 +107,63 @@
       }
     });
 
-    var quillAction = new Quill('#editor-action-button', {
-        modules: {
-            mention: {
-                allowedChars: /^[A-Za-z\sÅÄÖåäö]*$/,
-                mentionDenotationChars: ["@", "#"],
-                showDenotationChar: false,
-                dataAttributes: ['myCustomProperty'],
-                renderItem(item, searchTerm) {
-                    if (item.hasOwnProperty('query')) {
-                        return `<div>Create \"<i>${searchTerm}</i>\"</div>`;
-                    }
-                    return item.value;
-                },
-                beforeInsert(data, insertItem) {
-                    if (data.hasOwnProperty('query')) {
-                        document.getElementById('action-data').innerHTML = `<span>Server request: ${data.query}</span>`;
+    disable = function(id, value) {
+      const editor = document.getElementById(id);
+      if (value === false) {
+        quillAction.enable(true);
+        editor.classList.remove('ql-editor-disabled');
+      } else {
+        quillAction.enable(false);
+        editor.classList.add('ql-editor-disabled');
+      }
+    };
 
-                        setTimeout(() => {
-                            insertItem({"id": "fake-id", "value": data.query})
-                        }, 1000);
+    let quillAction = null;
 
-                        return null;
-                    }
-                    return data;
-                },
-                source: function (searchTerm, renderList, mentionChar) {
-                    let values = actionValues;
+    quillAction = new Quill('#editor-onselect', {
+      modules: {
+        mention: {
+          allowedChars: /^[A-Za-z\sÅÄÖåäö]*$/,
+          mentionDenotationChars: ["@", "#"],
+          showDenotationChar: false,
+          dataAttributes: ['myCustomProperty'],
+          renderItem(item, searchTerm) {
+            if (item.hasOwnProperty('query')) {
+              return `<div>Create \"<i>${searchTerm}</i>\"</div>`;
+            }
+            return item.value;
+          },
+          onSelect(data, insertItem) {
+            if (data.hasOwnProperty('query')) {
+              disable('editor-onselect', true);
+              document.getElementById('action-data').innerHTML = `<span>Creating: ${data.query}</span>`;
+              setTimeout(() => {
+                insertItem({"id": "fake-id", "value": data.query});
+                disable('editor-onselect', false);
+              }, 1000);
+            } else {
+              insertItem(data);
+            }
+          },
+          source: function (searchTerm, renderList, mentionChar) {
+            let values = actionValues;
 
-                    if (searchTerm.length === 0) {
-                        renderList(values, searchTerm);
-                    } else {
-                        const matches = [];
-                        for (i = 0; i < values.length; i++) {
-                            if (~values[i].value.toLowerCase().indexOf(searchTerm.toLowerCase())) {
-                                matches.push(values[i])
-                            }
-                        }
-                        matches.push({"query": searchTerm});
-                        renderList(matches, searchTerm);
-                    }
+            if (searchTerm.length === 0) {
+              renderList(values, searchTerm);
+            } else {
+              const matches = [];
+              for (i = 0; i < values.length; i++) {
+                if (~values[i].value.toLowerCase().indexOf(searchTerm.toLowerCase())) {
+                  matches.push(values[i])
+                }
+              }
+              matches.push({"query": searchTerm});
+              renderList(matches, searchTerm);
+            }
 
-                },
-            },
-        }
+          },
+        },
+      }
     });
   </script>
 
