@@ -72,13 +72,16 @@ const quill = new Quill('#editor', {
 | `mentionDenotationChars` | `["@"]`    | Specifies which characters will cause the mention autocomplete to open
 | `isolateCharacter`   | `false`        | Whether or not the denotation character(s) should be isolated. For example, to avoid mentioning in an email.
 | `fixMentionsToQuill` | `false`        | When set to true, the mentions menu will be rendered above or below the quill container. Otherwise, the mentions menu will track the denotation character(s);
+|`showDenotationChar` | `true` | Whether to show the used denotation character in the mention item or not
 | `defaultMenuOrientation` | `'bottom'` | Options are `'bottom'` and `'top'`. Determines what the default orientation of the menu will be. Quill-mention will attempt to render the menu either above or below the editor. If `'top'` is provided as a value, and there is not enough space above the editor, the menu will be rendered below. Vice versa, if there is not enough space below the editor, and `'bottom'` is provided as a value (or no value is provided at all), the menu will be rendered above the editor.
 | `dataAttributes`     | `['id', 'value', 'denotationChar', 'link', 'target']`  | A list of data values you wish to be passed from your list data to the html node. (`id, value, denotationChar, link, target` are included by default).
 | `onOpen`             | `function`     | Callback when mention dropdown is open.
 | `onClose`            | `function`     | Callback when mention dropdown is closed.
+|`onSelect(item, insertItem)` | `function` | Callback for a selected item. When overriding this method, `insertItem` should be used to insert `item` to the editor. This makes async requests possible.
 | `linkTarget`         | `'_blank'`       | Link target for mentions with a link
-
-
+| `listItemClass` |  `'ql-mention-list-item'` | Style class to be used for list items (may be null)
+| `mentionContainerClass` |  `'ql-mention-list-container'` |  Style class to be used for the mention list container (may be null)
+| `mentionListClass` |  `'ql-mention-list'` |  Style class to be used for the mention list (may be null)
 ## Authors
 
 **Fredrik Sundqvist** ([MadSpindel](https://github.com/MadSpindel))

@@ -21,7 +21,11 @@ class Mention {
       renderItem(item, searchTerm) {
         return `${item.value}`;
       },
+      onSelect(item, insertItem) {
+        insertItem(item);
+      },
       mentionDenotationChars: ['@'],
+      showDenotationChar: true,
       allowedChars: /^[a-zA-Z0-9_]*$/,
       minChars: 0,
       maxChars: 31,
@@ -37,7 +41,11 @@ class Mention {
       },
       onClose() {
         return true;
-      }
+      },
+      // Style options
+      listItemClass: 'ql-mention-list-item',
+      mentionContainerClass: 'ql-mention-list-container',
+      mentionListClass: 'ql-mention-list',
     };
 
     Object.assign(this.options, options, {
@@ -47,7 +55,7 @@ class Mention {
     });
 
     this.mentionContainer = document.createElement('div');
-    this.mentionContainer.className = 'ql-mention-list-container';
+    this.mentionContainer.className = this.options.mentionContainerClass ? this.options.mentionContainerClass : '';
     this.mentionContainer.style.cssText = 'display: none; position: absolute;';
     this.mentionContainer.onmousemove = this.onContainerMouseMove.bind(this);
 
@@ -56,7 +64,7 @@ class Mention {
     }
 
     this.mentionList = document.createElement('ul');
-    this.mentionList.className = 'ql-mention-list';
+    this.mentionList.className = this.options.mentionListClass ? this.options.mentionListClass : '';
     this.mentionContainer.appendChild(this.mentionList);
 
     this.quill.container.appendChild(this.mentionContainer);
@@ -124,7 +132,6 @@ class Mention {
     this.mentionContainer.style.display = '';
     this.setMentionContainerPosition();
     this.setIsOpen(true);
-    
   }
 
   hideMentionList() {
@@ -170,9 +177,23 @@ class Mention {
 
   selectItem() {
     const data = this.getItemData();
+    this.options.onSelect(data, (asyncData) => {
+      this.insertItem(asyncData);
+    });
+    this.hideMentionList();
+  }
+
+  insertItem(data) {
+    const render = data;
+    if (render === null) {
+      return;
+    }
+    if (!this.options.showDenotationChar) {
+      render.denotationChar = '';
+    }
     this.quill
       .deleteText(this.mentionCharPos, this.cursorPos - this.mentionCharPos, Quill.sources.API);
-    this.quill.insertEmbed(this.mentionCharPos, 'mention', data, Quill.sources.API);
+    this.quill.insertEmbed(this.mentionCharPos, 'mention', render, Quill.sources.API);
     this.quill.insertText(this.mentionCharPos + 1, ' ', Quill.sources.API);
     this.quill.setSelection(this.mentionCharPos + 2, Quill.sources.API);
     this.hideMentionList();
@@ -215,9 +236,10 @@ class Mention {
     if (data && data.length > 0) {
       this.values = data;
       this.mentionList.innerHTML = '';
+
       for (let i = 0; i < data.length; i += 1) {
         const li = document.createElement('li');
-        li.className = 'ql-mention-list-item';
+        li.className = this.options.listItemClass ? this.options.listItemClass : '';
         li.dataset.index = i;
         li.innerHTML = this.options.renderItem(data[i], searchTerm);
         li.onmouseenter = this.onItemMouseEnter.bind(this);
