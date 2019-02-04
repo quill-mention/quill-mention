@@ -287,7 +287,7 @@ class Mention {
   }
 
   setIsOpen(isOpen) {
-    if (this.isOpen != isOpen) {
+    if (this.isOpen !== isOpen) {
       if (isOpen) {
         this.options.onOpen();
       } else {
