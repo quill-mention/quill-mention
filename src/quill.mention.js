@@ -191,11 +191,14 @@ class Mention {
     if (!this.options.showDenotationChar) {
       render.denotationChar = '';
     }
+
+    const prevMentionCharPos = this.mentionCharPos;
+
     this.quill
       .deleteText(this.mentionCharPos, this.cursorPos - this.mentionCharPos, Quill.sources.USER);
-    this.quill.insertEmbed(this.mentionCharPos, 'mention', render, Quill.sources.USER);
-    this.quill.insertText(this.mentionCharPos + 1, ' ', Quill.sources.USER);
-    this.quill.setSelection(this.mentionCharPos + 2, Quill.sources.USER);
+    this.quill.insertEmbed(prevMentionCharPos, 'mention', render, Quill.sources.USER);
+    this.quill.insertText(prevMentionCharPos + 1, ' ', Quill.sources.USER);
+    this.quill.setSelection(prevMentionCharPos + 2, Quill.sources.USER);
     this.hideMentionList();
   }
 
