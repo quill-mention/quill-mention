@@ -45,15 +45,13 @@ class Mention {
       // Style options
       listItemClass: 'ql-mention-list-item',
       mentionContainerClass: 'ql-mention-list-container',
-      mentionContainerBottomClass: 'ql-mention-list-container-bottom',
-      mentionContainerTopClass: 'ql-mention-list-container-top',
       mentionListClass: 'ql-mention-list',
     };
 
     Object.assign(this.options, options, {
       dataAttributes: Array.isArray(options.dataAttributes)
         ? this.options.dataAttributes.concat(options.dataAttributes)
-        : this.options.dataAttributes,
+        : this.options.dataAttributes
     });
 
     this.mentionContainer = document.createElement('div');
@@ -366,11 +364,11 @@ class Mention {
     }
 
     if (topPos >= 0) {
-      this.mentionContainer.classList.add(this.options.mentionContainerBottomClass);
-      this.mentionContainer.classList.remove(this.options.mentionContainerTopClass);
+      this.mentionContainer.classList.add(`${this.options.mentionContainerClass}-bottom`);
+      this.mentionContainer.classList.remove(`${this.options.mentionContainerClass}-top`);
     } else {
-      this.mentionContainer.classList.add(this.options.mentionContainerTopClass);
-      this.mentionContainer.classList.remove(this.options.mentionContainerBottomClass);
+      this.mentionContainer.classList.add(`${this.options.mentionContainerClass}-top`);
+      this.mentionContainer.classList.remove(`${this.options.mentionContainerClass}-bottom`);
     }
 
     this.mentionContainer.style.top = `${topPos}px`;
