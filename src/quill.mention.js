@@ -45,6 +45,8 @@ class Mention {
       // Style options
       listItemClass: 'ql-mention-list-item',
       mentionContainerClass: 'ql-mention-list-container',
+      mentionContainerBottomClass: 'ql-mention-list-container-bottom',
+      mentionContainerTopClass: 'ql-mention-list-container-top',
       mentionListClass: 'ql-mention-list',
     };
 
@@ -361,6 +363,14 @@ class Mention {
 
         topPos = overMentionCharPos - containerHeight;
       }
+    }
+
+    if (topPos >= 0) {
+      this.mentionContainer.classList.add(this.options.mentionContainerBottomClass);
+      this.mentionContainer.classList.remove(this.options.mentionContainerTopClass);
+    } else {
+      this.mentionContainer.classList.add(this.options.mentionContainerTopClass);
+      this.mentionContainer.classList.remove(this.options.mentionContainerBottomClass);
     }
 
     this.mentionContainer.style.top = `${topPos}px`;

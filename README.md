@@ -81,7 +81,10 @@ const quill = new Quill('#editor', {
 | `linkTarget`         | `'_blank'`       | Link target for mentions with a link
 | `listItemClass` |  `'ql-mention-list-item'` | Style class to be used for list items (may be null)
 | `mentionContainerClass` |  `'ql-mention-list-container'` |  Style class to be used for the mention list container (may be null)
+| `mentionContainerBottomClass` |  `'ql-mention-list-container-bottom'` | Style class to be used if the list container is rendered above the mention character
+| `mentionContainerTopClass` |  `'ql-mention-list-container-top'` | Style class to be used if the list container is rendered below the mention character
 | `mentionListClass` |  `'ql-mention-list'` |  Style class to be used for the mention list (may be null)
+
 ## Authors
 
 **Fredrik Sundqvist** ([MadSpindel](https://github.com/MadSpindel))
