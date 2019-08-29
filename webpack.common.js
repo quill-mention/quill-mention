@@ -6,19 +6,21 @@ module.exports = {
     app: './src/quill.mention.js',
   },
   externals: {
-    quill: 'Quill',
+    quill: 'quill',
   },
   module: {
     rules: [
       {
         test: /\.css$/,
         use: ExtractTextPlugin.extract({
-          use: [{
-            loader: 'css-loader',
-            options: {
-              minimize: true,
+          use: [
+            {
+              loader: 'css-loader',
+              options: {
+                minimize: true,
+              },
             },
-          }],
+          ],
         }),
       },
       {
