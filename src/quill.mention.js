@@ -51,7 +51,7 @@ class Mention {
     Object.assign(this.options, options, {
       dataAttributes: Array.isArray(options.dataAttributes)
         ? this.options.dataAttributes.concat(options.dataAttributes)
-        : this.options.dataAttributes
+        : this.options.dataAttributes,
     });
 
     this.mentionContainer = document.createElement('div');
