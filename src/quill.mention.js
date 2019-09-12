@@ -363,6 +363,14 @@ class Mention {
       }
     }
 
+    if (topPos >= 0) {
+      this.mentionContainer.classList.add(`${this.options.mentionContainerClass}-bottom`);
+      this.mentionContainer.classList.remove(`${this.options.mentionContainerClass}-top`);
+    } else {
+      this.mentionContainer.classList.add(`${this.options.mentionContainerClass}-top`);
+      this.mentionContainer.classList.remove(`${this.options.mentionContainerClass}-bottom`);
+    }
+
     this.mentionContainer.style.top = `${topPos}px`;
     this.mentionContainer.style.left = `${leftPos}px`;
 
