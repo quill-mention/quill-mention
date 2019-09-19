@@ -1,5 +1,5 @@
 {
-  "name": "quill-mention",
+  "name": "trilogo-quill-mention",
   "version": "2.1.2",
   "description": "@mentions for the Quill rich text editor",
   "main": "dist/quill.mention.min.js",
