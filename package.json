@@ -3,8 +3,8 @@
   "version": "0.0.1",
   "description": "@mentions for the Quill rich text editor",
   "main": "dist/quill.mention.min.js",
-  "repository": "https://github.com/afconsult/quill-mention.git",
-  "author": "Fredrik Sundqvist <fsundqvist@gmail.com>",
+  "repository": "https://github.com/hileomsi/trilogo-quill-mention.git",
+  "author": "Hiléo Andersson <hileomsi@gmail.com>",
   "license": "MIT",
   "files": [
     "src",
