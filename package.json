@@ -1,6 +1,6 @@
 {
   "name": "trilogo-quill-mention",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "@mentions for the Quill rich text editor",
   "main": "dist/quill.mention.min.js",
   "repository": "https://github.com/hileomsi/trilogo-quill-mention.git",

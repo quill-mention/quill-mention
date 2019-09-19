@@ -14,11 +14,11 @@ https://afconsult.github.io/quill-mention/
 ### Install
 Install with npm:
 ```bash
-npm install quill-mention --save
+npm install trilogo-quill-mention --save
 ```
 Install with [Yarn](https://yarnpkg.com/en/):
 ```bash
-yarn add quill-mention
+yarn add trilogo-quill-mention
 ```
 
 ### Example
