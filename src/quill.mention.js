@@ -194,7 +194,7 @@ class Mention {
 
     this.quill
       .deleteText(this.mentionCharPos, this.cursorPos - this.mentionCharPos, Quill.sources.USER);
-    this.quill.insertText(prevMentionCharPos, render + ' ', Quill.sources.USER);
+    this.quill.insertText(prevMentionCharPos, render.value + ' ', Quill.sources.USER);
     // this.quill.insertText(prevMentionCharPos + 1, ' ', Quill.sources.USER);
     this.quill.setSelection(prevMentionCharPos + 2, Quill.sources.USER);
     this.hideMentionList();
