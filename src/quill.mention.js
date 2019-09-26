@@ -190,11 +190,12 @@ class Mention {
     }
 
     const prevMentionCharPos = this.mentionCharPos;
+    console.log(render)
 
     this.quill
       .deleteText(this.mentionCharPos, this.cursorPos - this.mentionCharPos, Quill.sources.USER);
-    this.quill.insertText(prevMentionCharPos, render, Quill.sources.USER);
-    this.quill.insertText(prevMentionCharPos + 1, ' ', Quill.sources.USER);
+    this.quill.insertText(prevMentionCharPos, render + ' ', Quill.sources.USER);
+    // this.quill.insertText(prevMentionCharPos + 1, ' ', Quill.sources.USER);
     this.quill.setSelection(prevMentionCharPos + 2, Quill.sources.USER);
     this.hideMentionList();
   }
