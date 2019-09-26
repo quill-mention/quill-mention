@@ -62,6 +62,26 @@ const quill = new Quill('#editor', {
     });
 ```
 
+**Note**: if you whitelist quill formats via ["formats" option](https://quilljs.com/docs/configuration/#formats),
+you need to add "mention" format there. Another way quill-mention won't work.
+Here's an example with whitelisted formats:
+
+```javascript
+const quill = new Quill('#editor', {
+      formats: ["bold", "italic", "mention"],
+      // note "mention" format above
+      modules: {
+        mention: {
+          allowedChars: /^[A-Za-z\sÅÄÖåäö]*$/,
+          mentionDenotationChars: ["@", "#"],
+          source: function (searchTerm, renderList, mentionChar) {
+            // some source implementation
+          },
+        },
+      }
+    });
+```
+
 ### Settings
 | Property             | Default        | Description  |
 | -------------------- | -------------- | ------------ |
