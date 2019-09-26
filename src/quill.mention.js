@@ -188,9 +188,6 @@ class Mention {
     if (render === null) {
       return;
     }
-    if (!this.options.showDenotationChar) {
-      render.denotationChar = '';
-    }
 
     const prevMentionCharPos = this.mentionCharPos;
 
