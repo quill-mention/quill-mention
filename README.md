@@ -21,6 +21,17 @@ Install with [Yarn](https://yarnpkg.com/en/):
 yarn add quill-mention
 ```
 
+### Import package
+```javascript
+import 'quill-mention';
+// or
+require('quill-mention');
+```
+
+Importing quill-mention automagically adds it to Quill modules.
+
+Now you only need to pass quill-mention config to quill.
+
 ### Example
 ```javascript
 
