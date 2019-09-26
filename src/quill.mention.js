@@ -198,8 +198,7 @@ class Mention {
     // console.log(render.value.length)
     // console.log({ prevMentionCharPos })
     console.log({ delta })
-    // this.quill.insertText(prevMentionCharPos + render.value.length + 1, ' ', Quill.sources.USER);
-    // this.quill.setSelection(prevMentionCharPos + render.value.length + 2, Quill.sources.USER);
+    this.quill.setSelection(prevMentionCharPos + 1, Quill.sources.USER);
     this.hideMentionList();
   }
 
