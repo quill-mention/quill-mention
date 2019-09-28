@@ -46,31 +46,31 @@ const hashValues = [
   { id: 4, value: 'Patrik Sjölin 2' }
 ]
 const quill = new Quill('#editor', {
-      modules: {
-        mention: {
-          allowedChars: /^[A-Za-z\sÅÄÖåäö]*$/,
-          mentionDenotationChars: ["@", "#"],
-          source: function (searchTerm, renderList, mentionChar) {
-            let values;
+  modules: {
+    mention: {
+      allowedChars: /^[A-Za-z\sÅÄÖåäö]*$/,
+      mentionDenotationChars: ["@", "#"],
+      source: function (searchTerm, renderList, mentionChar) {
+        let values;
 
-            if (mentionChar === "@") {
-              values = atValues;
-            } else {
-              values = hashValues;
-            }
+        if (mentionChar === "@") {
+          values = atValues;
+        } else {
+          values = hashValues;
+        }
 
-            if (searchTerm.length === 0) {
-              renderList(values, searchTerm);
-            } else {
-              const matches = [];
-              for (let i = 0; i < values.length; i++)
-                if (~values[i].value.toLowerCase().indexOf(searchTerm.toLowerCase())) matches.push(values[i]);
-              renderList(matches, searchTerm);
-            }
-          },
-        },
-      }
-    });
+        if (searchTerm.length === 0) {
+          renderList(values, searchTerm);
+        } else {
+          const matches = [];
+          for (let i = 0; i < values.length; i++)
+            if (~values[i].value.toLowerCase().indexOf(searchTerm.toLowerCase())) matches.push(values[i]);
+          renderList(matches, searchTerm);
+        }
+      },
+    },
+  }
+});
 ```
 
 **Note**: if you whitelist quill formats via ["formats" option](https://quilljs.com/docs/configuration/#formats),
