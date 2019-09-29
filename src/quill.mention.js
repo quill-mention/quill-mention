@@ -46,6 +46,7 @@ class Mention {
       listItemClass: 'ql-mention-list-item',
       mentionContainerClass: 'ql-mention-list-container',
       mentionListClass: 'ql-mention-list',
+      spaceAfterInsert: true,
     };
 
     Object.assign(this.options, options, {
@@ -197,8 +198,13 @@ class Mention {
     this.quill
       .deleteText(this.mentionCharPos, this.cursorPos - this.mentionCharPos, Quill.sources.USER);
     this.quill.insertEmbed(prevMentionCharPos, 'mention', render, Quill.sources.USER);
-    this.quill.insertText(prevMentionCharPos + 1, ' ', Quill.sources.USER);
-    this.quill.setSelection(prevMentionCharPos + 2, Quill.sources.USER);
+    if (this.options.spaceAfterInsert) {
+      this.quill.insertText(prevMentionCharPos + 1, ' ', Quill.sources.USER);
+      // setSelection here sets cursor position
+      this.quill.setSelection(prevMentionCharPos + 2, Quill.sources.USER);
+    } else {
+      this.quill.setSelection(prevMentionCharPos + 1, Quill.sources.USER);
+    }
     this.hideMentionList();
   }
 
