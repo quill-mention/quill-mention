@@ -82,6 +82,7 @@ const quill = new Quill('#editor', {
 | `listItemClass` |  `'ql-mention-list-item'` | Style class to be used for list items (may be null)
 | `mentionContainerClass` |  `'ql-mention-list-container'` |  Style class to be used for the mention list container (may be null)
 | `mentionListClass` |  `'ql-mention-list'` |  Style class to be used for the mention list (may be null)
+| `spaceAfterInsert`   | `true`        | Whether or not insert 1 space after mention block in text
 
 ### Styling
 
