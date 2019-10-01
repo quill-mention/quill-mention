@@ -46,6 +46,9 @@ class Mention {
       listItemClass: 'ql-mention-list-item',
       mentionContainerClass: 'ql-mention-list-container',
       mentionListClass: 'ql-mention-list',
+      shouldOpenToBottom: true,
+      loadOnScroll: false,
+      lazyLoad: null
     };
 
     Object.assign(this.options, options, {
@@ -64,6 +67,9 @@ class Mention {
     }
 
     this.mentionList = document.createElement('ul');
+    if(this.options.loadOnScroll){
+        this.mentionList.onscroll = this.onLazyLoading.bind(this);
+    }
     this.mentionList.className = this.options.mentionListClass ? this.options.mentionListClass : '';
     this.mentionContainer.appendChild(this.mentionList);
 
@@ -93,6 +99,9 @@ class Mention {
     quill.keyboard.addBinding({
       key: Keys.DOWN,
     }, this.downHandler.bind(this));
+      this.mentionChar = null;
+      this.searchTerm = "";
+      this.lastItemsFromLoad = false
   }
 
   selectHandler() {
@@ -235,7 +244,7 @@ class Mention {
     return mention;
   }
 
-  renderList(mentionChar, data, searchTerm) {
+  renderList(mentionChar, data, searchTerm, lastItemsFromLoad) {
     if (data && data.length > 0) {
       this.values = data;
       this.mentionList.innerHTML = '';
@@ -256,6 +265,7 @@ class Mention {
     } else {
       this.hideMentionList();
     }
+    this.lastItemsFromLoad = lastItemsFromLoad;
   }
 
   nextItem() {
@@ -352,7 +362,7 @@ class Mention {
       }
 
       // default to the top if the bottom is not visible
-      if (this.containerBottomIsNotVisible(topPos, containerPos)) {
+      if (this.options.shouldOpenToBottom && this.containerBottomIsNotVisible(topPos, containerPos)) {
         let overMentionCharPos = this.options.offsetTop * -1;
 
         if (!this.options.fixMentionsToQuill) {
@@ -396,10 +406,10 @@ class Mention {
       }
       const mentionCharPos = this.cursorPos - (beforeCursorPos.length - mentionCharIndex);
       this.mentionCharPos = mentionCharPos;
-      const textAfter = beforeCursorPos.substring(mentionCharIndex + 1);
-      if (textAfter.length >= this.options.minChars && this.hasValidChars(textAfter)) {
-        const mentionChar = beforeCursorPos[mentionCharIndex];
-        this.options.source(textAfter, this.renderList.bind(this, mentionChar), mentionChar);
+        this.searchTerm = beforeCursorPos.substring(mentionCharIndex + 1);
+      if (this.searchTerm.length >= this.options.minChars && this.hasValidChars(this.searchTerm)) {
+        this.mentionChar = beforeCursorPos[mentionCharIndex];
+        this.options.source(this.searchTerm, this.renderList.bind(this, this.mentionChar), this.mentionChar);
       } else {
         this.hideMentionList();
       }
@@ -421,6 +431,20 @@ class Mention {
       this.hideMentionList();
     }
   }
+
+    onLazyLoading(event) {
+    if(
+        !this.lastItemsFromLoad &&
+        (
+          Math.round(event.srcElement.offsetHeight + event.srcElement.scrollTop) >=
+            event.srcElement.scrollHeight
+        )
+    ) {
+        event.stopImmediatePropagation();
+        event.preventDefault();
+        this.options.lazyLoad(event, this.searchTerm, this.renderList.bind(this, this.mentionChar), this.mentionChar);
+      }
+    }
 }
 
 Quill.register('modules/mention', Mention);
