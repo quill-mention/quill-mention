@@ -59,6 +59,10 @@ const quill = new Quill('#editor', {
     });
 ```
 
+### Example on Web
+
+--- Content goes here
+
 ### Settings
 | Property             | Default        | Description  |
 | -------------------- | -------------- | ------------ |

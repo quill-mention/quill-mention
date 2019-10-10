@@ -1,0 +1,407 @@
+﻿<!doctype html>
+
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>Quill Mention</title>
+  <meta name="description" content="Quill Mention Demo">
+  <link href="https://cdn.quilljs.com/1.3.4/quill.snow.css" rel="stylesheet">
+  <link href="quill.mention.css" rel="stylesheet">
+  <style>
+    body {
+      font-size: 16px;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+
+    .ql-editor {
+      border: none;
+      /* border-radius: 6px; */
+      /* height: 350px; */
+      font-size: 18px;
+    }
+
+    .ql-editor:focus {
+      border: none !important;
+    }
+
+
+    .ql-editor-disabled {
+      border-radius: 6px;
+      background-color: rgba(124, 0, 0, 0.2);
+      transition-duration: 0.5s;
+    }
+
+    /* .ql-editor:focus {
+      /* border: 1px solid #0078D7;
+    } */
+
+    .ql-mention-list-container {
+      max-height: 130px;
+      width: 300px;
+      overflow: auto;
+      box-shadow: none;
+      border-color: #696969;
+      border-radius: 0;
+    }
+
+    /* Styling for action button example */
+
+    .cql-list-item {
+      cursor: pointer;
+      color: #696969;
+      background-color: #f6f6f6;
+    }
+
+    .cql-list-item.selected {
+      color: #696969;
+      background-color: #e2e2e2;
+    }
+
+    .cql-list-item-inner {
+      padding: 8px 12px;
+      transition-duration: 0.6s;
+    }
+
+    .cql-list-item-inner:hover {
+      padding-left: 8px 12px;
+      color: #696969;
+      background-color: #e2e2e2;
+      transition-duration: 0.3s;
+    }
+
+    .cql-list-item .cql-list-item-action {
+      cursor: pointer;
+      padding: 8px 12px;
+      color: white;
+      background-color: #7c0000;
+      border-top: 4px dashed white;
+      transition-duration: 0.6s;
+    }
+
+    .cql-list-item.selected .cql-list-item-action {
+      padding-left: 2px;
+      transition-duration: 0.3s;
+    }
+
+    /* Scrollbar Styles */
+    header {
+      font-family: 'Lobster', cursive;
+      text-align: center;
+      font-size: 25px;
+    }
+
+    #info {
+      font-size: 18px;
+      color: #555;
+      text-align: center;
+      margin-bottom: 25px;
+    }
+
+    a {
+      color: #074E8C;
+    }
+
+    .scrollbar {
+      margin-left: 30px;
+      float: left;
+      height: 300px;
+      width: 65px;
+      background: #F5F5F5;
+      overflow-y: scroll;
+      margin-bottom: 25px;
+    }
+
+    .force-overflow {
+      min-height: 450px;
+    }
+
+    #wrapper {
+      text-align: center;
+      width: 500px;
+      margin: auto;
+    }
+
+    /*
+ *  STYLE 1
+ */
+
+    /* *::-webkit-scrollbar-track {
+      -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+      border-radius: 10px;
+      background-color: #F5F5F5;
+    }
+
+    *::-webkit-scrollbar {
+      width: 12px;
+      background-color: #F5F5F5;
+    }
+
+    *::-webkit-scrollbar-thumb {
+      border-radius: 10px;
+      -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, .3);
+      background-color: #555;
+    }
+
+    *:hover::-webkit-scrollbar {
+      width: unset;
+      background-color: #F5F5F5;
+    }
+
+    *:hover::-webkit-scrollbar-thumb {
+      border-radius: unset;
+      -webkit-box-shadow: unset;
+      background-color: unset;
+    } */
+
+
+    /*
+ *  STYLE 2
+ */
+
+    #counter {
+      text-align: right;
+      margin-bottom: 6px
+    }
+
+    .editor-container {
+      border: 1px solid;
+    }
+
+    .editor-container:focus{
+      border: 1px solid #0078D7;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="counter"></div>
+  <div style="margin-top: 3px;">
+      Quill Custom Mention Field: 
+  </div>
+  <div class="editor-container" onfocus="" onblur="" style=" height: 450px; padding: 6px 0 12px 0;">
+    <div id="editor-onselect"></div>
+  </div>
+  <div id="action-data" style="margin-top: 8px; display: none; color: firebrick;">Character Limit Exceeded</div>
+
+  <!--<button id="logs">Get Logs</button>-->
+  <!-- Include the Quill library -->
+  <!-- <script src="https://cdn.quilljs.com/1.3.4/quill.js"></script> -->
+  <script src="quill.web.js"></script>
+  <script src="quill.mention.js"></script>
+  <!-- Initialize Quill editor -->
+  <script>
+
+    var actionValues = [
+      { "id": "1", "value": "Porsche", pic: "./users.png" },
+      { "id": "2", "value": "Ahamd Khan", pic: "./users.png" },
+      { "id": "3", "value": "BMW", pic: "./users.png" },
+      { "id": "4", "value": "BMWd", pic: "./users.png" },
+      { "id": "5", "value": "BMWds", pic: "./users.png" },
+      { "id": "6", "value": "BMWas", pic: "./users.png" },
+      { "id": "7", "value": "BMWdf", pic: "./users.png" },
+      { "id": "8", "value": "BMWasfd", pic: "./users.png" },
+    ];
+
+    let userValues = null
+
+    let quillAction = null;
+
+    var limit = 500
+
+
+    var Counter = function (quill, options) {
+      this.quill = quill;
+      this.options = options;
+      this.container = document.querySelector(options.container);
+      quill.on('text-change', this.update.bind(this));
+      this.update(); // Account for initial contents
+    };
+
+    const getContentString = (quillLocal) => {
+      const contents = quillLocal.getContents().ops;
+      var textComplete = ""
+      contents.map(item => {
+        if (item.insert)
+          if (item.insert.mention) {
+            textComplete += item.insert.mention.value
+          }
+          else
+            textComplete += item.insert
+      })
+      return textComplete
+    }
+
+    Counter.prototype.calculate = function () {
+      var text = this.quill.getText();
+      if (this.options.unit === 'word') {
+        text = text.trim();
+        // Splitting empty text returns a non-empty array
+        return text.length > 0 ? text.split(/\s+/).length : 0;
+      } else {
+        var textComplete = getContentString(this.quill)
+        // console.log(textComplete, textComplete.length, this.quill.getLength())
+
+
+        // console.log(this.quill.getLength(), limit, text.length, text)
+        // if (this.quill.getLength() > limit) {
+        var length = textComplete.length
+        if (textComplete.length - 1 >= limit) {
+
+          this.quill.deleteText(limit - (textComplete.length - (this.quill.getLength())), this.quill.getLength());
+        }
+        // return this.quill.getText().length - 1;
+        return getContentString(this.quill).length - 1;
+      }
+    };
+
+    Counter.prototype.update = function () {
+      var length = this.calculate();
+      var label = this.options.unit;
+      if (length !== 1) {
+        label += 's';
+      }
+      this.container.innerHTML = `Remaining Characters : <span style = "color: ${limit - length == 0? "#e1182B":"black"}">${limit - length}/${limit}</span>`;
+    }
+
+    Quill.register('modules/counter', Counter);
+
+
+    quillAction = new Quill('#editor-onselect', {
+      modules: {
+        counter: { container: "#counter", unit: 'character' },
+        mention: {
+          listItemClass: 'cql-list-item',
+          allowedChars: /^[A-Za-z\sÅÄÖåäö]*$/,
+          mentionDenotationChars: ["@"],
+          showDenotationChar: true,
+          isolateCharacter: true,
+          dataAttributes: ['query'],
+          source: function (searchTerm, renderList, mentionChar) {
+            let values = userValues ? userValues : actionValues
+            // if (mentionChar === "@") {
+            //   values = atValues;
+            // } else {
+            //   values = hashValues;
+            // }
+            if (searchTerm.length === 0) {
+              renderList(values, searchTerm);
+            }
+            else if (searchTerm == " ") {
+              renderList([], searchTerm);
+            }
+            else {
+              const matches = [];
+              for (i = 0; i < values.length; i++)
+                if (~values[i].value.toLowerCase().indexOf(searchTerm.toLowerCase())) matches.push(values[i]);
+              renderList(matches, searchTerm);
+            }
+          },
+          renderItem(item, searchTerm) {
+            // if (item.hasOwnProperty('query')) {
+            //   return `<div class="cql-list-item-action">Create \"<i>${searchTerm}</i>\"</div>`;
+            // }
+            if (item.value)
+              return `<div class="cql-list-item-inner">
+                <div style = "display: flex; flex: 1; align-items: center;" >
+                  <div>
+                    <img src="${item.pic}" style = "height: 24px;" />
+                  </div>
+                  <div style = "flex: 1; margin-left: 12px; font-size: 15px; font-weight: 500;" >
+                    ${item.value}
+                  </div>
+                </div>
+                </div>`;
+            else
+              return `<div></div>`;
+          },
+          onSelect(data, insertItem) {
+            const contents = quillAction.getContents().ops;
+            var textComplete = ""
+            contents.map(item => {
+              if (item.insert)
+                if (item.insert.mention) {
+                  textComplete += item.insert.mention.value
+                }
+                else
+                  textComplete += item.insert
+            })
+
+            var actionMarkup = document.getElementById("action-data")
+            if (textComplete.length + data.value.length > limit) {
+              // console.log("limit exceeds")
+              insertItem(null)
+              actionMarkup.style.display = "block";
+
+              setTimeout(() => {
+                actionMarkup.style.display = "none";
+              }, 3000)
+            }
+            else {
+              insertItem(data);
+            }
+          },
+        },
+      }
+    });
+
+    function keyHandler(event) {
+      // event.preventDefault()
+      var textComplete = getContentString(quillAction)
+      var length = textComplete.length
+      var regex = /^[\w&.\-]*$/
+      // var regex = /[^]*/
+      var isValid = regex.test(String.fromCharCode(event.keyCode));
+      // console.log(isValid)
+      if (textComplete.length - 1 >= limit && isValid) {
+        event.preventDefault()
+      }
+
+    }
+
+    quillAction.root.addEventListener("keydown", (event) => this.keyHandler(event))
+
+    // We can now initialize Quill with something like this:
+
+
+    const logs = () => {
+      const text = quillAction.getText();
+      const contents = quillAction.getContents();
+      const shippableContent = contents.ops.map((item, index) => item.insert.mention ? JSON.stringify(item.insert.mention) : item.insert ? item.insert : "");
+      // console.log("Quill instance:", quillAction);
+      // console.log("Text:", text);
+      // console.log("Contents:", contents);
+      // console.log(shippableContent)
+    }
+
+    const getFieldContent = () => {
+      const contents = quillAction.getContents();
+      const shippableContent = contents.ops.map((item, index) => item.insert.mention ? JSON.stringify(item.insert.mention) : item.insert ? item.insert : "");
+      // console.log(shippableContent)
+      return JSON.stringify(shippableContent)
+      // console.log(shippableContent)
+    }
+
+      const clearFieldContent = () => {
+          quillAction.setContents([{ insert: '\n' }]);
+      }
+
+    //document.getElementById('logs').addEventListener('click', getFieldContent);
+
+
+    //const onFocusListener = (event) => {
+    //  console.log("Field infocus")
+    //}
+
+    //const onBlurListener = (event) => {
+    //  console.log("Field outBlur")
+    //}
+
+  </script>
+
+</body>
+
+</html>
