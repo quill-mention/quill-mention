@@ -23,6 +23,9 @@ yarn add quill-mention
 
 ### Example
 ```javascript
+
+import 'quill-mention';
+
 const atValues = [
   { id: 1, value: 'Fredrik Sundqvist' },
   { id: 2, value: 'Patrik Sjölin' }
@@ -49,7 +52,7 @@ const quill = new Quill('#editor', {
               renderList(values, searchTerm);
             } else {
               const matches = [];
-              for (i = 0; i < values.length; i++)
+              for (let i = 0; i < values.length; i++)
                 if (~values[i].value.toLowerCase().indexOf(searchTerm.toLowerCase())) matches.push(values[i]);
               renderList(matches, searchTerm);
             }
