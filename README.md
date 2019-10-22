@@ -21,6 +21,17 @@ Install with [Yarn](https://yarnpkg.com/en/):
 yarn add quill-mention
 ```
 
+### Import package
+```javascript
+import 'quill-mention';
+// or
+require('quill-mention');
+```
+
+Importing quill-mention automagically adds it to Quill modules.
+
+Now you only need to pass quill-mention config to quill.
+
 ### Example
 ```javascript
 
@@ -35,27 +46,77 @@ const hashValues = [
   { id: 4, value: 'Patrik Sjölin 2' }
 ]
 const quill = new Quill('#editor', {
+  modules: {
+    mention: {
+      allowedChars: /^[A-Za-z\sÅÄÖåäö]*$/,
+      mentionDenotationChars: ["@", "#"],
+      source: function (searchTerm, renderList, mentionChar) {
+        let values;
+
+        if (mentionChar === "@") {
+          values = atValues;
+        } else {
+          values = hashValues;
+        }
+
+        if (searchTerm.length === 0) {
+          renderList(values, searchTerm);
+        } else {
+          const matches = [];
+          for (let i = 0; i < values.length; i++)
+            if (~values[i].value.toLowerCase().indexOf(searchTerm.toLowerCase())) matches.push(values[i]);
+          renderList(matches, searchTerm);
+        }
+      },
+    },
+  }
+});
+```
+
+### Async example
+```javascript
+async function suggestPeople(searchTerm) {
+  const allPeople = [
+    {
+      id: 1,
+      value: 'Fredrik Sundqvist'
+    },
+    {
+      id: 2,
+      value: 'Patrik Sjölin'
+    }
+  ];
+  return allPeople.filter((person) => person.value.includes(searchTerm));
+}
+
+const quill = new Quill('#editor', {
+  modules: {
+    mention: {
+      allowedChars: /^[A-Za-z\sÅÄÖåäö]*$/,
+      mentionDenotationChars: ["@", "#"],
+      source: async function (searchTerm, renderList) {
+        const matchedPeople = await suggestPeople(searchTerm);
+        renderList(matchedPeople);
+      },
+    },
+  }
+});
+```
+
+**Note**: if you whitelist quill formats via ["formats" option](https://quilljs.com/docs/configuration/#formats),
+you need to add "mention" format there. Another way quill-mention won't work.
+Here's an example with whitelisted formats:
+
+```javascript
+const quill = new Quill('#editor', {
+      formats: ["bold", "italic", "mention"],
+      // note "mention" format above
       modules: {
         mention: {
           allowedChars: /^[A-Za-z\sÅÄÖåäö]*$/,
           mentionDenotationChars: ["@", "#"],
           source: function (searchTerm, renderList, mentionChar) {
-            let values;
-
-            if (mentionChar === "@") {
-              values = atValues;
-            } else {
-              values = hashValues;
-            }
-
-            if (searchTerm.length === 0) {
-              renderList(values, searchTerm);
-            } else {
-              const matches = [];
-              for (let i = 0; i < values.length; i++)
-                if (~values[i].value.toLowerCase().indexOf(searchTerm.toLowerCase())) matches.push(values[i]);
-              renderList(matches, searchTerm);
-            }
+            // some source implementation
           },
         },
       }
