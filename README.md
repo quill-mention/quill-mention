@@ -123,6 +123,9 @@ const quill = new Quill('#editor', {
     });
 ```
 
+### Example on Web
+An example of custom quill-mention field with custom listing is placed in example folder. To see it working just open the index.html file in browser. 
+
 ### Settings
 | Property             | Default        | Description  |
 | -------------------- | -------------- | ------------ |
