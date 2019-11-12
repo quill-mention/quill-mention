@@ -76,12 +76,12 @@ class Mention {
     quill.keyboard.addBinding({
       key: Keys.TAB,
     }, this.selectHandler.bind(this));
-    quill.keyboard.bindings[9].unshift(quill.keyboard.bindings[9].pop());
+    quill.keyboard.bindings[Keys.TAB].unshift(quill.keyboard.bindings[Keys.TAB].pop());
 
     quill.keyboard.addBinding({
       key: Keys.ENTER,
     }, this.selectHandler.bind(this));
-    quill.keyboard.bindings[13].unshift(quill.keyboard.bindings[13].pop());
+    quill.keyboard.bindings[Keys.ENTER].unshift(quill.keyboard.bindings[Keys.ENTER].pop());
 
     quill.keyboard.addBinding({
       key: Keys.ESCAPE,
