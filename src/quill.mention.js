@@ -50,9 +50,8 @@ class Mention {
     };
 
     Object.assign(this.options, options, {
-      dataAttributes: Array.isArray(options.dataAttributes)
-        ? this.options.dataAttributes.concat(options.dataAttributes)
-        : this.options.dataAttributes,
+      dataAttributes: Array.isArray(options.dataAttributes) ?
+        this.options.dataAttributes.concat(options.dataAttributes) : this.options.dataAttributes,
     });
 
     this.mentionContainer = document.createElement('div');
@@ -163,7 +162,9 @@ class Mention {
   }
 
   getItemData() {
-    const { link } = this.mentionList.childNodes[this.itemIndex].dataset;
+    const {
+      link
+    } = this.mentionList.childNodes[this.itemIndex].dataset;
     const hasLinkValue = typeof link !== 'undefined';
     const itemTarget = this.mentionList.childNodes[this.itemIndex].dataset.target;
     if (hasLinkValue) {
@@ -389,12 +390,28 @@ class Mention {
     this.cursorPos = range.index;
     const startPos = Math.max(0, this.cursorPos - this.options.maxChars);
     const beforeCursorPos = this.quill.getText(startPos, this.cursorPos - startPos);
-    const mentionCharIndex = this.options.mentionDenotationChars.reduce((prev, cur) => {
-      const previousIndex = prev;
+    const {
+      mentionCharIndex,
+      mentionStringLength
+    } = this.options.mentionDenotationChars.reduce((prev, cur) => {
+      const previousIndex = prev.mentionCharIndex;
+      const previousLength = prev.mentionStringLength;
       const mentionIndex = beforeCursorPos.lastIndexOf(cur);
-
-      return mentionIndex > previousIndex ? mentionIndex : previousIndex;
-    }, -1);
+      const mentionString = cur.length;
+      if (mentionIndex > previousIndex) {
+        return {
+          mentionCharIndex: mentionIndex,
+          mentionStringLength: mentionString
+        }
+      }
+      return {
+        mentionCharIndex: previousIndex,
+        mentionStringLength: previousLength
+      };
+    }, {
+      mentionCharIndex: -1,
+      mentionStringLength: 0
+    });
     if (mentionCharIndex > -1) {
       if (this.options.isolateCharacter && !(mentionCharIndex === 0 || !!beforeCursorPos[mentionCharIndex - 1].match(/\s/g))) {
         this.hideMentionList();
@@ -402,7 +419,7 @@ class Mention {
       }
       const mentionCharPos = this.cursorPos - (beforeCursorPos.length - mentionCharIndex);
       this.mentionCharPos = mentionCharPos;
-      const textAfter = beforeCursorPos.substring(mentionCharIndex + 1);
+      const textAfter = beforeCursorPos.substring(mentionCharIndex + mentionStringLength);
       if (textAfter.length >= this.options.minChars && this.hasValidChars(textAfter)) {
         const mentionChar = beforeCursorPos[mentionCharIndex];
         this.options.source(textAfter, this.renderList.bind(this, mentionChar), mentionChar);
