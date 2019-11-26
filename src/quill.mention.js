@@ -420,9 +420,21 @@ class Mention {
     }
   }
 
+  editMention(mentionObj, rangeIndex) {
+    let rangeLength = this.options.spaceAfterInsert ? 2 : 1;
+    this.quill.deleteText(rangeIndex - 1, rangeLength);
+    this.quill.insertText(rangeIndex - 1, mentionObj.denotationChar, 'user')
+    this.quill.setSelection(rangeIndex, 0);
+  }
+
   onSelectionChange(range) {
     if (range && range.length === 0) {
-      this.onSomethingChange();
+      let rangeContents = this.quill.getContents(range.index - 1, range.length + 1)
+      if (rangeContents.ops[0] && rangeContents.ops[0].insert && rangeContents.ops[0].insert.mention) {
+        this.editMention(rangeContents.ops[0].insert.mention, range.index)
+      } else {
+        this.onSomethingChange();
+      }
     } else {
       this.hideMentionList();
     }
