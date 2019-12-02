@@ -3,7 +3,7 @@
 [![npm version](https://badge.fury.io/js/quill-mention.svg)](https://badge.fury.io/js/quill-mention)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-Quill Mention is a module to provide @mentions functionality for the [Quill](https://quilljs.com/) rich text editor.
+Quill Mention is a module to provide @mentions or #hashtag functionality for the [Quill](https://quilljs.com/) rich text editor.
 
 ## Demo
 https://afconsult.github.io/quill-mention/
