@@ -30,50 +30,6 @@
     .ql-editor:focus {
       border: 1px solid #025FAE;
     }
-
-    .ql-mention-list-container {
-      max-height: 300px;
-      overflow: auto;
-    }
-
-    /* Styling for action button example */
-
-    .cql-list-item {
-      cursor: pointer;
-      color: #7c0000;
-      background-color: white;
-    }
-
-    .cql-list-item.selected {
-      color: white;
-      background-color: #7c0000;
-    }
-
-    .cql-list-item-inner {
-      padding: 12px;
-      transition-duration: 0.6s;
-    }
-
-    .cql-list-item-inner:hover {
-      padding-left: 20px;
-      color: white;
-      background-color: #7c0000;
-      transition-duration: 0.3s;
-    }
-
-    .cql-list-item .cql-list-item-action {
-      cursor: pointer;
-      padding: 12px;
-      color: white;
-      background-color: #7c0000;
-      border-top: 4px dashed white;
-      transition-duration: 0.6s;
-    }
-
-    .cql-list-item.selected .cql-list-item-action {
-      padding-left: 20px;
-      transition-duration: 0.3s;
-    }
   </style>
 </head>
 
@@ -81,14 +37,9 @@
   <h1>Quill Mention</h1>
   <p>Quill Mention is a module to provide @mentions functionality for the Quill rich text editor.</p>
 
-  <h2>Examples</h2>
+  <h2>Demo</h2>
   <!-- Create the editor container -->
-  <h3>Basic</h3>
   <div id="editor"></div>
-
-  <h3>Action Button & Custom Style</h3>
-  <div id="editor-onselect"></div>
-  <div id="action-data" style="margin: 8px;"></div>
 
   <h2>License</h2>
   <p>This project is licensed under the MIT License</p>
@@ -100,41 +51,27 @@
   <!-- Initialize Quill editor -->
   <script>
     const atValues = [
-      { "id": "5a97b2a402de91c5b6c3e8a4", "value": "Josie Rice", "link": "http://www.josierice.com", "myCustomProperty": "custom value" },
-      { "id": "5a97b2a464a8ff2d0996d2ef", "value": "Elva Bowman", "link": "mailto:elva@bowman.com", "myCustomProperty": "custom value" },
-      { "id": "5a97b2a4ecb768a2092a298b", "value": "Ella Cochran", "link": "http://www.ellacochran.com", "myCustomProperty": "custom value" },
-      { "id": "5a97b2a418b984d2aff97657", "value": "Knowles Walls", "link": "mailto:knowles@walls.com", "myCustomProperty": "custom value" },
-      { "id": "5a97b2a4436c2c9acc6b5ad0", "value": "Hanson Webb", "link": "http://www.hansonwebb.com", "myCustomProperty": "custom value" },
-      { "id": "5a97b2a4436c2c9acc6b5ad1", "value": "Maria Cruz", "link": "mailto:maria@cruz.com", "myCustomProperty": "custom value" },
-      { "id": "5a97b2a4436c2c9acc6b5ad2", "value": "Pablo Escobar", "link": "http://www.pabloescobar.com", "myCustomProperty": "custom value" },
-      { "id": "5a97b2a4436c2c9acc6b5ad3", "value": "Richard Smith", "link": "mailto:richard@smith.com", "myCustomProperty": "custom value" }
+      { "id": "515fd775-cb54-41f3-b921-56163871e2cf", "value": "Mickey Dooley" },
+      { "id": "3f0b7933-57b8-4d9d-b238-f8af62b2e945", "value": "Desmond Waterstone" },
+      { "id": "711f68ab-ca20-4011-ab0f-d98c8fac4c05", "value": "Jeralee Fryd" },
+      { "id": "775e05fc-72bc-48a1-9508-5c61674734f1", "value": "Eddie Hucquart" },
+      { "id": "e8701885-105e-4a21-b200-98e559776655", "value": "Nathalia Whear" }
     ];
 
     const hashValues = [
-      { "id": "5a97b2a402de91c5b6c3e8a5", "value": "Josie Price", "myCustomProperty": "custom value" },
-      { "id": "5a97b2a464a8ff2d0996d2eg", "value": "Elva Showman", "myCustomProperty": "custom value" },
-      { "id": "5a97b2a4ecb768a2092a298c", "value": "Ella Coach", "myCustomProperty": "custom value" },
-      { "id": "5a97b2a418b984d2aff97658", "value": "Knowles Walis", "myCustomProperty": "custom value" },
-      { "id": "5a97b2a4436c2c9acc6b5ad1", "value": "Hanson Webster", "myCustomProperty": "custom value" },
-      { "id": "5a97b2a4436c2c9acc6b5ad2", "value": "Maria Cruiser", "myCustomProperty": "custom value" },
-      { "id": "5a97b2a4436c2c9acc6b5ad3", "value": "Pablo Escobeer", "myCustomProperty": "custom value" },
-      { "id": "5a97b2a4436c2c9acc6b5ad4", "value": "Richard Schmidt", "myCustomProperty": "custom value" }
-    ];
-
-    const actionValues = [
-      { "id": "1", "value": "Porsche" },
-      { "id": "1", "value": "Volkswagen" },
-      { "id": "1", "value": "BMW" },
+      { "id": "0075256a-19c2-4a2d-b549-627000bcc3bc", "value": "Accounting" },
+      { "id": "91e8901b-e3bf-4158-8ddf-7f5d9e8cbb7f", "value": "Product Management" },
+      { "id": "c3373e89-7ab8-4a45-8b69-0b0cc49d89a9", "value": "Marketing" },
+      { "id": "fa22f1d2-16c8-4bea-b869-8acad16e187a", "value": "Engineering" },
+      { "id": "fe681168-f315-42f0-b78b-b1ea787fa1fd", "value": "Accounting" }
     ];
 
     var quill = new Quill('#editor', {
-      placeholder: 'Start by typing @...',
+      placeholder: 'Start by typing @ for mentions or # for hashtags...',
       modules: {
         mention: {
           allowedChars: /^[A-Za-z\sÅÄÖåäö]*$/,
           mentionDenotationChars: ["@", "#"],
-          dataAttributes: ['myCustomProperty'],
-          spaceAfterInsert: true,
           source: function (searchTerm, renderList, mentionChar) {
             let values;
 
@@ -152,69 +89,6 @@
                 if (~values[i].value.toLowerCase().indexOf(searchTerm.toLowerCase())) matches.push(values[i]);
               renderList(matches, searchTerm);
             }
-          },
-        },
-      }
-    });
-
-    let quillAction = null;
-
-    disable = function (id, value) {
-      const editor = document.getElementById(id);
-      if (value === false) {
-        quillAction.enable(true);
-        editor.classList.remove('ql-editor-disabled');
-        quillAction.setSelection(quillAction.getText().length, 0);
-      } else {
-        quillAction.enable(false);
-        editor.classList.add('ql-editor-disabled');
-      }
-    };
-
-    quillAction = new Quill('#editor-onselect', {
-      modules: {
-        mention: {
-          listItemClass: 'cql-list-item',
-          allowedChars: /^[A-Za-z\sÅÄÖåäö]*$/,
-          mentionDenotationChars: ["@", "#"],
-          showDenotationChar: false,
-          dataAttributes: ['query'],
-          renderItem(item, searchTerm) {
-            if (item.hasOwnProperty('query')) {
-              return `<div class="cql-list-item-action">Create \"<i>${searchTerm}</i>\"</div>`;
-            }
-            return `<div class="cql-list-item-inner">${item.value}</div>`;
-          },
-          onSelect(data, insertItem) {
-            console.log('onSelect');
-            console.log(data);
-            if (data.hasOwnProperty('query')) {
-              disable('editor-onselect', true);
-              document.getElementById('action-data').innerHTML = `<span>Creating: ${data.query}</span>`;
-              setTimeout(() => {
-                insertItem({ "id": "fake-id", "value": data.query });
-                disable('editor-onselect', false);
-              }, 1000);
-            } else {
-              insertItem(data);
-            }
-          },
-          source: function (searchTerm, renderList, mentionChar) {
-            let values = actionValues;
-
-            if (searchTerm.length === 0) {
-              renderList(values, searchTerm);
-            } else {
-              const matches = [];
-              for (i = 0; i < values.length; i++) {
-                if (~values[i].value.toLowerCase().indexOf(searchTerm.toLowerCase())) {
-                  matches.push(values[i])
-                }
-              }
-              matches.push({ "query": searchTerm });
-              renderList(matches, searchTerm);
-            }
-
           },
         },
       }
