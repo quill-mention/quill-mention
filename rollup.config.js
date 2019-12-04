@@ -16,7 +16,7 @@ export default [
         exclude: ['node_modules/**'],
       }),
       postcss({
-        extract: true,
+        extract: 'dist/quill.mention.css',
       }),
     ],
   },
