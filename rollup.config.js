@@ -16,6 +16,20 @@ export default [
         file: pkg.module,
         format: 'es',
       },
+    ],
+    external: ['quill'],
+    plugins: [
+      babel({
+        exclude: ['node_modules/**'],
+      }),
+      postcss({
+        extract: 'dist/quill.mention.css',
+      }),
+    ],
+  },
+  {
+    input: 'src/quill.mention.js',
+    output: [
       {
         file: 'dist/quill.mention.min.js',
         format: 'iife',
@@ -32,7 +46,8 @@ export default [
         exclude: ['node_modules/**'],
       }),
       postcss({
-        extract: 'dist/quill.mention.css',
+        extract: 'dist/quill.mention.min.css',
+        minimize: true,
       }),
     ],
   },
