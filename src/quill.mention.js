@@ -3,7 +3,6 @@ import Keys from './constants/keys';
 import './quill.mention.css';
 import './blots/mention';
 
-const numberIsNaN = require('./imports/numberisnan.js');
 
 class Mention {
   constructor(quill, options) {
@@ -18,7 +17,7 @@ class Mention {
 
     this.options = {
       source: null,
-      renderItem(item, searchTerm) {
+      renderItem(item) {
         return `${item.value}`;
       },
       onSelect(item, insertItem) {
@@ -215,7 +214,7 @@ class Mention {
 
     const index = Number(e.target.dataset.index);
 
-    if (!numberIsNaN(index) && index !== this.itemIndex) {
+    if (!Number.isNaN(index) && index !== this.itemIndex) {
       this.itemIndex = index;
       this.highlightItem(false);
     }
