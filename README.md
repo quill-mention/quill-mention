@@ -6,7 +6,7 @@
 Quill Mention is a module to provide @mentions or #hashtag functionality for the [Quill](https://quilljs.com/) rich text editor.
 
 ## Demo
-https://afconsult.github.io/quill-mention/
+https://afry.github.io/quill-mention/
 
 ![Mention Demo GIF](static/mention.gif "Mention Demo GIF")
 
@@ -156,7 +156,7 @@ To allow styling based on the menu orientation, a class is added depending on th
 
 **Fredrik Sundqvist** ([MadSpindel](https://github.com/MadSpindel))
 
-See also the list of [contributors](https://github.com/afconsult/quill-mention/contributors) who participated in this project.
+See also the list of [contributors](https://github.com/afry/quill-mention/contributors) who participated in this project.
 
 ## License
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
