@@ -1,14 +1,14 @@
-![Quill Mention](static/quill-mention.png "Quill Mention")
+![Quill Mention](docs/static/quill-mention.png "Quill Mention")
 # Quill Mention
 [![npm version](https://badge.fury.io/js/quill-mention.svg)](https://badge.fury.io/js/quill-mention)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-Quill Mention is a module to provide @mentions functionality for the [Quill](https://quilljs.com/) rich text editor.
+Quill Mention is a module to provide @mentions or #hashtag functionality for the [Quill](https://quilljs.com/) rich text editor.
 
 ## Demo
-https://afconsult.github.io/quill-mention/
+https://afry.github.io/quill-mention/
 
-![Mention Demo GIF](static/mention.gif "Mention Demo GIF")
+![Mention Demo GIF](docs/static/mention.gif "Mention Demo GIF")
 
 ## Getting Started
 ### Install
@@ -156,7 +156,7 @@ To allow styling based on the menu orientation, a class is added depending on th
 
 **Fredrik Sundqvist** ([MadSpindel](https://github.com/MadSpindel))
 
-See also the list of [contributors](https://github.com/afconsult/quill-mention/contributors) who participated in this project.
+See also the list of [contributors](https://github.com/afry/quill-mention/contributors) who participated in this project.
 
 ## License
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
