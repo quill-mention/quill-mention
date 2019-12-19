@@ -54,7 +54,7 @@ class Mention {
         : this.options.dataAttributes,
     });
 
-    this.mentionContainer = document.createElement('div');
+    this.mentionContainer = options.container || document.createElement('div');
     this.mentionContainer.className = this.options.mentionContainerClass ? this.options.mentionContainerClass : '';
     this.mentionContainer.style.cssText = 'display: none; position: absolute;';
     this.mentionContainer.onmousemove = this.onContainerMouseMove.bind(this);
@@ -67,7 +67,9 @@ class Mention {
     this.mentionList.className = this.options.mentionListClass ? this.options.mentionListClass : '';
     this.mentionContainer.appendChild(this.mentionList);
 
-    this.quill.container.appendChild(this.mentionContainer);
+    if (!options.container) {
+      this.quill.container.appendChild(this.mentionContainer);
+    }
 
     quill.on('text-change', this.onTextChange.bind(this));
     quill.on('selection-change', this.onSelectionChange.bind(this));
@@ -306,79 +308,101 @@ class Mention {
   }
 
   setMentionContainerPosition() {
-    const containerPos = this.quill.container.getBoundingClientRect();
-    const mentionCharPos = this.quill.getBounds(this.mentionCharPos);
-    const containerHeight = this.mentionContainer.offsetHeight;
+    if (this.options.container) {
+      const containerPos = this.quill.container.getBoundingClientRect();
+      const mentionCharPos = this.quill.getBounds(this.mentionCharPos);
+      let { x, y } = containerPos;
 
-    let topPos = this.options.offsetTop;
-    let leftPos = this.options.offsetLeft;
+      x += window.pageXOffset;
+      y += window.pageYOffset;
+      if (!this.options.fixMentionsToQuill) {
+        x += mentionCharPos.left;
+      }
+      const yBottom = y + mentionCharPos.bottom;
+      const yTop = y + mentionCharPos.top - this.mentionContainer.offsetHeight;
 
-    // handle horizontal positioning
-    if (this.options.fixMentionsToQuill) {
-      const rightPos = 0;
-      this.mentionContainer.style.right = `${rightPos}px`;
-    } else {
-      leftPos += mentionCharPos.left;
-    }
-
-    if (this.containerRightIsNotVisible(leftPos, containerPos)) {
-      const containerWidth = this.mentionContainer.offsetWidth + this.options.offsetLeft;
-      const quillWidth = containerPos.width;
-      leftPos = quillWidth - containerWidth;
-    }
-
-    // handle vertical positioning
-    if (this.options.defaultMenuOrientation === 'top') {
-      // Attempt to align the mention container with the top of the quill editor
-      if (this.options.fixMentionsToQuill) {
-        topPos = -1 * (containerHeight + this.options.offsetTop);
+      const mentionContainerBottom = yBottom + this.mentionContainer.offsetHeight;
+      const isBottomVisible = window.pageYOffset + window.innerHeight > mentionContainerBottom;
+      if (isBottomVisible) {
+        y = yBottom;
       } else {
-        topPos = mentionCharPos.top - (containerHeight + this.options.offsetTop);
+        y = yTop;
+      }
+      this.mentionContainer.style.transform = `translate(${x}px, ${y}px)`;
+    } else {
+      const containerPos = this.quill.container.getBoundingClientRect();
+      const mentionCharPos = this.quill.getBounds(this.mentionCharPos);
+      const containerHeight = this.mentionContainer.offsetHeight;
+
+      let topPos = this.options.offsetTop;
+      let leftPos = this.options.offsetLeft;
+
+      // handle horizontal positioning
+      if (this.options.fixMentionsToQuill) {
+        const rightPos = 0;
+        this.mentionContainer.style.right = `${rightPos}px`;
+      } else {
+        leftPos += mentionCharPos.left;
       }
 
-      // default to bottom if the top is not visible
-      if (topPos + containerPos.top <= 0) {
-        let overMentionCharPos = this.options.offsetTop;
+      if (this.containerRightIsNotVisible(leftPos, containerPos)) {
+        const containerWidth = this.mentionContainer.offsetWidth + this.options.offsetLeft;
+        const quillWidth = containerPos.width;
+        leftPos = quillWidth - containerWidth;
+      }
 
+      // handle vertical positioning
+      if (this.options.defaultMenuOrientation === 'top') {
+        // Attempt to align the mention container with the top of the quill editor
         if (this.options.fixMentionsToQuill) {
-          overMentionCharPos += containerPos.height;
+          topPos = -1 * (containerHeight + this.options.offsetTop);
         } else {
-          overMentionCharPos += mentionCharPos.bottom;
+          topPos = mentionCharPos.top - (containerHeight + this.options.offsetTop);
         }
 
-        topPos = overMentionCharPos;
-      }
-    } else {
-      // Attempt to align the mention container with the bottom of the quill editor
-      if (this.options.fixMentionsToQuill) {
-        topPos += containerPos.height;
+        // default to bottom if the top is not visible
+        if (topPos + containerPos.top <= 0) {
+          let overMentionCharPos = this.options.offsetTop;
+
+          if (this.options.fixMentionsToQuill) {
+            overMentionCharPos += containerPos.height;
+          } else {
+            overMentionCharPos += mentionCharPos.bottom;
+          }
+
+          topPos = overMentionCharPos;
+        }
       } else {
-        topPos += mentionCharPos.bottom;
-      }
-
-      // default to the top if the bottom is not visible
-      if (this.containerBottomIsNotVisible(topPos, containerPos)) {
-        let overMentionCharPos = this.options.offsetTop * -1;
-
-        if (!this.options.fixMentionsToQuill) {
-          overMentionCharPos += mentionCharPos.top;
+        // Attempt to align the mention container with the bottom of the quill editor
+        if (this.options.fixMentionsToQuill) {
+          topPos += containerPos.height;
+        } else {
+          topPos += mentionCharPos.bottom;
         }
 
-        topPos = overMentionCharPos - containerHeight;
+        // default to the top if the bottom is not visible
+        if (this.containerBottomIsNotVisible(topPos, containerPos)) {
+          let overMentionCharPos = this.options.offsetTop * -1;
+
+          if (!this.options.fixMentionsToQuill) {
+            overMentionCharPos += mentionCharPos.top;
+          }
+
+          topPos = overMentionCharPos - containerHeight;
+        }
       }
+
+      if (topPos >= 0) {
+        this.mentionContainer.classList.add(`${this.options.mentionContainerClass}-bottom`);
+        this.mentionContainer.classList.remove(`${this.options.mentionContainerClass}-top`);
+      } else {
+        this.mentionContainer.classList.add(`${this.options.mentionContainerClass}-top`);
+        this.mentionContainer.classList.remove(`${this.options.mentionContainerClass}-bottom`);
+      }
+
+      this.mentionContainer.style.top = `${topPos}px`;
+      this.mentionContainer.style.left = `${leftPos}px`;
     }
-
-    if (topPos >= 0) {
-      this.mentionContainer.classList.add(`${this.options.mentionContainerClass}-bottom`);
-      this.mentionContainer.classList.remove(`${this.options.mentionContainerClass}-top`);
-    } else {
-      this.mentionContainer.classList.add(`${this.options.mentionContainerClass}-top`);
-      this.mentionContainer.classList.remove(`${this.options.mentionContainerClass}-bottom`);
-    }
-
-    this.mentionContainer.style.top = `${topPos}px`;
-    this.mentionContainer.style.left = `${leftPos}px`;
-
     this.mentionContainer.style.visibility = 'visible';
   }
 
