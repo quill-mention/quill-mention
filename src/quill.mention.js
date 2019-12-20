@@ -60,7 +60,11 @@ class Mention {
     this.mentionContainer.onmousemove = this.onContainerMouseMove.bind(this);
 
     if (this.options.fixMentionsToQuill) {
-      this.mentionContainer.style.width = 'auto';
+      if (this.options.container) {
+        this.mentionContainer.style.width = this.quill.container.offsetWidth;
+      } else {
+        this.mentionContainer.style.width = 'auto';
+      }
     }
 
     this.mentionList = document.createElement('ul');
@@ -327,6 +331,9 @@ class Mention {
         y = yBottom;
       } else {
         y = yTop;
+      }
+      if (this.options.fixMentionsToQuill) {
+        this.mentionContainer.style.maxWidth = `${this.quill.container.offsetWidth}px`;
       }
       this.mentionContainer.style.transform = `translate(${x}px, ${y}px)`;
     } else {
