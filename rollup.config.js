@@ -9,6 +9,30 @@ export default [
     input: 'src/quill.mention.js',
     output: [
       {
+        file: 'docs/quill.mention.min.js',
+        format: 'iife',
+        name: 'quillMention',
+        plugins: [terser()],
+        globals: {
+          quill: 'Quill',
+        },
+      },
+    ],
+    external: ['quill'],
+    plugins: [
+      babel({
+        exclude: ['node_modules/**'],
+      }),
+      postcss({
+        extract: 'docs/quill.mention.min.css',
+        minimize: true,
+      }),
+    ],
+  },
+  {
+    input: 'src/quill.mention.js',
+    output: [
+      {
         file: pkg.main,
         format: 'cjs',
       },
@@ -47,30 +71,6 @@ export default [
       }),
       postcss({
         extract: 'dist/quill.mention.min.css',
-        minimize: true,
-      }),
-    ],
-  },
-  {
-    input: 'src/quill.mention.js',
-    output: [
-      {
-        file: 'docs/quill.mention.min.js',
-        format: 'iife',
-        name: 'quillMention',
-        plugins: [terser()],
-        globals: {
-          quill: 'Quill',
-        },
-      },
-    ],
-    external: ['quill'],
-    plugins: [
-      babel({
-        exclude: ['node_modules/**'],
-      }),
-      postcss({
-        extract: 'docs/quill.mention.min.css',
         minimize: true,
       }),
     ],

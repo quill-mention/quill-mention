@@ -19,15 +19,18 @@
     "@babel/core": "^7.7.4",
     "@babel/plugin-transform-object-assign": "^7.7.4",
     "@babel/preset-env": "^7.7.4",
+    "concurrently": "^5.0.2",
     "eslint": "^6.7.2",
     "eslint-config-airbnb-base": "^14.0.0",
     "eslint-plugin-import": "^2.18.2",
     "rollup": "^1.27.8",
     "rollup-plugin-babel": "^4.3.3",
     "rollup-plugin-postcss": "^2.0.3",
-    "rollup-plugin-terser": "^5.1.2"
+    "rollup-plugin-terser": "^5.1.2",
+    "serve": "^11.2.0"
   },
   "scripts": {
+    "start": "concurrently \"rollup -c -w\" \"serve docs\"",
     "build": "rollup -c"
   },
   "keywords": [
