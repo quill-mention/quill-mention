@@ -1,5 +1,6 @@
 import Quill from "quill";
 import Keys from "./constants/keys";
+import { attachDataValues, getMentionCharIndex } from "./utils";
 import "./quill.mention.css";
 import "./blots/mention";
 
@@ -262,18 +263,6 @@ class Mention {
     this.selectItem();
   }
 
-  attachDataValues(element, data) {
-    const mention = element;
-    Object.keys(data).forEach(key => {
-      if (this.options.dataAttributes.indexOf(key) > -1) {
-        mention.dataset[key] = data[key];
-      } else {
-        delete mention.dataset[key];
-      }
-    });
-    return mention;
-  }
-
   renderList(mentionChar, data, searchTerm) {
     if (data && data.length > 0) {
       this.values = data;
@@ -289,7 +278,9 @@ class Mention {
         li.onmouseenter = this.onItemMouseEnter.bind(this);
         li.dataset.denotationChar = mentionChar;
         li.onclick = this.onItemClick.bind(this);
-        this.mentionList.appendChild(this.attachDataValues(li, data[i]));
+        this.mentionList.appendChild(
+          attachDataValues(li, data[i], this.options.dataAttributes)
+        );
       }
       this.itemIndex = 0;
       this.highlightItem();
@@ -441,22 +432,16 @@ class Mention {
     return textBeforeCursorPos;
   }
 
-  getMentionCharIndex(textBeforeCursor) {
-    return this.options.mentionDenotationChars.reduce((prev, cur) => {
-      const previousIndex = prev;
-      const mentionIndex = textBeforeCursor.lastIndexOf(cur);
-
-      return mentionIndex > previousIndex ? mentionIndex : previousIndex;
-    }, -1);
-  }
-
   onSomethingChange() {
     const range = this.quill.getSelection();
     if (range == null) return;
 
     this.cursorPos = range.index;
     const textBeforeCursor = this.getTextBeforeCursor();
-    const mentionCharIndex = this.getMentionCharIndex(textBeforeCursor);
+    const mentionCharIndex = getMentionCharIndex(
+      textBeforeCursor,
+      this.options.mentionDenotationChars
+    );
 
     if (mentionCharIndex > -1) {
       if (

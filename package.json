@@ -26,6 +26,7 @@
     "prettier": "1.19.1",
     "rollup": "^1.27.8",
     "rollup-plugin-babel": "^4.3.3",
+    "rollup-plugin-local-resolve": "^1.0.7",
     "rollup-plugin-postcss": "^2.0.3",
     "rollup-plugin-terser": "^5.1.2",
     "serve": "^11.2.0"
