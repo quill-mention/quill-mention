@@ -10,12 +10,13 @@ function attachDataValues(element, data, dataAttributes) {
   return mention;
 }
 
-function getMentionCharIndex(textBeforeCursor, mentionDenotationChars) {
-  return mentionDenotationChars.reduce((prev, cur) => {
-    const previousIndex = prev;
-    const mentionIndex = textBeforeCursor.lastIndexOf(cur);
+function getMentionCharIndex(text, mentionDenotationChars) {
+  return mentionDenotationChars.reduce((previousMentionIndex, mentionChar) => {
+    const mentionIndex = text.lastIndexOf(mentionChar);
 
-    return mentionIndex > previousIndex ? mentionIndex : previousIndex;
+    return mentionIndex > previousMentionIndex
+      ? mentionIndex
+      : previousMentionIndex;
   }, -1);
 }
 
