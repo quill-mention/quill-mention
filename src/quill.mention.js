@@ -441,22 +441,22 @@ class Mention {
     return textBeforeCursorPos;
   }
 
+  getMentionCharIndex(textBeforeCursor) {
+    return this.options.mentionDenotationChars.reduce((prev, cur) => {
+      const previousIndex = prev;
+      const mentionIndex = textBeforeCursor.lastIndexOf(cur);
+
+      return mentionIndex > previousIndex ? mentionIndex : previousIndex;
+    }, -1);
+  }
+
   onSomethingChange() {
     const range = this.quill.getSelection();
     if (range == null) return;
 
     this.cursorPos = range.index;
     const textBeforeCursor = this.getTextBeforeCursor();
-
-    const mentionCharIndex = this.options.mentionDenotationChars.reduce(
-      (prev, cur) => {
-        const previousIndex = prev;
-        const mentionIndex = textBeforeCursor.lastIndexOf(cur);
-
-        return mentionIndex > previousIndex ? mentionIndex : previousIndex;
-      },
-      -1
-    );
+    const mentionCharIndex = this.getMentionCharIndex(textBeforeCursor);
 
     if (mentionCharIndex > -1) {
       if (
