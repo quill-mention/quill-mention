@@ -255,8 +255,8 @@ class Mention {
   }
 
   onItemClick(e) {
-    e.stopImmediatePropagation();
     e.preventDefault();
+    e.stopImmediatePropagation();
     this.itemIndex = e.currentTarget.dataset.index;
     this.highlightItem();
     this.selectItem();
