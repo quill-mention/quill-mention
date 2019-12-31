@@ -1,6 +1,6 @@
 import Quill from "quill";
 import Keys from "./constants/keys";
-import { attachDataValues, getMentionCharIndex } from "./utils";
+import { attachDataValues, getMentionCharIndex, hasValidChars } from "./utils";
 import "./quill.mention.css";
 import "./blots/mention";
 
@@ -303,10 +303,6 @@ class Mention {
     this.highlightItem();
   }
 
-  hasValidChars(s) {
-    return this.options.allowedChars.test(s);
-  }
-
   containerBottomIsNotVisible(topPos, containerPos) {
     const mentionContainerBottom =
       topPos + this.mentionContainer.offsetHeight + containerPos.top;
@@ -460,7 +456,7 @@ class Mention {
       const textAfter = textBeforeCursor.substring(mentionCharIndex + 1);
       if (
         textAfter.length >= this.options.minChars &&
-        this.hasValidChars(textAfter)
+        hasValidChars(textAfter, this.options.allowedChars)
       ) {
         const mentionChar = textBeforeCursor[mentionCharIndex];
         this.options.source(

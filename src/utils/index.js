@@ -19,4 +19,8 @@ function getMentionCharIndex(textBeforeCursor, mentionDenotationChars) {
   }, -1);
 }
 
-export { attachDataValues, getMentionCharIndex };
+function hasValidChars(text, allowedChars) {
+  return allowedChars.test(text);
+}
+
+export { attachDataValues, getMentionCharIndex, hasValidChars };
