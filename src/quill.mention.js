@@ -1,5 +1,5 @@
 import Quill from "quill";
-import Keys from "./constants/keys";
+import Keys from "./constants";
 import { attachDataValues, getMentionCharIndex, hasValidChars } from "./utils";
 import "./quill.mention.css";
 import "./blots/mention";
@@ -82,7 +82,9 @@ class Mention {
       },
       this.selectHandler.bind(this)
     );
-    quill.keyboard.bindings[9].unshift(quill.keyboard.bindings[9].pop());
+    quill.keyboard.bindings[Keys.TAB].unshift(
+      quill.keyboard.bindings[Keys.TAB].pop()
+    );
 
     quill.keyboard.addBinding(
       {
@@ -90,7 +92,9 @@ class Mention {
       },
       this.selectHandler.bind(this)
     );
-    quill.keyboard.bindings[13].unshift(quill.keyboard.bindings[13].pop());
+    quill.keyboard.bindings[Keys.ENTER].unshift(
+      quill.keyboard.bindings[Keys.ENTER].pop()
+    );
 
     quill.keyboard.addBinding(
       {
