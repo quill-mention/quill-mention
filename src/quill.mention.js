@@ -432,44 +432,52 @@ class Mention {
     this.mentionContainer.style.visibility = "visible";
   }
 
-  onSomethingChange() {
-    const range = this.quill.getSelection();
-    if (range == null) return;
-    this.cursorPos = range.index;
+  getTextBeforeCursor() {
     const startPos = Math.max(0, this.cursorPos - this.options.maxChars);
-    const beforeCursorPos = this.quill.getText(
+    const textBeforeCursorPos = this.quill.getText(
       startPos,
       this.cursorPos - startPos
     );
+    return textBeforeCursorPos;
+  }
+
+  onSomethingChange() {
+    const range = this.quill.getSelection();
+    if (range == null) return;
+
+    this.cursorPos = range.index;
+    const textBeforeCursor = this.getTextBeforeCursor();
+
     const mentionCharIndex = this.options.mentionDenotationChars.reduce(
       (prev, cur) => {
         const previousIndex = prev;
-        const mentionIndex = beforeCursorPos.lastIndexOf(cur);
+        const mentionIndex = textBeforeCursor.lastIndexOf(cur);
 
         return mentionIndex > previousIndex ? mentionIndex : previousIndex;
       },
       -1
     );
+
     if (mentionCharIndex > -1) {
       if (
         this.options.isolateCharacter &&
         !(
           mentionCharIndex === 0 ||
-          !!beforeCursorPos[mentionCharIndex - 1].match(/\s/g)
+          !!textBeforeCursor[mentionCharIndex - 1].match(/\s/g)
         )
       ) {
         this.hideMentionList();
         return;
       }
       const mentionCharPos =
-        this.cursorPos - (beforeCursorPos.length - mentionCharIndex);
+        this.cursorPos - (textBeforeCursor.length - mentionCharIndex);
       this.mentionCharPos = mentionCharPos;
-      const textAfter = beforeCursorPos.substring(mentionCharIndex + 1);
+      const textAfter = textBeforeCursor.substring(mentionCharIndex + 1);
       if (
         textAfter.length >= this.options.minChars &&
         this.hasValidChars(textAfter)
       ) {
-        const mentionChar = beforeCursorPos[mentionCharIndex];
+        const mentionChar = textBeforeCursor[mentionCharIndex];
         this.options.source(
           textAfter,
           this.renderList.bind(this, mentionChar),
