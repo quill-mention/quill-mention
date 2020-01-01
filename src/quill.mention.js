@@ -443,31 +443,28 @@ class Mention {
 
     this.cursorPos = range.index;
     const textBeforeCursor = this.getTextBeforeCursor();
-    const mentionCharIndex = getMentionCharIndex(
+    const { mentionChar, mentionCharIndex } = getMentionCharIndex(
       textBeforeCursor,
       this.options.mentionDenotationChars
     );
 
-    if (hasValidMentionCharIndex(mentionCharIndex)) {
-      if (
-        this.options.isolateCharacter &&
-        !(
-          mentionCharIndex === 0 ||
-          !!textBeforeCursor[mentionCharIndex - 1].match(/\s/g)
-        )
-      ) {
-        this.hideMentionList();
-        return;
-      }
+    if (
+      hasValidMentionCharIndex(
+        mentionCharIndex,
+        textBeforeCursor,
+        this.options.isolateCharacter
+      )
+    ) {
       const mentionCharPos =
         this.cursorPos - (textBeforeCursor.length - mentionCharIndex);
       this.mentionCharPos = mentionCharPos;
-      const textAfter = textBeforeCursor.substring(mentionCharIndex + 1);
+      const textAfter = textBeforeCursor.substring(
+        mentionCharIndex + mentionChar.length
+      );
       if (
         textAfter.length >= this.options.minChars &&
         hasValidChars(textAfter, this.options.allowedChars)
       ) {
-        const mentionChar = textBeforeCursor[mentionCharIndex];
         this.options.source(
           textAfter,
           this.renderList.bind(this, mentionChar),
