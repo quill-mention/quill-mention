@@ -1,6 +1,11 @@
 import Quill from "quill";
 import Keys from "./constants";
-import { attachDataValues, getMentionCharIndex, hasValidChars } from "./utils";
+import {
+  attachDataValues,
+  getMentionCharIndex,
+  hasValidChars,
+  hasValidMentionCharIndex
+} from "./utils";
 import "./quill.mention.css";
 import "./blots/mention";
 
@@ -443,7 +448,7 @@ class Mention {
       this.options.mentionDenotationChars
     );
 
-    if (mentionCharIndex > -1) {
+    if (hasValidMentionCharIndex(mentionCharIndex)) {
       if (
         this.options.isolateCharacter &&
         !(

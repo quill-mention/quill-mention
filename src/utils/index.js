@@ -24,4 +24,13 @@ function hasValidChars(text, allowedChars) {
   return allowedChars.test(text);
 }
 
-export { attachDataValues, getMentionCharIndex, hasValidChars };
+function hasValidMentionCharIndex(mentionCharIndex) {
+  return mentionCharIndex > -1;
+}
+
+export {
+  attachDataValues,
+  getMentionCharIndex,
+  hasValidChars,
+  hasValidMentionCharIndex
+};
