@@ -16,6 +16,15 @@ export default [
         globals: {
           quill: "Quill"
         }
+      },
+      {
+        file: "dist/quill.mention.min.js",
+        format: "iife",
+        name: "quillMention",
+        plugins: [terser()],
+        globals: {
+          quill: "Quill"
+        }
       }
     ],
     external: ["quill"],
@@ -25,7 +34,7 @@ export default [
         exclude: ["node_modules/**"]
       }),
       postcss({
-        extract: "docs/quill.mention.min.css",
+        extract: true,
         minimize: true
       })
     ]
@@ -50,31 +59,6 @@ export default [
       }),
       postcss({
         extract: "dist/quill.mention.css"
-      })
-    ]
-  },
-  {
-    input: "src/quill.mention.js",
-    output: [
-      {
-        file: "dist/quill.mention.min.js",
-        format: "iife",
-        name: "quillMention",
-        plugins: [terser()],
-        globals: {
-          quill: "Quill"
-        }
-      }
-    ],
-    external: ["quill"],
-    plugins: [
-      localResolve(),
-      babel({
-        exclude: ["node_modules/**"]
-      }),
-      postcss({
-        extract: "dist/quill.mention.min.css",
-        minimize: true
       })
     ]
   }
