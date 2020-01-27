@@ -10,6 +10,7 @@ class Mention {
     this.isOpen = false;
     this.itemIndex = 0;
     this.mentionCharPos = null;
+    this.editMentionCharPos = null;
     this.cursorPos = null;
     this.values = [];
     this.suspendMouseEnter = false;
@@ -192,11 +193,16 @@ class Mention {
     if (!this.options.showDenotationChar) {
       render.denotationChar = '';
     }
+    const prevMentionCharPos = this.editMentionCharPos === null
+      ? this.mentionCharPos
+      : this.editMentionCharPos;
 
-    const prevMentionCharPos = this.mentionCharPos;
+    const deleteTextLength = this.options.spaceAfterInsert
+      ? this.cursorPos - prevMentionCharPos + 1
+      : this.cursorPos - prevMentionCharPos;
 
     this.quill
-      .deleteText(this.mentionCharPos, this.cursorPos - this.mentionCharPos, Quill.sources.USER);
+      .deleteText(prevMentionCharPos, deleteTextLength, Quill.sources.USER);
     this.quill.insertEmbed(prevMentionCharPos, 'mention', render, Quill.sources.USER);
     if (this.options.spaceAfterInsert) {
       this.quill.insertText(prevMentionCharPos + 1, ' ', Quill.sources.USER);
@@ -205,6 +211,7 @@ class Mention {
     } else {
       this.quill.setSelection(prevMentionCharPos + 1, Quill.sources.USER);
     }
+    this.editMentionCharPos = null;
     this.hideMentionList();
   }
 
@@ -308,7 +315,9 @@ class Mention {
 
   setMentionContainerPosition() {
     const containerPos = this.quill.container.getBoundingClientRect();
-    const mentionCharPos = this.quill.getBounds(this.mentionCharPos);
+    const mentionCharPos = this.quill.getBounds(
+      this.editMentionCharPos === null ? this.mentionCharPos : this.editMentionCharPos
+    );
     const containerHeight = this.mentionContainer.offsetHeight;
 
     let topPos = this.options.offsetTop;
@@ -386,7 +395,8 @@ class Mention {
   onSomethingChange() {
     const range = this.quill.getSelection();
     if (range == null) return;
-    this.cursorPos = range.index;
+    if (this.editMentionCharPos === null)
+      this.cursorPos = range.index;
     const startPos = Math.max(0, this.cursorPos - this.options.maxChars);
     const beforeCursorPos = this.quill.getText(startPos, this.cursorPos - startPos);
     const mentionCharIndex = this.options.mentionDenotationChars.reduce((prev, cur) => {
@@ -420,18 +430,14 @@ class Mention {
     }
   }
 
-  editMention(mentionObj, rangeIndex) {
-    let rangeLength = this.options.spaceAfterInsert ? 2 : 1;
-    this.quill.deleteText(rangeIndex - 1, rangeLength);
-    this.quill.insertText(rangeIndex - 1, mentionObj.denotationChar, 'user')
-    this.quill.setSelection(rangeIndex, 0);
-  }
 
   onSelectionChange(range) {
     if (range && range.length === 0) {
-      let rangeContents = this.quill.getContents(range.index - 1, range.length + 1)
+      let rangeContents = this.quill.getContents(range.index - 1, range.index)
       if (rangeContents.ops[0] && rangeContents.ops[0].insert && rangeContents.ops[0].insert.mention) {
-        this.editMention(rangeContents.ops[0].insert.mention, range.index)
+        this.cursorPos = range.index;
+        this.editMentionCharPos = range.index - 1;
+        this.showMentionList();
       } else {
         this.onSomethingChange();
       }
