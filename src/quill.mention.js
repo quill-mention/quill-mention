@@ -407,19 +407,15 @@ class Mention {
     }
 
     if (topPos >= 0) {
-      this.mentionContainer.classList.add(
-        `${this.options.mentionContainerClass}-bottom`
-      );
-      this.mentionContainer.classList.remove(
-        `${this.options.mentionContainerClass}-top`
-      );
+      this.mentionContainer.classList.forEach(className => {
+        this.mentionContainer.classList.add(`${className}-bottom`);
+        this.mentionContainer.classList.remove(`${className}-top`);
+      });
     } else {
-      this.mentionContainer.classList.add(
-        `${this.options.mentionContainerClass}-top`
-      );
-      this.mentionContainer.classList.remove(
-        `${this.options.mentionContainerClass}-bottom`
-      );
+      this.mentionContainer.classList.forEach(className => {
+        this.mentionContainer.classList.add(`${className}-top`);
+        this.mentionContainer.classList.remove(`${className}-bottom`);
+      });
     }
 
     this.mentionContainer.style.top = `${topPos}px`;
