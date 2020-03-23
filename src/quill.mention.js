@@ -407,12 +407,12 @@ class Mention {
     }
 
     if (topPos >= 0) {
-      this.mentionContainer.classList.forEach(className => {
+      this.options.mentionContainerClass.split(' ').forEach(className => {
         this.mentionContainer.classList.add(`${className}-bottom`);
         this.mentionContainer.classList.remove(`${className}-top`);
       });
     } else {
-      this.mentionContainer.classList.forEach(className => {
+      this.options.mentionContainerClass.split(' ').forEach(className => {
         this.mentionContainer.classList.add(`${className}-top`);
         this.mentionContainer.classList.remove(`${className}-bottom`);
       });
