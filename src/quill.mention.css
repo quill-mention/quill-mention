@@ -35,6 +35,7 @@
   background-color: #d3e1eb;
   padding: 3px 0;
   margin-right: 2px;
+  user-select: all;
 }
 
 .mention > span {
