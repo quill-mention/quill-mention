@@ -37,6 +37,7 @@ class Mention {
       offsetLeft: 0,
       isolateCharacter: false,
       fixMentionsToQuill: false,
+      mentionsContainment: 'window',
       defaultMenuOrientation: "bottom",
       dataAttributes: ["id", "value", "denotationChar", "link", "target"],
       linkTarget: "_blank",
@@ -313,6 +314,15 @@ class Mention {
   }
 
   containerBottomIsNotVisible(topPos, containerPos) {
+    if (this.options.mentionsContainment === "quill") {
+      const mentionOffsetHeight = this.mentionContainer.offsetHeight;
+      const quillScrollTop = this.quill.container.scrollTop;
+      return (
+        topPos + mentionOffsetHeight > containerPos.height + quillScrollTop &&
+        topPos - quillScrollTop > mentionOffsetHeight
+      );
+    }
+
     const mentionContainerBottom =
       topPos + this.mentionContainer.offsetHeight + containerPos.top;
     return mentionContainerBottom > window.pageYOffset + window.innerHeight;
@@ -321,6 +331,15 @@ class Mention {
   containerRightIsNotVisible(leftPos, containerPos) {
     if (this.options.fixMentionsToQuill) {
       return false;
+    }
+
+    if (this.options.mentionsContainment === "quill") {
+      const mentionOffsetWidth = this.mentionContainer.offsetWidth;
+      const quillScrollLeft = this.quill.container.scrollLeft;
+      return (
+        leftPos + mentionOffsetWidth > containerPos.width + quillScrollLeft &&
+        leftPos - quillScrollLeft > mentionOffsetWidth
+      );
     }
 
     const rightPos =
