@@ -38,6 +38,7 @@ class Mention {
       isolateCharacter: false,
       fixMentionsToQuill: false,
       defaultMenuOrientation: "bottom",
+      blotName: "mention",
       dataAttributes: ["id", "value", "denotationChar", "link", "target"],
       linkTarget: "_blank",
       onOpen() {
@@ -237,7 +238,7 @@ class Mention {
     );
     this.quill.insertEmbed(
       prevMentionCharPos,
-      "mention",
+      this.options.blotName,
       render,
       Quill.sources.USER
     );
