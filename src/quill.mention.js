@@ -72,8 +72,8 @@ class Mention {
     //create mention container
     this.mentionContainer = document.createElement("div");
     this.mentionContainer.className = this.options.mentionContainerClass
-                                          ? this.options.mentionContainerClass
-                                          : "";
+      ? this.options.mentionContainerClass
+      : "";
     this.mentionContainer.style.cssText = "display: none; position: absolute;";
     this.mentionContainer.onmousemove = this.onContainerMouseMove.bind(this);
 
@@ -83,8 +83,8 @@ class Mention {
 
     this.mentionList = document.createElement("ul");
     this.mentionList.className = this.options.mentionListClass
-                                      ? this.options.mentionListClass
-                                      : "";
+      ? this.options.mentionListClass
+      : "";
     this.mentionContainer.appendChild(this.mentionList);
 
     quill.on("text-change", this.onTextChange.bind(this));
@@ -530,12 +530,12 @@ class Mention {
     }
 
     if (topPos >= 0) {
-      this.options.mentionContainerClass.split(' ').forEach((className) => {
+      this.options.mentionContainerClass.split(' ').forEach(className => {
         this.mentionContainer.classList.add(`${className}-bottom`);
         this.mentionContainer.classList.remove(`${className}-top`);
       });
     } else {
-      this.options.mentionContainerClass.split(' ').forEach((className) => {
+      this.options.mentionContainerClass.split(' ').forEach(className => {
         this.mentionContainer.classList.add(`${className}-top`);
         this.mentionContainer.classList.remove(`${className}-bottom`);
       });

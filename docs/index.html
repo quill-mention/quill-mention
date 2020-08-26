@@ -10,8 +10,9 @@
     <style>
       body {
         font-size: 16px;
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif,
-          "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          Helvetica, Arial, sans-serif,"Apple Color Emoji", "Segoe UI Emoji",
+          "Segoe UI Symbol";
         max-width: 800px;
         margin: 0 auto;
       }
@@ -36,7 +37,8 @@
   <body>
     <h1>Quill Mention</h1>
     <p>
-      Quill Mention is a module to provide @mentions or #hashtag functionality for the Quill rich text editor.
+      Quill Mention is a module to provide @mentions or #hashtag functionality
+      for the Quill rich text editor.
     </p>
 
     <h2>Simple Demo</h2>
@@ -116,16 +118,16 @@
                 const matches = [];
                 for (i = 0; i < values.length; i++)
                   if (
-                      ~values[i].value.
-                        toLowerCase().
-                        indexOf(searchTerm.toLowerCase())
-                    )
-                      matches.push(values[i]);
+                    ~values[i].value
+                    .toLowerCase()
+                    .indexOf(searchTerm.toLowerCase())
+                  )
+                    matches.push(values[i]);
                 renderList(matches, searchTerm);
               }
-            },
-          },
-        },
+            }
+          }
+        }
       });
 
       var quill2 = new Quill("#editor2", {

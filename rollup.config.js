@@ -31,11 +31,11 @@ export default [
     plugins: [
       localResolve(),
       babel({
-        exclude: ["node_modules/**"],
+        exclude: ["node_modules/**"]
       }),
       postcss({
         extract: true,
-        minimize: true,
+        minimize: true
       })
     ]
   },
