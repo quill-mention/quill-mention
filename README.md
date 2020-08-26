@@ -48,11 +48,11 @@ import "quill-mention";
 
 const atValues = [
   { id: 1, value: "Fredrik Sundqvist" },
-  { id: 2, value: "Patrik Sjölin" },
+  { id: 2, value: "Patrik Sjölin" }
 ];
 const hashValues = [
   { id: 3, value: "Fredrik Sundqvist 2" },
-  { id: 4, value: "Patrik Sjölin 2" },
+  { id: 4, value: "Patrik Sjölin 2" }
 ];
 const quill = new Quill("#editor", {
   modules: {
@@ -73,12 +73,13 @@ const quill = new Quill("#editor", {
         } else {
           const matches = [];
           for (let i = 0; i < values.length; i++)
-            if (~values[i].value.toLowerCase().indexOf(searchTerm.toLowerCase())) matches.push(values[i]);
+            if (~values[i].value.toLowerCase().indexOf(searchTerm.toLowerCase()))
+              matches.push(values[i]);
           renderList(matches, searchTerm);
         }
-      },
-    },
-  },
+      }
+    }
+  }
 });
 ```
 
@@ -89,14 +90,14 @@ async function suggestPeople(searchTerm) {
   const allPeople = [
     {
       id: 1,
-      value: "Fredrik Sundqvist",
+      value: "Fredrik Sundqvist"
     },
     {
       id: 2,
-      value: "Patrik Sjölin",
-    },
+      value: "Patrik Sjölin"
+    }
   ];
-  return allPeople.filter((person) => person.value.includes(searchTerm));
+  return allPeople.filter(person => person.value.includes(searchTerm));
 }
 
 const quill = new Quill("#editor", {
@@ -107,9 +108,9 @@ const quill = new Quill("#editor", {
       source: async function(searchTerm, renderList) {
         const matchedPeople = await suggestPeople(searchTerm);
         renderList(matchedPeople);
-      },
-    },
-  },
+      }
+    }
+  }
 });
 ```
 
@@ -127,9 +128,9 @@ const quill = new Quill("#editor", {
       mentionDenotationChars: ["@", "#"],
       source: function(searchTerm, renderList, mentionChar) {
         // some source implementation
-      },
-    },
-  },
+      }
+    }
+  }
 });
 ```
 
@@ -139,7 +140,7 @@ const quill = new Quill("#editor", {
 | --------------------------------------------- | ---------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `source(searchTerm, renderList, mentionChar)` | `null`                                                           | Required callback function to handle the search term and connect it to a data source for matches. The data source can be a local source or an AJAX request. The callback should call `renderList(matches, searchTerm);` with matches of JSON Objects in an array to show the result for the user. The JSON Objects should have `id` and `value` but can also have other values to be used in `renderItem` for custom display.                                                       |
 | `renderItem(item, searchTerm)`                | `function`                                                       | A function that gives you control over how matches from source are displayed. You can use this function to highlight the search term or change the design with custom HTML.                                                                                                                                                                                                                                                                                                         |
-| `allowedChars`                                | `[a-zA-Z0-9_]`                                                   | Allowed characters in search term triggering a search request using regular expressions                                                                                                                                                                                                                                                                                                                                                                                             |
+| `allowedChars`                                | `[a-zA-Z0-9_]` (or `function`)                                   | Allowed characters in search term triggering a search request using regular expressions.  Can be a function that takes the denotationChar and returns a regex.                                                                                                                                                                                                                                                                                                                                                                                             |
 | `minChars`                                    | `0`                                                              | Minimum number of characters after the @ symbol triggering a search request                                                                                                                                                                                                                                                                                                                                                                                                         |
 | `maxChars`                                    | `31`                                                             | Maximum number of characters after the @ symbol triggering a search request                                                                                                                                                                                                                                                                                                                                                                                                         |
 | `offsetTop`                                   | `2`                                                              | Additional top offset of the mention container position                                                                                                                                                                                                                                                                                                                                                                                                                             |

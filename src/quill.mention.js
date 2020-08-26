@@ -1,6 +1,11 @@
 import Quill from "quill";
 import Keys from "./constants";
-import { attachDataValues, getMentionCharIndex, hasValidChars, hasValidMentionCharIndex } from "./utils";
+import {
+  attachDataValues,
+  getMentionCharIndex,
+  hasValidChars,
+  hasValidMentionCharIndex
+} from "./utils";
 import "./quill.mention.css";
 import "./blots/mention";
 
@@ -55,18 +60,20 @@ class Mention {
       listItemClass: "ql-mention-list-item",
       mentionContainerClass: "ql-mention-list-container",
       mentionListClass: "ql-mention-list",
-      spaceAfterInsert: true,
+      spaceAfterInsert: true
     };
 
     Object.assign(this.options, options, {
       dataAttributes: Array.isArray(options.dataAttributes)
         ? this.options.dataAttributes.concat(options.dataAttributes)
-        : this.options.dataAttributes,
+        : this.options.dataAttributes
     });
 
     //create mention container
     this.mentionContainer = document.createElement("div");
-    this.mentionContainer.className = this.options.mentionContainerClass ? this.options.mentionContainerClass : "";
+    this.mentionContainer.className = this.options.mentionContainerClass
+                                          ? this.options.mentionContainerClass
+                                          : "";
     this.mentionContainer.style.cssText = "display: none; position: absolute;";
     this.mentionContainer.onmousemove = this.onContainerMouseMove.bind(this);
 
@@ -75,7 +82,9 @@ class Mention {
     }
 
     this.mentionList = document.createElement("ul");
-    this.mentionList.className = this.options.mentionListClass ? this.options.mentionListClass : "";
+    this.mentionList.className = this.options.mentionListClass
+                                      ? this.options.mentionListClass
+                                      : "";
     this.mentionContainer.appendChild(this.mentionList);
 
     quill.on("text-change", this.onTextChange.bind(this));
@@ -83,37 +92,41 @@ class Mention {
 
     quill.keyboard.addBinding(
       {
-        key: Keys.TAB,
+        key: Keys.TAB
       },
       this.selectHandler.bind(this)
     );
-    quill.keyboard.bindings[Keys.TAB].unshift(quill.keyboard.bindings[Keys.TAB].pop());
+    quill.keyboard.bindings[Keys.TAB].unshift(
+      quill.keyboard.bindings[Keys.TAB].pop()
+    );
 
     quill.keyboard.addBinding(
       {
-        key: Keys.ENTER,
+        key: Keys.ENTER
       },
       this.selectHandler.bind(this)
     );
-    quill.keyboard.bindings[Keys.ENTER].unshift(quill.keyboard.bindings[Keys.ENTER].pop());
+    quill.keyboard.bindings[Keys.ENTER].unshift(
+      quill.keyboard.bindings[Keys.ENTER].pop()
+    );
 
     quill.keyboard.addBinding(
       {
-        key: Keys.ESCAPE,
+        key: Keys.ESCAPE
       },
       this.escapeHandler.bind(this)
     );
 
     quill.keyboard.addBinding(
       {
-        key: Keys.UP,
+        key: Keys.UP
       },
       this.upHandler.bind(this)
     );
 
     quill.keyboard.addBinding(
       {
-        key: Keys.DOWN,
+        key: Keys.DOWN
       },
       this.downHandler.bind(this)
     );
@@ -186,7 +199,8 @@ class Mention {
     this.mentionList.childNodes[this.itemIndex].classList.add("selected");
 
     if (scrollItemInView) {
-      const itemHeight = this.mentionList.childNodes[this.itemIndex].offsetHeight;
+      const itemHeight = this.mentionList.childNodes[this.itemIndex]
+        .offsetHeight;
       const itemPos = this.mentionList.childNodes[this.itemIndex].offsetTop;
       const containerTop = this.mentionContainer.scrollTop;
       const containerBottom = containerTop + this.mentionContainer.offsetHeight;
@@ -196,7 +210,8 @@ class Mention {
         this.mentionContainer.scrollTop = itemPos;
       } else if (itemPos > containerBottom - itemHeight) {
         // scroll down if any part of the element is below the bottom of the container
-        this.mentionContainer.scrollTop += itemPos - containerBottom + itemHeight;
+        this.mentionContainer.scrollTop +=
+          itemPos - containerBottom + itemHeight;
       }
     }
   }
@@ -204,10 +219,15 @@ class Mention {
   getItemData() {
     const { link } = this.mentionList.childNodes[this.itemIndex].dataset;
     const hasLinkValue = typeof link !== "undefined";
-    const itemTarget = this.mentionList.childNodes[this.itemIndex].dataset.target;
+    const itemTarget = this.mentionList.childNodes[this.itemIndex].dataset
+      .target;
     if (hasLinkValue) {
-      this.mentionList.childNodes[this.itemIndex].dataset.value = `<a href="${link}" target=${itemTarget ||
-        this.options.linkTarget}>${this.mentionList.childNodes[this.itemIndex].dataset.value}`;
+      this.mentionList.childNodes[
+        this.itemIndex
+      ].dataset.value = `<a href="${link}" target=${itemTarget ||
+        this.options.linkTarget}>${
+        this.mentionList.childNodes[this.itemIndex].dataset.value
+      }`;
     }
     return this.mentionList.childNodes[this.itemIndex].dataset;
   }
@@ -243,7 +263,11 @@ class Mention {
 
     if (!programmaticInsert) {
       insertAtPos = this.mentionCharPos;
-      this.quill.deleteText(this.mentionCharPos, this.cursorPos - this.mentionCharPos, Quill.sources.USER);
+      this.quill.deleteText(
+        this.mentionCharPos,
+        this.cursorPos - this.mentionCharPos,
+        Quill.sources.USER
+      );
     } else {
       insertAtPos = this.cursorPos;
     }
@@ -333,7 +357,9 @@ class Mention {
 
       for (let i = 0; i < data.length; i += 1) {
         const li = document.createElement("li");
-        li.className = this.options.listItemClass ? this.options.listItemClass : "";
+        li.className = this.options.listItemClass
+          ? this.options.listItemClass
+          : "";
         if (data[i].disabled) {
           li.className += " disabled";
         } else if (initialSelection === -1) {
@@ -349,7 +375,9 @@ class Mention {
           li.onmouseenter = this.onDisabledItemMouseEnter.bind(this);
         }
         li.dataset.denotationChar = mentionChar;
-        this.mentionList.appendChild(attachDataValues(li, data[i], this.options.dataAttributes));
+        this.mentionList.appendChild(
+          attachDataValues(li, data[i], this.options.dataAttributes)
+        );
       }
       this.itemIndex = initialSelection;
       this.highlightItem();
@@ -400,7 +428,8 @@ class Mention {
   }
 
   containerBottomIsNotVisible(topPos, containerPos) {
-    const mentionContainerBottom = topPos + this.mentionContainer.offsetHeight + containerPos.top;
+    const mentionContainerBottom =
+      topPos + this.mentionContainer.offsetHeight + containerPos.top;
     return mentionContainerBottom > window.pageYOffset + window.innerHeight;
   }
 
@@ -409,8 +438,10 @@ class Mention {
       return false;
     }
 
-    const rightPos = leftPos + this.mentionContainer.offsetWidth + containerPos.left;
-    const browserWidth = window.pageXOffset + document.documentElement.clientWidth;
+    const rightPos =
+      leftPos + this.mentionContainer.offsetWidth + containerPos.left;
+    const browserWidth =
+      window.pageXOffset + document.documentElement.clientWidth;
     return rightPos > browserWidth;
   }
 
@@ -450,7 +481,8 @@ class Mention {
     }
 
     if (this.containerRightIsNotVisible(leftPos, containerPos)) {
-      const containerWidth = this.mentionContainer.offsetWidth + this.options.offsetLeft;
+      const containerWidth =
+        this.mentionContainer.offsetWidth + this.options.offsetLeft;
       const quillWidth = containerPos.width;
       leftPos = quillWidth - containerWidth;
     }
@@ -461,7 +493,8 @@ class Mention {
       if (this.options.fixMentionsToQuill) {
         topPos = -1 * (containerHeight + this.options.offsetTop);
       } else {
-        topPos = mentionCharPos.top - (containerHeight + this.options.offsetTop);
+        topPos =
+          mentionCharPos.top - (containerHeight + this.options.offsetTop);
       }
 
       // default to bottom if the top is not visible
@@ -497,12 +530,12 @@ class Mention {
     }
 
     if (topPos >= 0) {
-      this.options.mentionContainerClass.split(" ").forEach((className) => {
+      this.options.mentionContainerClass.split(' ').forEach((className) => {
         this.mentionContainer.classList.add(`${className}-bottom`);
         this.mentionContainer.classList.remove(`${className}-top`);
       });
     } else {
-      this.options.mentionContainerClass.split(" ").forEach((className) => {
+      this.options.mentionContainerClass.split(' ').forEach((className) => {
         this.mentionContainer.classList.add(`${className}-top`);
         this.mentionContainer.classList.remove(`${className}-bottom`);
       });
@@ -596,7 +629,10 @@ class Mention {
 
   getTextBeforeCursor() {
     const startPos = Math.max(0, this.cursorPos - this.options.maxChars);
-    const textBeforeCursorPos = this.quill.getText(startPos, this.cursorPos - startPos);
+    const textBeforeCursorPos = this.quill.getText(
+      startPos,
+      this.cursorPos - startPos
+    );
     return textBeforeCursorPos;
   }
 
@@ -611,11 +647,22 @@ class Mention {
       this.options.mentionDenotationChars
     );
 
-    if (hasValidMentionCharIndex(mentionCharIndex, textBeforeCursor, this.options.isolateCharacter)) {
+    if (
+        hasValidMentionCharIndex(
+          mentionCharIndex,
+          textBeforeCursor,
+          this.options.isolateCharacter
+        )
+      ) {
       const mentionCharPos = this.cursorPos - (textBeforeCursor.length - mentionCharIndex);
       this.mentionCharPos = mentionCharPos;
-      const textAfter = textBeforeCursor.substring(mentionCharIndex + mentionChar.length);
-      if (textAfter.length >= this.options.minChars && hasValidChars(textAfter, this.options.allowedChars)) {
+      const textAfter = textBeforeCursor.substring(
+        mentionCharIndex + mentionChar.length
+      );
+      if (
+        textAfter.length >= this.options.minChars &&
+        hasValidChars(textAfter, this.getAllowedCharsRegex(mentionChar))
+      ) {
         if (this.existingSourceExecutionToken) {
           this.existingSourceExecutionToken.abandoned = true;
         }
@@ -640,6 +687,14 @@ class Mention {
       }
     } else {
       this.hideMentionList();
+    }
+  }
+
+  getAllowedCharsRegex(denotationChar) {
+    if (this.options.allowedChars instanceof RegExp) {
+      return this.options.allowedChars;
+    } else {
+      return this.options.allowedChars(denotationChar);
     }
   }
 
