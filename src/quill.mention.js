@@ -17,6 +17,11 @@ class Mention {
     this.cursorPos = null;
     this.values = [];
     this.suspendMouseEnter = false;
+    //this token is an object that may contains one key "abandoned", set to
+    //true when the previous source call should be ignored in favor or a
+    //more recent execution.  This token will be null unless a source call
+    //is in progress.
+    this.existingSourceExecutionToken = null;
 
     this.quill = quill;
 
@@ -24,6 +29,9 @@ class Mention {
       source: null,
       renderItem(item) {
         return `${item.value}`;
+      },
+      renderLoading() {
+        return null;
       },
       onSelect(item, insertItem) {
         insertItem(item);
@@ -37,9 +45,10 @@ class Mention {
       offsetLeft: 0,
       isolateCharacter: false,
       fixMentionsToQuill: false,
+      positioningStrategy: "normal",
       defaultMenuOrientation: "bottom",
       blotName: "mention",
-      dataAttributes: ["id", "value", "denotationChar", "link", "target"],
+      dataAttributes: ["id", "value", "denotationChar", "link", "target", "disabled"],
       linkTarget: "_blank",
       onOpen() {
         return true;
@@ -60,6 +69,7 @@ class Mention {
         : this.options.dataAttributes
     });
 
+    //create mention container
     this.mentionContainer = document.createElement("div");
     this.mentionContainer.className = this.options.mentionContainerClass
       ? this.options.mentionContainerClass
@@ -76,8 +86,6 @@ class Mention {
       ? this.options.mentionListClass
       : "";
     this.mentionContainer.appendChild(this.mentionList);
-
-    this.quill.container.appendChild(this.mentionContainer);
 
     quill.on("text-change", this.onTextChange.bind(this));
     quill.on("selection-change", this.onSelectionChange.bind(this));
@@ -125,7 +133,7 @@ class Mention {
   }
 
   selectHandler() {
-    if (this.isOpen) {
+    if (this.isOpen && !this.existingSourceExecutionToken) {
       this.selectItem();
       return false;
     }
@@ -134,6 +142,9 @@ class Mention {
 
   escapeHandler() {
     if (this.isOpen) {
+      if (this.existingSourceExecutionToken) {
+        this.existingSourceExecutionToken.abandoned = true;
+      }
       this.hideMentionList();
       return false;
     }
@@ -141,7 +152,7 @@ class Mention {
   }
 
   upHandler() {
-    if (this.isOpen) {
+    if (this.isOpen && !this.existingSourceExecutionToken) {
       this.prevItem();
       return false;
     }
@@ -149,7 +160,7 @@ class Mention {
   }
 
   downHandler() {
-    if (this.isOpen) {
+    if (this.isOpen && !this.existingSourceExecutionToken) {
       this.nextItem();
       return false;
     }
@@ -157,14 +168,22 @@ class Mention {
   }
 
   showMentionList() {
+    if (this.options.positioningStrategy === "fixed") {
+      document.body.appendChild(this.mentionContainer);
+    } else {
+      this.quill.container.appendChild(this.mentionContainer);
+    }
+
     this.mentionContainer.style.visibility = "hidden";
     this.mentionContainer.style.display = "";
+    this.mentionContainer.scrollTop = 0;
     this.setMentionContainerPosition();
     this.setIsOpen(true);
   }
 
   hideMentionList() {
     this.mentionContainer.style.display = "none";
+    this.mentionContainer.remove();
     this.setIsOpen(false);
   }
 
@@ -172,12 +191,17 @@ class Mention {
     for (let i = 0; i < this.mentionList.childNodes.length; i += 1) {
       this.mentionList.childNodes[i].classList.remove("selected");
     }
+
+    if (this.itemIndex === -1 || this.mentionList.childNodes[this.itemIndex].dataset.disabled === "true") {
+      return;
+    }
+
     this.mentionList.childNodes[this.itemIndex].classList.add("selected");
 
     if (scrollItemInView) {
       const itemHeight = this.mentionList.childNodes[this.itemIndex]
         .offsetHeight;
-      const itemPos = this.itemIndex * itemHeight;
+      const itemPos = this.mentionList.childNodes[this.itemIndex].offsetTop;
       const containerTop = this.mentionContainer.scrollTop;
       const containerBottom = containerTop + this.mentionContainer.offsetHeight;
 
@@ -213,14 +237,20 @@ class Mention {
   }
 
   selectItem() {
+    if (this.itemIndex === -1) {
+      return;
+    }
     const data = this.getItemData();
-    this.options.onSelect(data, asyncData => {
+    if (data.disabled) {
+      return;
+    }
+    this.options.onSelect(data, (asyncData) => {
       this.insertItem(asyncData);
     });
     this.hideMentionList();
   }
 
-  insertItem(data) {
+  insertItem(data, programmaticInsert) {
     const render = data;
     if (render === null) {
       return;
@@ -229,25 +259,25 @@ class Mention {
       render.denotationChar = "";
     }
 
-    const prevMentionCharPos = this.mentionCharPos;
+    var insertAtPos;
 
-    this.quill.deleteText(
-      this.mentionCharPos,
-      this.cursorPos - this.mentionCharPos,
-      Quill.sources.USER
-    );
-    this.quill.insertEmbed(
-      prevMentionCharPos,
-      this.options.blotName,
-      render,
-      Quill.sources.USER
-    );
-    if (this.options.spaceAfterInsert) {
-      this.quill.insertText(prevMentionCharPos + 1, " ", Quill.sources.USER);
-      // setSelection here sets cursor position
-      this.quill.setSelection(prevMentionCharPos + 2, Quill.sources.USER);
+    if (!programmaticInsert) {
+      insertAtPos = this.mentionCharPos;
+      this.quill.deleteText(
+        this.mentionCharPos,
+        this.cursorPos - this.mentionCharPos,
+        Quill.sources.USER
+      );
     } else {
-      this.quill.setSelection(prevMentionCharPos + 1, Quill.sources.USER);
+      insertAtPos = this.cursorPos;
+    }
+    this.quill.insertEmbed(insertAtPos, this.options.blotName, render, Quill.sources.USER);
+    if (this.options.spaceAfterInsert) {
+      this.quill.insertText(insertAtPos + 1, " ", Quill.sources.USER);
+      // setSelection here sets cursor position
+      this.quill.setSelection(insertAtPos + 2, Quill.sources.USER);
+    } else {
+      this.quill.setSelection(insertAtPos + 1, Quill.sources.USER);
     }
     this.hideMentionList();
   }
@@ -265,7 +295,19 @@ class Mention {
     }
   }
 
+  onDisabledItemMouseEnter(e) {
+    if (this.suspendMouseEnter) {
+      return;
+    }
+
+    this.itemIndex = -1;
+    this.highlightItem(false);
+  }
+
   onItemClick(e) {
+    if (e.button !== 0) {
+      return;
+    }
     e.preventDefault();
     e.stopImmediatePropagation();
     this.itemIndex = e.currentTarget.dataset.index;
@@ -273,26 +315,71 @@ class Mention {
     this.selectItem();
   }
 
+  onItemMouseDown(e) {
+    e.preventDefault();
+    e.stopImmediatePropagation();
+  }
+
+  renderLoading() {
+    var renderedLoading = this.options.renderLoading();
+    if (!renderedLoading) {
+      return;
+    }
+
+    if (this.mentionContainer.getElementsByClassName("ql-mention-loading").length > 0) {
+      this.showMentionList();
+      return;
+    }
+
+    this.mentionList.innerHTML = "";
+    var loadingDiv = document.createElement("div");
+    loadingDiv.className = "ql-mention-loading";
+    loadingDiv.innerHTML = this.options.renderLoading();
+    this.mentionContainer.append(loadingDiv);
+    this.showMentionList();
+  }
+
+  removeLoading() {
+    var loadingDiv = this.mentionContainer.getElementsByClassName("ql-mention-loading");
+    if (loadingDiv.length > 0) {
+      loadingDiv[0].remove();
+    }
+  }
+
   renderList(mentionChar, data, searchTerm) {
     if (data && data.length > 0) {
+      this.removeLoading();
+
       this.values = data;
       this.mentionList.innerHTML = "";
+
+      var initialSelection = -1;
 
       for (let i = 0; i < data.length; i += 1) {
         const li = document.createElement("li");
         li.className = this.options.listItemClass
           ? this.options.listItemClass
           : "";
+        if (data[i].disabled) {
+          li.className += " disabled";
+        } else if (initialSelection === -1) {
+          initialSelection = i;
+        }
         li.dataset.index = i;
         li.innerHTML = this.options.renderItem(data[i], searchTerm);
-        li.onmouseenter = this.onItemMouseEnter.bind(this);
+        if (!data[i].disabled) {
+          li.onmouseenter = this.onItemMouseEnter.bind(this);
+          li.onmouseup = this.onItemClick.bind(this);
+          li.onmousedown = this.onItemMouseDown.bind(this);
+        } else {
+          li.onmouseenter = this.onDisabledItemMouseEnter.bind(this);
+        }
         li.dataset.denotationChar = mentionChar;
-        li.onclick = this.onItemClick.bind(this);
         this.mentionList.appendChild(
           attachDataValues(li, data[i], this.options.dataAttributes)
         );
       }
-      this.itemIndex = 0;
+      this.itemIndex = initialSelection;
       this.highlightItem();
       this.showMentionList();
     } else {
@@ -301,14 +388,41 @@ class Mention {
   }
 
   nextItem() {
-    this.itemIndex = (this.itemIndex + 1) % this.values.length;
+    var increment = 0;
+    var newIndex;
+
+    do {
+      increment++;
+      newIndex = (this.itemIndex + increment) % this.values.length;
+      var disabled = this.mentionList.childNodes[newIndex].dataset.disabled === "true";
+      if (increment === this.values.length + 1) {
+        //we've wrapped around w/o finding an enabled item
+        newIndex = -1;
+        break;
+      }
+    } while (disabled);
+
+    this.itemIndex = newIndex;
     this.suspendMouseEnter = true;
     this.highlightItem();
   }
 
   prevItem() {
-    this.itemIndex =
-      (this.itemIndex + this.values.length - 1) % this.values.length;
+    var decrement = 0;
+    var newIndex;
+
+    do {
+      decrement++;
+      newIndex = (this.itemIndex + this.values.length - decrement) % this.values.length;
+      var disabled = this.mentionList.childNodes[newIndex].dataset.disabled === "true";
+      if (decrement === this.values.length + 1) {
+        //we've wrapped around w/o finding an enabled item
+        newIndex = -1;
+        break;
+      }
+    } while (disabled);
+
+    this.itemIndex = newIndex;
     this.suspendMouseEnter = true;
     this.highlightItem();
   }
@@ -343,6 +457,14 @@ class Mention {
   }
 
   setMentionContainerPosition() {
+    if (this.options.positioningStrategy === "fixed") {
+      this.setMentionContainerPosition_Fixed();
+    } else {
+      this.setMentionContainerPosition_Normal();
+    }
+  }
+
+  setMentionContainerPosition_Normal() {
     const containerPos = this.quill.container.getBoundingClientRect();
     const mentionCharPos = this.quill.getBounds(this.mentionCharPos);
     const containerHeight = this.mentionContainer.offsetHeight;
@@ -421,7 +543,87 @@ class Mention {
 
     this.mentionContainer.style.top = `${topPos}px`;
     this.mentionContainer.style.left = `${leftPos}px`;
+    this.mentionContainer.style.visibility = "visible";
+  }
 
+  setMentionContainerPosition_Fixed() {
+    this.mentionContainer.style.position = "fixed";
+    this.mentionContainer.style.height = null;
+
+    const containerPos = this.quill.container.getBoundingClientRect();
+    const mentionCharPos = this.quill.getBounds(this.mentionCharPos);
+    const mentionCharPosAbsolute = {
+      left: containerPos.left + mentionCharPos.left,
+      top: containerPos.top + mentionCharPos.top,
+      width: 0,
+      height: mentionCharPos.height,
+    };
+
+    //Which rectangle should it be relative to
+    const relativeToPos = this.options.fixMentionsToQuill ? containerPos : mentionCharPosAbsolute;
+
+    let topPos = this.options.offsetTop;
+    let leftPos = this.options.offsetLeft;
+
+    // handle horizontal positioning
+    if (this.options.fixMentionsToQuill) {
+      const rightPos = relativeToPos.right;
+      this.mentionContainer.style.right = `${rightPos}px`;
+    } else {
+      leftPos += relativeToPos.left;
+
+      //if its off the righ edge, push it back
+      if (leftPos + this.mentionContainer.offsetWidth > document.documentElement.clientWidth) {
+        leftPos -= leftPos + this.mentionContainer.offsetWidth - document.documentElement.clientWidth;
+      }
+    }
+
+    const availableSpaceTop = relativeToPos.top;
+    const availableSpaceBottom = document.documentElement.clientHeight - (relativeToPos.top + relativeToPos.height);
+
+    const fitsBottom = this.mentionContainer.offsetHeight <= availableSpaceBottom;
+    const fitsTop = this.mentionContainer.offsetHeight <= availableSpaceTop;
+
+    var placement;
+
+    if (this.options.defaultMenuOrientation === "top" && fitsTop) {
+      placement = "top";
+    } else if (this.options.defaultMenuOrientation === "bottom" && fitsBottom) {
+      placement = "bottom";
+    } else {
+      //it doesnt fit either so put it where there's the most space
+      placement = availableSpaceBottom > availableSpaceTop ? "bottom" : "top";
+    }
+
+    if (placement === "bottom") {
+      topPos = relativeToPos.top + relativeToPos.height;
+      if (!fitsBottom) {
+        //shrink it to fit
+        //3 is a bit of a fudge factor so it doesnt touch the edge of the screen
+        this.mentionContainer.style.height = availableSpaceBottom - 3 + "px";
+      }
+
+      this.options.mentionContainerClass.split(" ").forEach((className) => {
+        this.mentionContainer.classList.add(`${className}-bottom`);
+        this.mentionContainer.classList.remove(`${className}-top`);
+      });
+    } else {
+      topPos = relativeToPos.top - this.mentionContainer.offsetHeight;
+      if (!fitsTop) {
+        //shrink it to fit
+        //3 is a bit of a fudge factor so it doesnt touch the edge of the screen
+        this.mentionContainer.style.height = availableSpaceTop - 3 + "px";
+        topPos = 3;
+      }
+
+      this.options.mentionContainerClass.split(" ").forEach((className) => {
+        this.mentionContainer.classList.add(`${className}-top`);
+        this.mentionContainer.classList.remove(`${className}-bottom`);
+      });
+    }
+
+    this.mentionContainer.style.top = `${topPos}px`;
+    this.mentionContainer.style.left = `${leftPos}px`;
     this.mentionContainer.style.visibility = "visible";
   }
 
@@ -446,25 +648,38 @@ class Mention {
     );
 
     if (
-      hasValidMentionCharIndex(
-        mentionCharIndex,
-        textBeforeCursor,
-        this.options.isolateCharacter
-      )
-    ) {
-      const mentionCharPos =
-        this.cursorPos - (textBeforeCursor.length - mentionCharIndex);
+        hasValidMentionCharIndex(
+          mentionCharIndex,
+          textBeforeCursor,
+          this.options.isolateCharacter
+        )
+      ) {
+      const mentionCharPos = this.cursorPos - (textBeforeCursor.length - mentionCharIndex);
       this.mentionCharPos = mentionCharPos;
       const textAfter = textBeforeCursor.substring(
         mentionCharIndex + mentionChar.length
       );
       if (
         textAfter.length >= this.options.minChars &&
-        hasValidChars(textAfter, this.options.allowedChars)
+        hasValidChars(textAfter, this.getAllowedCharsRegex(mentionChar))
       ) {
+        if (this.existingSourceExecutionToken) {
+          this.existingSourceExecutionToken.abandoned = true;
+        }
+        this.renderLoading();
+        var sourceRequestToken = {
+          abandoned: false,
+        };
+        this.existingSourceExecutionToken = sourceRequestToken;
         this.options.source(
           textAfter,
-          this.renderList.bind(this, mentionChar),
+          (data, searchTerm) => {
+            if (sourceRequestToken.abandoned) {
+              return;
+            }
+            this.existingSourceExecutionToken = null;
+            this.renderList(mentionChar, data, searchTerm);
+          },
           mentionChar
         );
       } else {
@@ -472,6 +687,14 @@ class Mention {
       }
     } else {
       this.hideMentionList();
+    }
+  }
+
+  getAllowedCharsRegex(denotationChar) {
+    if (this.options.allowedChars instanceof RegExp) {
+      return this.options.allowedChars;
+    } else {
+      return this.options.allowedChars(denotationChar);
     }
   }
 
@@ -487,6 +710,13 @@ class Mention {
     } else {
       this.hideMentionList();
     }
+  }
+
+  openMenu(denotationChar) {
+    var selection = this.quill.getSelection(true);
+    this.quill.insertText(selection.index, denotationChar);
+    this.quill.blur();
+    this.quill.focus();
   }
 }
 

@@ -5,6 +5,14 @@
   background-color: #ffffff;
   box-shadow: 0 2px 12px 0 rgba(30, 30, 30, 0.08);
   z-index: 9001;
+  overflow: auto;
+}
+
+.ql-mention-loading {
+  line-height: 44px;
+  padding: 0 20px;
+  vertical-align: middle;
+  font-size: 16px;
 }
 
 .ql-mention-list {
@@ -16,11 +24,14 @@
 
 .ql-mention-list-item {
   cursor: pointer;
-  height: 44px;
   line-height: 44px;
   font-size: 16px;
   padding: 0 20px;
   vertical-align: middle;
+}
+
+.ql-mention-list-item.disabled {
+  cursor: auto;
 }
 
 .ql-mention-list-item.selected {
