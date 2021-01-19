@@ -90,6 +90,15 @@ class Mention {
     quill.on("text-change", this.onTextChange.bind(this));
     quill.on("selection-change", this.onSelectionChange.bind(this));
 
+    //Pasting doesn't fire selection-change after the pasted text is 
+    //inserted, so here we manually trigger one
+    quill.container.addEventListener("paste", () => {
+      setTimeout(() => {
+        const range = quill.getSelection();
+        this.onSelectionChange(range);
+      });
+    });
+
     quill.keyboard.addBinding(
       {
         key: Keys.TAB
