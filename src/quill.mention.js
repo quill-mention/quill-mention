@@ -60,7 +60,8 @@ class Mention {
       listItemClass: "ql-mention-list-item",
       mentionContainerClass: "ql-mention-list-container",
       mentionListClass: "ql-mention-list",
-      spaceAfterInsert: true
+      spaceAfterInsert: true,
+      selectKeys: [Keys.ENTER]
     };
 
     Object.assign(this.options, options, {
@@ -109,12 +110,14 @@ class Mention {
       quill.keyboard.bindings[Keys.TAB].pop()
     );
 
-    quill.keyboard.addBinding(
-      {
-        key: Keys.ENTER
-      },
-      this.selectHandler.bind(this)
-    );
+    for (let selectKey of this.options.selectKeys) {
+      quill.keyboard.addBinding(
+        {
+          key: selectKey
+        },
+        this.selectHandler.bind(this)
+      );
+    }
     quill.keyboard.bindings[Keys.ENTER].unshift(
       quill.keyboard.bindings[Keys.ENTER].pop()
     );
