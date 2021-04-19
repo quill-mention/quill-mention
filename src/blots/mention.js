@@ -10,14 +10,28 @@ class MentionBlot extends Embed {
     denotationChar.innerHTML = data.denotationChar;
     node.appendChild(denotationChar);
     node.innerHTML += data.value;
+
+    node.style.color = 'cyan'; 
+
+    if (data.hasOwnProperty('style')) {
+      Object.keys(data.style).forEach(key => {
+        node.style[key] = data.style[key];
+      });
+    }
+
     return MentionBlot.setDataValues(node, data);
   }
 
   static setDataValues(element, data) {
     const domNode = element;
+    
+
     Object.keys(data).forEach(key => {
-      domNode.dataset[key] = data[key];
+      if (key != 'style') {
+        domNode.dataset[key] = data[key];  
+      }
     });
+
     return domNode;
   }
 
