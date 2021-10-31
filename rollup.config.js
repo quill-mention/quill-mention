@@ -1,5 +1,5 @@
 import localResolve from "rollup-plugin-local-resolve";
-import babel from "rollup-plugin-babel";
+import babel from "@rollup/plugin-babel";
 import postcss from "rollup-plugin-postcss";
 import { terser } from "rollup-plugin-terser";
 import pkg from "./package.json";
