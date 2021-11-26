@@ -9,6 +9,7 @@ class MentionBlot extends Embed {
     super(scroll, node);
     this.clickHandler = null;
     this.hoverHandler = null;
+    this.mounted = false;
   }
 
   static create(data) {
@@ -35,15 +36,20 @@ class MentionBlot extends Embed {
 
   attach() {
     super.attach();
-    this.clickHandler = this.getClickHandler();
-    this.hoverHandler = this.getHoverHandler();
+  
+    if (!this.mounted) {
+      this.mounted = true;
+      this.clickHandler = this.getClickHandler();
+      this.hoverHandler = this.getHoverHandler();
 
-    this.domNode.addEventListener("click", this.clickHandler, false);
-    this.domNode.addEventListener("mouseenter", this.hoverHandler, false);
+      this.domNode.addEventListener("click", this.clickHandler, false);
+      this.domNode.addEventListener("mouseenter", this.hoverHandler, false);
+    }
   }
 
   detach() {
     super.detach();
+    this.mounted = false;
     if (this.clickHandler) {
       this.domNode.removeEventListener("click", this.clickHandler);
       this.clickHandler = null;
