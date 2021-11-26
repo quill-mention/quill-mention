@@ -85,6 +85,12 @@ const quill = new Quill("#editor", {
 });
 ```
 
+### Hover and Click Example
+```javascript
+  window.addEventListener('mention-hovered', (event) => {console.log('hovered: ', event)}, false);
+  window.addEventListener('mention-clicked', (event) => {console.log('hovered: ', event)}, false);
+```
+
 ### Async example
 
 ```javascript
