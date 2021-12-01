@@ -3,9 +3,12 @@ import Quill from "quill";
 const Embed = Quill.import("blots/embed");
 
 class MentionBlot extends Embed {
+  hoverHandler;
+
   constructor(scroll, node) {
     super(scroll, node);
     this.clickHandler = null;
+    this.hoverHandler = null;
     this.mounted = false;
   }
 
@@ -33,19 +36,14 @@ class MentionBlot extends Embed {
 
   attach() {
     super.attach();
+  
     if (!this.mounted) {
       this.mounted = true;
-      this.clickHandler = e => {
-        const event = new Event("mention-clicked", {
-          bubbles: true,
-          cancelable: true
-        });
-        event.value = Object.assign({}, this.domNode.dataset);
-        event.event = e;
-        window.dispatchEvent(event);
-        e.preventDefault();
-      };
+      this.clickHandler = this.getClickHandler();
+      this.hoverHandler = this.getHoverHandler();
+
       this.domNode.addEventListener("click", this.clickHandler, false);
+      this.domNode.addEventListener("mouseenter", this.hoverHandler, false);
     }
   }
 
@@ -57,6 +55,34 @@ class MentionBlot extends Embed {
       this.clickHandler = null;
     }
   }
+
+  getClickHandler() {
+    return e => {
+      const event = this.buildEvent("mention-clicked", e);
+      window.dispatchEvent(event);
+      e.preventDefault();
+    };
+  }
+
+  getHoverHandler() {
+    return e => {
+      const event = this.buildEvent('mention-hovered', e);
+      window.dispatchEvent(event);
+      e.preventDefault();
+    }
+  }
+
+  buildEvent(name, e) {
+      const event = new Event(name, {
+        bubbles: true,
+        cancelable: true
+      });
+      event.value = Object.assign({}, this.domNode.dataset);
+      event.event = e;
+      return event;
+  }
+
+  hoverHandler;
 }
 
 MentionBlot.blotName = "mention";
