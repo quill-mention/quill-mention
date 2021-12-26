@@ -9,7 +9,7 @@ Quill Mention is a module to provide @mentions or #hashtag functionality for the
 
 ## Demo
 
-https://afry.github.io/quill-mention/
+https://quill-mention.github.io/quill-mention/
 
 ![Mention Demo GIF](docs/static/mention.gif "Mention Demo GIF")
 
@@ -193,7 +193,7 @@ Sometimes you may want to display a menu item that should not be selectable. The
 
 **Fredrik Sundqvist** ([MadSpindel](https://github.com/MadSpindel))
 
-See also the list of [contributors](https://github.com/afry/quill-mention/contributors) who participated in this project.
+See also the list of [contributors](https://github.com/quill-mention/quill-mention/contributors) who participated in this project.
 
 ## License
 
