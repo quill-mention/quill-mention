@@ -9,7 +9,7 @@ Quill Mention is a module to provide @mentions or #hashtag functionality for the
 
 ## Demo
 
-https://quill-mention.github.io/quill-mention/
+https://quill-mention.com/
 
 ![Mention Demo GIF](docs/static/mention.gif "Mention Demo GIF")
 
