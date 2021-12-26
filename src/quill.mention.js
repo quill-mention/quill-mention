@@ -53,6 +53,9 @@ class Mention {
       onOpen() {
         return true;
       },
+      onBeforeClose() {
+        return true;
+      },
       onClose() {
         return true;
       },
@@ -196,6 +199,7 @@ class Mention {
   }
 
   hideMentionList() {
+    this.options.onBeforeClose();
     this.mentionContainer.style.display = "none";
     this.mentionContainer.remove();
     this.setIsOpen(false);
