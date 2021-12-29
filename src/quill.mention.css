@@ -47,6 +47,7 @@
   padding: 3px 0;
   margin-right: 2px;
   user-select: all;
+  display: inline-block;
 }
 
 .mention > span {
