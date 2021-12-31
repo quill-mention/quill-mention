@@ -41,13 +41,12 @@
 
 .mention {
   height: 24px;
-  /* width: 65px; */
+  width: 65px;
   border-radius: 6px;
   background-color: #d3e1eb;
   padding: 3px 0;
   margin-right: 2px;
   user-select: all;
-  display: inline-block;
 }
 
 .mention > span {
