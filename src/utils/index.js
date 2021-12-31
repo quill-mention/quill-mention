@@ -34,11 +34,14 @@ function hasValidChars(text, allowedChars) {
   return allowedChars.test(text);
 }
 
+const HAS_EMBED_MARK = 'HAS_EMBED'
+
 function hasValidMentionCharIndex(mentionCharIndex, text, isolateChar) {
   if (mentionCharIndex > -1) {
     if (
       isolateChar &&
-      !(mentionCharIndex === 0 || !!text[mentionCharIndex - 1].match(/\s/g))
+      !(mentionCharIndex === 0 || !!text[mentionCharIndex - 1].match(/\s/g)) ||
+      (text.includes(HAS_EMBED_MARK))
     ) {
       return false;
     }
@@ -51,5 +54,6 @@ export {
   attachDataValues,
   getMentionCharIndex,
   hasValidChars,
-  hasValidMentionCharIndex
+  hasValidMentionCharIndex,
+  HAS_EMBED_MARK
 };

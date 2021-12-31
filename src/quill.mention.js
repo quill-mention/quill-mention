@@ -4,7 +4,8 @@ import {
   attachDataValues,
   getMentionCharIndex,
   hasValidChars,
-  hasValidMentionCharIndex
+  hasValidMentionCharIndex,
+  HAS_EMBED_MARK
 } from "./utils";
 import "./quill.mention.css";
 import "./blots/mention";
@@ -651,10 +652,23 @@ class Mention {
 
   getTextBeforeCursor() {
     const startPos = Math.max(0, this.cursorPos - this.options.maxChars);
+    const deltasBeforeCursorPos = this.quill.getContents(
+      startPos,
+      this.cursorPos - startPos
+    );
+    let hasEmbedInside = false // has embed item between mentionDenotationChars and maxChars
+    deltasBeforeCursorPos.forEach(deltaItem => {
+      if (typeof deltaItem.insert === 'object') {
+        hasEmbedInside = true
+      }
+    })
     const textBeforeCursorPos = this.quill.getText(
       startPos,
       this.cursorPos - startPos
     );
+    if (hasEmbedInside) {
+      textBeforeCursorPos += HAS_EMBED_MARK
+    }
     return textBeforeCursorPos;
   }
 
