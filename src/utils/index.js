@@ -10,10 +10,28 @@ function attachDataValues(element, data, dataAttributes) {
   return mention;
 }
 
-function getMentionCharIndex(text, mentionDenotationChars) {
+function getMentionCharIndex(text, mentionDenotationChars, isolateChar, allowInlineMentionChar) {
   return mentionDenotationChars.reduce(
     (prev, mentionChar) => {
-      const mentionCharIndex = text.lastIndexOf(mentionChar);
+      let mentionCharIndex;
+
+      if (isolateChar && allowInlineMentionChar) {
+        const regex = new RegExp(`^${mentionChar}|\\s${mentionChar}`, 'g');
+        const lastMatch = (text.match(regex) || []).pop();
+
+        if (!lastMatch) {
+          return {
+            mentionChar: prev.mentionChar,
+            mentionCharIndex: prev.mentionCharIndex
+          };
+        }
+
+        mentionCharIndex = lastMatch !== mentionChar
+          ? text.lastIndexOf(lastMatch) + lastMatch.length - mentionChar.length
+          : 0;
+      } else {
+        mentionCharIndex = text.lastIndexOf(mentionChar);
+      }
 
       if (mentionCharIndex > prev.mentionCharIndex) {
         return {
