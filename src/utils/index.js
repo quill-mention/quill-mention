@@ -47,8 +47,7 @@ function hasValidMentionCharIndex(mentionCharIndex, text, isolateChar, textPrefi
     ? text[mentionCharIndex - 1]
     : textPrefix;
 
-  return !mentionPrefix
-      || !!mentionPrefix.match(/\s/);
+  return !mentionPrefix || !!mentionPrefix.match(/\s/);
 }
 
 export {

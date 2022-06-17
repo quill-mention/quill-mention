@@ -674,13 +674,13 @@ class Mention {
     );
 
     if (
-        hasValidMentionCharIndex(
-          mentionCharIndex,
-          textBeforeCursor,
-          this.options.isolateCharacter,
-          textPrefix,
-        )
-      ) {
+      hasValidMentionCharIndex(
+        mentionCharIndex,
+        textBeforeCursor,
+        this.options.isolateCharacter,
+        textPrefix
+      )
+    ) {
       const mentionCharPos = this.cursorPos - (textBeforeCursor.length - mentionCharIndex);
       this.mentionCharPos = mentionCharPos;
       const textAfter = textBeforeCursor.substring(
