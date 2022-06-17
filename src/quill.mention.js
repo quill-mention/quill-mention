@@ -664,6 +664,10 @@ class Mention {
 
     this.cursorPos = range.index;
     const textBeforeCursor = this.getTextBeforeCursor();
+
+    const textOffset = Math.max(0, this.cursorPos - this.options.maxChars);
+    const textPrefix = textOffset ? this.quill.getText(textOffset - 1, textOffset) : '';
+
     const { mentionChar, mentionCharIndex } = getMentionCharIndex(
       textBeforeCursor,
       this.options.mentionDenotationChars
@@ -673,7 +677,8 @@ class Mention {
         hasValidMentionCharIndex(
           mentionCharIndex,
           textBeforeCursor,
-          this.options.isolateCharacter
+          this.options.isolateCharacter,
+          textPrefix,
         )
       ) {
       const mentionCharPos = this.cursorPos - (textBeforeCursor.length - mentionCharIndex);
