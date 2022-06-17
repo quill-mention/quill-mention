@@ -34,17 +34,20 @@ function hasValidChars(text, allowedChars) {
   return allowedChars.test(text);
 }
 
-function hasValidMentionCharIndex(mentionCharIndex, text, isolateChar) {
-  if (mentionCharIndex > -1) {
-    if (
-      isolateChar &&
-      !(mentionCharIndex === 0 || !!text[mentionCharIndex - 1].match(/\s/g))
-    ) {
-      return false;
-    }
+function hasValidMentionCharIndex(mentionCharIndex, text, isolateChar, textPrefix) {
+  if (mentionCharIndex === -1) {
+    return false;
+  }
+
+  if (!isolateChar) {
     return true;
   }
-  return false;
+
+  const mentionPrefix = mentionCharIndex
+    ? text[mentionCharIndex - 1]
+    : textPrefix;
+
+  return !mentionPrefix || !!mentionPrefix.match(/\s/);
 }
 
 export {
