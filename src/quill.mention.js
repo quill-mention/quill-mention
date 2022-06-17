@@ -2,6 +2,7 @@ import Quill from "quill";
 import Keys from "./constants";
 import {
   attachDataValues,
+  getAllowedCharsRegex,
   getMentionCharIndex,
   hasValidChars,
   hasValidMentionCharIndex
@@ -666,7 +667,8 @@ class Mention {
     const textBeforeCursor = this.getTextBeforeCursor();
     const { mentionChar, mentionCharIndex } = getMentionCharIndex(
       textBeforeCursor,
-      this.options.mentionDenotationChars
+      this.options.mentionDenotationChars,
+      this.options.isolateCharacter
     );
 
     if (
@@ -683,7 +685,7 @@ class Mention {
       );
       if (
         textAfter.length >= this.options.minChars &&
-        hasValidChars(textAfter, this.getAllowedCharsRegex(mentionChar))
+        hasValidChars(textAfter, getAllowedCharsRegex(this.options.allowedChars, mentionChar))
       ) {
         if (this.existingSourceExecutionToken) {
           this.existingSourceExecutionToken.abandoned = true;
@@ -715,14 +717,6 @@ class Mention {
         this.existingSourceExecutionToken.abandoned = true;
       }
       this.hideMentionList();
-    }
-  }
-
-  getAllowedCharsRegex(denotationChar) {
-    if (this.options.allowedChars instanceof RegExp) {
-      return this.options.allowedChars;
-    } else {
-      return this.options.allowedChars(denotationChar);
     }
   }
 

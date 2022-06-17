@@ -10,9 +10,34 @@ function attachDataValues(element, data, dataAttributes) {
   return mention;
 }
 
-function getMentionCharIndex(text, mentionDenotationChars) {
+function getAllowedCharsRegex(allowedChars, denotationChar) {
+  return allowedChars instanceof RegExp
+    ? allowedChars
+    : allowedChars(denotationChar);
+}
+
+function getMentionCharIndex(text, mentionDenotationChars, isolateChar) {
   return mentionDenotationChars.reduce(
     (prev, mentionChar) => {
+      let mentionCharIndex;
+
+      if (isolateChar) {
+        const regex = new RegExp(`^${mentionChar}|\\s${mentionChar}`, 'g');
+        const lastMatch = (text.match(regex) || []).pop();
+
+        if (!lastMatch) {
+          return {
+            mentionChar: prev.mentionChar,
+            mentionCharIndex: prev.mentionCharIndex
+          };
+        }
+
+        const lastMatchIndex = text.lastIndexOf(lastMatch);
+        mentionCharIndex = lastMatchIndex + (lastMatch.length - 1);
+        console.log(lastMatch, lastMatch.length, lastMatchIndex, mentionCharIndex, text)
+      } else {
+        mentionCharIndex = text.lastIndexOf(mentionChar);
+      }
       const mentionCharIndex = text.lastIndexOf(mentionChar);
 
       if (mentionCharIndex > prev.mentionCharIndex) {
@@ -49,6 +74,7 @@ function hasValidMentionCharIndex(mentionCharIndex, text, isolateChar) {
 
 export {
   attachDataValues,
+  getAllowedCharsRegex,
   getMentionCharIndex,
   hasValidChars,
   hasValidMentionCharIndex
