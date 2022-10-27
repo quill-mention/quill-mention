@@ -266,6 +266,12 @@ class Mention {
     }
     this.options.onSelect(data, (asyncData) => {
       this.insertItem(asyncData);
+    }, () => {
+      this.quill.deleteText(
+        this.mentionCharPos,
+        this.cursorPos - this.mentionCharPos,
+        Quill.sources.USER
+      );
     });
     this.hideMentionList();
   }
