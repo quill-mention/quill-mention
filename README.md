@@ -37,7 +37,7 @@ import "quill-mention";
 require("quill-mention");
 ```
 
-Importing quill-mention automagically adds it to Quill modules.
+Importing quill-mention automatically adds it to Quill modules.
 
 Now you only need to pass quill-mention config to quill.
 
