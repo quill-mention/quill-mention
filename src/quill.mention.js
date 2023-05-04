@@ -73,6 +73,13 @@ class Mention {
         : this.options.dataAttributes
     });
 
+    //Bind all option-functions so they have a reasonable context
+    for(let o in this.options) {
+      if (typeof this.options[o] === 'function') {
+        this.options[o] = this.options[o].bind(this);
+      }
+    }
+
     //create mention container
     this.mentionContainer = document.createElement("div");
     this.mentionContainer.className = this.options.mentionContainerClass
