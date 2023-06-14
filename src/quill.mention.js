@@ -33,8 +33,8 @@ class Mention {
       renderLoading() {
         return null;
       },
-      onSelect(item, insertItem) {
-        insertItem(item);
+      onSelect(item, insertItem, overriddenOptions = {}) {
+        insertItem(item, overriddenOptions);
       },
       mentionDenotationChars: ["@"],
       showDenotationChar: true,
@@ -271,18 +271,20 @@ class Mention {
     if (data.disabled) {
       return;
     }
-    this.options.onSelect(data, (asyncData) => {
-      this.insertItem(asyncData);
+    this.options.onSelect(data, (asyncData, overriddenOptions = {}) => {
+      this.insertItem(asyncData, false, overriddenOptions);
     });
     this.hideMentionList();
   }
 
-  insertItem(data, programmaticInsert) {
+  insertItem(data, programmaticInsert, overriddenOptions = {}) {
     const render = data;
     if (render === null) {
       return;
     }
-    if (!this.options.showDenotationChar) {
+    const options = {...this.options, ...overriddenOptions}
+
+    if (!options.showDenotationChar) {
       render.denotationChar = "";
     }
 
@@ -298,8 +300,8 @@ class Mention {
     } else {
       insertAtPos = this.cursorPos;
     }
-    this.quill.insertEmbed(insertAtPos, this.options.blotName, render, Quill.sources.USER);
-    if (this.options.spaceAfterInsert) {
+    this.quill.insertEmbed(insertAtPos, options.blotName, render, Quill.sources.USER);
+    if (options.spaceAfterInsert) {
       this.quill.insertText(insertAtPos + 1, " ", Quill.sources.USER);
       // setSelection here sets cursor position
       this.quill.setSelection(insertAtPos + 2, Quill.sources.USER);
