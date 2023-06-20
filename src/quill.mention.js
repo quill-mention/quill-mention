@@ -272,7 +272,7 @@ class Mention {
       return;
     }
     this.options.onSelect(data, (asyncData, overriddenOptions = {}) => {
-      this.insertItem(asyncData, false, overriddenOptions);
+      return this.insertItem(asyncData, overriddenOptions);
     });
     this.hideMentionList();
   }
@@ -300,7 +300,7 @@ class Mention {
     } else {
       insertAtPos = this.cursorPos;
     }
-    this.quill.insertEmbed(insertAtPos, options.blotName, render, Quill.sources.USER);
+    const delta = this.quill.insertEmbed(insertAtPos, options.blotName, render, Quill.sources.USER);
     if (options.spaceAfterInsert) {
       this.quill.insertText(insertAtPos + 1, " ", Quill.sources.USER);
       // setSelection here sets cursor position
@@ -309,6 +309,7 @@ class Mention {
       this.quill.setSelection(insertAtPos + 1, Quill.sources.USER);
     }
     this.hideMentionList();
+    return delta;
   }
 
   onItemMouseEnter(e) {
@@ -756,7 +757,5 @@ class Mention {
     this.quill.focus();
   }
 }
-
-Quill.register("modules/mention", Mention);
 
 export default Mention;
