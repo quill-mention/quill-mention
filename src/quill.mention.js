@@ -33,8 +33,8 @@ class Mention {
       renderLoading() {
         return null;
       },
-      onSelect(item, insertItem, overriddenOptions = {}) {
-        insertItem(item, overriddenOptions);
+      onSelect(item, insertItem) {
+        insertItem(item);
       },
       mentionDenotationChars: ["@"],
       showDenotationChar: true,
@@ -271,8 +271,8 @@ class Mention {
     if (data.disabled) {
       return;
     }
-    this.options.onSelect(data, (asyncData, overriddenOptions = {}) => {
-      return this.insertItem(asyncData, overriddenOptions);
+    this.options.onSelect(data, (asyncData, programmaticInsert = false, overriddenOptions = {}) => {
+      return this.insertItem(asyncData, programmaticInsert, overriddenOptions);
     });
     this.hideMentionList();
   }
