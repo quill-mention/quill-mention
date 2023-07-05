@@ -163,7 +163,7 @@ const quill = new Quill("#editor", {
 | `onOpen`                                      | `function`                                                   | Callback when mention dropdown is open.                      |
 | `onBeforeClose`                               | `function`                                                   | Callback before the DOM of mention dropdown is removed.      |
 | `onClose`                                     | `function`                                                   | Callback when mention dropdown is closed.                    |
-| `onSelect(item, insertItem, overriddenOptions)`                  | `function`                                                   | Callback for a selected item. When overriding this method, `insertItem` should be used to insert `item` to the editor. This makes async requests possible. Also you can override `blotName`, `showDenotationChar` and `spaceAfterInsert` options using `overriddenOptions` prop |
+| `onSelect(item, insertItem)`                  | `function`                                                   | Callback for a selected item. When overriding this method, `insertItem` should be used to insert `item` to the editor. This makes async requests possible.|
 | `linkTarget`                                  | `'_blank'`                                                   | Link target for mentions with a link                         |
 | `listItemClass`                               | `'ql-mention-list-item'`                                     | Style class to be used for list items (may be null)          |
 | `mentionContainerClass`                       | `'ql-mention-list-container'`                                | Style class to be used for the mention list container (may be null) |
@@ -175,11 +175,11 @@ const quill = new Quill("#editor", {
 
 ### Methods
 
-You may retrieve the module from Quill like `quill.getModule('mention')` then call one of the imperative methdos below.
+You may retrieve the module from Quill like `quill.getModule('mention')` then call one of the imperative methods below.
 
 | Method                                 | Example                                          | Description                                                 |
 | -------------------------------------- | ------------------------------------------------ | ----------------------------------------------------------- |
-| `insertItem(data, programmaticInsert)` | `insertItem({id:'123',value:'My Mention'},true)` | Inserts the given mention into the editor.                  |
+| `insertItem(data, programmaticInsert, overriddenOptions = {})` | `insertItem({id:'123',value:'My Mention'},true, {blotName: "new_blot"})` | Inserts the given mention into the editor.  Also you can override `blotName`, `showDenotationChar` and `spaceAfterInsert` options using `overriddenOptions` param |
 | `openMenu(denotationChar)`             | `openMenu('@')`                                  | Opens the mentions menu for the given denotation character. |
 
 ### Styling
