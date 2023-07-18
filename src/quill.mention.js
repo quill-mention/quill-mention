@@ -271,18 +271,20 @@ class Mention {
     if (data.disabled) {
       return;
     }
-    this.options.onSelect(data, (asyncData) => {
-      this.insertItem(asyncData);
+    this.options.onSelect(data, (asyncData, programmaticInsert = false, overriddenOptions = {}) => {
+      return this.insertItem(asyncData, programmaticInsert, overriddenOptions);
     });
     this.hideMentionList();
   }
 
-  insertItem(data, programmaticInsert) {
+  insertItem(data, programmaticInsert, overriddenOptions = {}) {
     const render = data;
     if (render === null) {
       return;
     }
-    if (!this.options.showDenotationChar) {
+    const options = {...this.options, ...overriddenOptions}
+
+    if (!options.showDenotationChar) {
       render.denotationChar = "";
     }
 
@@ -298,8 +300,8 @@ class Mention {
     } else {
       insertAtPos = this.cursorPos;
     }
-    this.quill.insertEmbed(insertAtPos, this.options.blotName, render, Quill.sources.USER);
-    if (this.options.spaceAfterInsert) {
+    const delta = this.quill.insertEmbed(insertAtPos, options.blotName, render, Quill.sources.USER);
+    if (options.spaceAfterInsert) {
       this.quill.insertText(insertAtPos + 1, " ", Quill.sources.USER);
       // setSelection here sets cursor position
       this.quill.setSelection(insertAtPos + 2, Quill.sources.USER);
@@ -307,6 +309,7 @@ class Mention {
       this.quill.setSelection(insertAtPos + 1, Quill.sources.USER);
     }
     this.hideMentionList();
+    return delta;
   }
 
   onItemMouseEnter(e) {

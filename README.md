@@ -158,7 +158,7 @@ const quill = new Quill("#editor", {
 | `fixMentionsToQuill`                          | `false`                                                      | When set to true, the mentions menu will be rendered above or below the quill container. Otherwise, the mentions menu will track the denotation character(s); |
 | `showDenotationChar`                          | `true`                                                       | Whether to show the used denotation character in the mention item or not |
 | `defaultMenuOrientation`                      | `'bottom'`                                                   | Options are `'bottom'` and `'top'`. Determines what the default orientation of the menu will be. Quill-mention will attempt to render the menu either above or below the editor. If `'top'` is provided as a value, and there is not enough space above the editor, the menu will be rendered below. Vice versa, if there is not enough space below the editor, and `'bottom'` is provided as a value (or no value is provided at all), the menu will be rendered above the editor. |
-| `blotName`                                    | `'mention'`                                                  | The name of the [Quill Blot](https://github.com/quilljs/parchment#blots) to be used for inserted mentions. A default implementation is provided named 'mention', which may be overidden with a custom blot. |
+| `blotName`                                    | `'mention'`                                                  | The name of the [Quill Blot](https://github.com/quilljs/parchment#blots) to be used for inserted mentions. A default implementation is provided named 'mention', which may be overridden with a custom blot. |
 | `dataAttributes`                              | `['id', 'value', 'denotationChar', 'link', 'target','disabled']` | A list of data values you wish to be passed from your list data to the html node. (`id, value, denotationChar, link, target` are included by default). |
 | `onOpen`                                      | `function`                                                   | Callback when mention dropdown is open.                      |
 | `onBeforeClose`                               | `function`                                                   | Callback before the DOM of mention dropdown is removed.      |
@@ -175,11 +175,11 @@ const quill = new Quill("#editor", {
 
 ### Methods
 
-You may retrieve the module from Quill like `quill.getModule('mention')` then call one of the imperative methdos below.
+You may retrieve the module from Quill like `quill.getModule('mention')` then call one of the imperative methods below.
 
 | Method                                 | Example                                          | Description                                                 |
 | -------------------------------------- | ------------------------------------------------ | ----------------------------------------------------------- |
-| `insertItem(data, programmaticInsert)` | `insertItem({id:'123',value:'My Mention'},true)` | Inserts the given mention into the editor.                  |
+| `insertItem(data, programmaticInsert, overriddenOptions = {})` | `insertItem({id:'123',value:'My Mention'},true, {blotName: "new_blot"})` | Inserts the given mention into the editor.  Also you can override `blotName`, `showDenotationChar` and `spaceAfterInsert` options using `overriddenOptions` param |
 | `openMenu(denotationChar)`             | `openMenu('@')`                                  | Opens the mentions menu for the given denotation character. |
 
 ### Styling
