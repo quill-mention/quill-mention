@@ -59,6 +59,7 @@ class Mention {
       onClose() {
         return true;
       },
+      onFindingMentionCharIndex: getMentionCharIndex,
       // Style options
       listItemClass: "ql-mention-list-item",
       mentionContainerClass: "ql-mention-list-container",
@@ -674,7 +675,7 @@ class Mention {
 
     this.cursorPos = range.index;
     const textBeforeCursor = this.getTextBeforeCursor();
-    const { mentionChar, mentionCharIndex } = getMentionCharIndex(
+    const { mentionChar, mentionCharIndex } = this.options.onFindingMentionCharIndex(
       textBeforeCursor,
       this.options.mentionDenotationChars
     );
