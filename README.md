@@ -122,6 +122,44 @@ const quill = new Quill("#editor", {
 });
 ```
 
+### Example that supports mentioning email addresses, e.g. @foo@example.com
+
+```javascript
+const quill = new Quill("#editor", {
+  modules: {
+    mention: {
+      allowedChars: /^[@\.\-A-Za-z\sÅÄÖåäö]*$/, // NOTE: this includes the mention char and other valid email chars "." and "-"
+      mentionDenotationChars: ["@"],
+      source: async function(searchTerm, renderList) {
+        // some source implementation
+      },
+      // Override how denotation char is parsed
+      // Only matches the first @ as denotation char, ignoring the @ in email addresses.
+      onFindingMentionCharIndex: function(text, mentionDenotationChars) {
+        return mentionDenotationChars.reduce(
+          (prev, mentionChar) => {
+            const mentionCharIndex = text.indexOf(mentionChar);
+
+            if (mentionCharIndex > prev.mentionCharIndex) {
+              return {
+                mentionChar,
+                mentionCharIndex
+              };
+            }
+
+            return {
+              mentionChar: prev.mentionChar,
+              mentionCharIndex: prev.mentionCharIndex
+            };
+          },
+          { mentionChar: null, mentionCharIndex: -1 }
+        );
+      }
+    }
+  }
+});
+```
+
 **Note**: if you whitelist quill formats via ["formats" option](https://quilljs.com/docs/configuration/#formats),
 you need to add the mention format (default: "mention") there. Another way quill-mention won't work.
 Here's an example with whitelisted formats:
@@ -155,6 +193,7 @@ const quill = new Quill("#editor", {
 | `offsetLeft`                                  | `0`                                                          | Additional left offset of the mention container position     |
 | `mentionDenotationChars`                      | `["@"]`                                                      | Specifies which characters will cause the mention autocomplete to open |
 | `isolateCharacter`                            | `false`                                                      | Whether or not the denotation character(s) should be isolated. For example, to avoid mentioning in an email. |
+| `onFindingMentionCharIndex`                   | `function`                                                   | A function that takes `(text: string, mentionDenotationChars: string[])` as parameters and returns `{mentionChar: string, mentionCharIndex: number}` to show where a denotation character is found in the text. When no denotation character is found then `mentionCharIndex` should be `-1`. |
 | `fixMentionsToQuill`                          | `false`                                                      | When set to true, the mentions menu will be rendered above or below the quill container. Otherwise, the mentions menu will track the denotation character(s); |
 | `showDenotationChar`                          | `true`                                                       | Whether to show the used denotation character in the mention item or not |
 | `defaultMenuOrientation`                      | `'bottom'`                                                   | Options are `'bottom'` and `'top'`. Determines what the default orientation of the menu will be. Quill-mention will attempt to render the menu either above or below the editor. If `'top'` is provided as a value, and there is not enough space above the editor, the menu will be rendered below. Vice versa, if there is not enough space below the editor, and `'bottom'` is provided as a value (or no value is provided at all), the menu will be rendered above the editor. |
