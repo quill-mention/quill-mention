@@ -44,6 +44,7 @@ class Mention {
       offsetTop: 2,
       offsetLeft: 0,
       isolateCharacter: false,
+      allowInlineMentionChar: false,
       fixMentionsToQuill: false,
       positioningStrategy: "normal",
       defaultMenuOrientation: "bottom",
@@ -680,7 +681,9 @@ class Mention {
 
     const { mentionChar, mentionCharIndex } = getMentionCharIndex(
       textBeforeCursor,
-      this.options.mentionDenotationChars
+      this.options.mentionDenotationChars,
+      this.options.isolateCharacter,
+      this.options.allowInlineMentionChar
     );
 
     if (
