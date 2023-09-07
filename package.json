@@ -1,6 +1,6 @@
 {
   "name": "quill-mention",
-  "version": "3.4.0",
+  "version": "3.4.1",
   "description": "@mentions for the Quill rich text editor",
   "homepage": "https://quill-mention.com/",
   "main": "dist/quill.mention.csj.js",
@@ -33,7 +33,7 @@
     "rollup-plugin-local-resolve": "^1.0.7",
     "rollup-plugin-postcss": "^4.0.0",
     "rollup-plugin-terser": "^7.0.2",
-    "serve": "^12.0.1"
+    "serve": "^14.2.1"
   },
   "scripts": {
     "start": "concurrently \"rollup -c -w\" \"serve docs\"",
