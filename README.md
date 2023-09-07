@@ -147,7 +147,7 @@ const quill = new Quill("#editor", {
 | Property                                      | Default                                                      | Description                                                  |
 | --------------------------------------------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
 | `source(searchTerm, renderList, mentionChar)` | `null`                                                       | Required callback function to handle the search term and connect it to a data source for matches. The data source can be a local source or an AJAX request. The callback should call `renderList(matches, searchTerm);` with matches of JSON Objects in an array to show the result for the user. The JSON Objects should have `id` and `value` but can also have other values to be used in `renderItem` for custom display. |
-| `renderItem(item, searchTerm)`                | `function`                                                   | A function that gives you control over how matches from source are displayed. You can use this function to highlight the search term or change the design with custom HTML. |
+| `renderItem(item, searchTerm)`                | `function`                                                   | A function that gives you control over how matches from source are displayed. You can use this function to highlight the search term or change the design with custom HTML. This function will need to return either a string possibly containing unsanitized user content, or a class implementing the [Node](https://developer.mozilla.org/en-US/docs/Web/API/Node) interface which will be treated as a sanitized DOM node. |
 | `allowedChars`                                | `[a-zA-Z0-9_]` (or `function`)                               | Allowed characters in search term triggering a search request using regular expressions.  Can be a function that takes the denotationChar and returns a regex. |
 | `minChars`                                    | `0`                                                          | Minimum number of characters after the @ symbol triggering a search request |
 | `maxChars`                                    | `31`                                                         | Maximum number of characters after the @ symbol triggering a search request |
@@ -171,7 +171,7 @@ const quill = new Quill("#editor", {
 | `mentionListClass`                            | `'ql-mention-list'`                                          | Style class to be used for the mention list (may be null)    |
 | `spaceAfterInsert`                            | `true`                                                       | Whether or not insert 1 space after mention block in text    |
 | `positioningStrategy`                         | `'absolute'`                                                 | Options are `'normal'` and `'fixed'`. When `'fixed'`, the menu will be appended to the body and use fixed positioning. Use this if the menu is clipped by a parent element that's using `overflow:hidden|scroll`. |
-| `renderLoading`                               | `function`                                                   | A function that returns the HTML for a loading message during async calls from `source`. The default functions returns `null` to prevent a loading message. |
+| `renderLoading`                               | `function`                                                   | A function that returns the HTML for a loading message during async calls from `source`. The function will need to return either a string possibly containing unsanitized user content, or a class implementing the [Node](https://developer.mozilla.org/en-US/docs/Web/API/Node) interface which will be treated as a sanitized DOM node. The default functions returns `null` to prevent a loading message. |
 | `selectKeys`                                  | `[13]`                                                       | An array of keyboard key codes that will trigger the select action for the mention dropdown. Default is ENTER key. See [this reference](http://gcctech.org/csc/javascript/javascript_keycodes.htm) for a list of numbers for each keyboard key. |
 
 ### Methods
@@ -187,9 +187,48 @@ You may retrieve the module from Quill like `quill.getModule('mention')` then ca
 
 To allow styling based on the menu orientation, a class is added depending on the orientation and the `mentionContainerClass` option. By default this will be `ql-mention-list-container-bottom` or `ql-mention-list-container-top`.
 
+#### Mention Blot Styling
+
+Mention blots can also be dynamically styled from data attributes, but requires
+implement a custom Quill blot. For example:
+
+```javascript
+const MentionBlot = Quill.import("blots/mention");
+
+class StyledMentionBlot extends MentionBlot {
+  static render(data) {
+    const element = document.createElement('span');
+    element.innerText = data.value;
+    element.style.color = data.color;
+    return element;
+  }
+}
+StyledMentionBlot.blotName = "styled-mention";
+
+Quill.register(StyledMentionBlot);
+```
+
+Then, when creating your Quill instance, use the following settings:
+
+```javascript
+const quill = new Quill('#editor', {
+  modules: {
+    mention: {
+      // ...
+      dataAttributes: ['id', 'value', 'denotationChar', 'link', 'target', 'disabled', 'color'],
+      blotName: 'styled-mention',
+    }
+  }
+});
+```
+
 ### Headers and Informational Items
 
 Sometimes you may want to display a menu item that should not be selectable. These items may be group headers, hint text, or even a message saying there were no matching results. To show items like these, add `disabled:true` to items passed to `renderList` from your `source` method. Disabled items are shown but not selectable with the mouse or keyboard. If you need to style the disabled items differently, you will need to override the `renderItem` method.
+
+### Upgrade Notes
+
+As of 4.0.0, HTML embedded in `value` will no longer be rendered, due to potential XSS issues. Instead, to adjust rendering of list items, you can return a class implementing the [Node](https://developer.mozilla.org/en-US/docs/Web/API/Node) interface which will be treated as a sanitized DOM node, and in order to customize blot rendering, you will need to create a [custom mention blot](https://github.com/quill-mention/quill-mention#mention-blot-styling)
 
 ## Authors
 
