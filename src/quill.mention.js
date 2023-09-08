@@ -4,7 +4,8 @@ import {
   attachDataValues,
   getMentionCharIndex,
   hasValidChars,
-  hasValidMentionCharIndex
+  hasValidMentionCharIndex,
+  setInnerContent,
 } from "./utils";
 import "./quill.mention.css";
 import "./blots/mention";
@@ -27,8 +28,8 @@ class Mention {
 
     this.options = {
       source: null,
-      renderItem(item) {
-        return `${item.value}`;
+      renderItem({ value }) {
+        return `${value}`;
       },
       renderLoading() {
         return null;
@@ -244,22 +245,6 @@ class Mention {
     }
   }
 
-  getItemData() {
-    const { link } = this.mentionList.childNodes[this.itemIndex].dataset;
-    const hasLinkValue = typeof link !== "undefined";
-    const itemTarget = this.mentionList.childNodes[this.itemIndex].dataset
-      .target;
-    if (hasLinkValue) {
-      this.mentionList.childNodes[
-        this.itemIndex
-      ].dataset.value = `<a href="${link}" target=${itemTarget ||
-        this.options.linkTarget}>${
-        this.mentionList.childNodes[this.itemIndex].dataset.value
-      }`;
-    }
-    return this.mentionList.childNodes[this.itemIndex].dataset;
-  }
-
   onContainerMouseMove() {
     this.suspendMouseEnter = false;
   }
@@ -268,7 +253,7 @@ class Mention {
     if (this.itemIndex === -1) {
       return;
     }
-    const data = this.getItemData();
+    const data = this.mentionList.childNodes[this.itemIndex].dataset;
     if (data.disabled) {
       return;
     }
@@ -365,7 +350,7 @@ class Mention {
     this.mentionList.innerHTML = "";
     var loadingDiv = document.createElement("div");
     loadingDiv.className = "ql-mention-loading";
-    loadingDiv.innerHTML = this.options.renderLoading();
+    setInnerContent(loadingDiv, this.options.renderLoading());
     this.mentionContainer.append(loadingDiv);
     this.showMentionList();
   }
@@ -382,7 +367,7 @@ class Mention {
       this.removeLoading();
 
       this.values = data;
-      this.mentionList.innerHTML = "";
+      this.mentionList.innerText = "";
 
       var initialSelection = -1;
 
@@ -399,7 +384,8 @@ class Mention {
           initialSelection = i;
         }
         li.dataset.index = i;
-        li.innerHTML = this.options.renderItem(data[i], searchTerm);
+        const renderedItem = this.options.renderItem(data[i], searchTerm);
+        setInnerContent(li, renderedItem);
         if (!data[i].disabled) {
           li.onmouseenter = this.onItemMouseEnter.bind(this);
           li.onmouseup = this.onItemClick.bind(this);
