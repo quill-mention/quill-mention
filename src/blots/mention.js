@@ -14,11 +14,18 @@ class MentionBlot extends Embed {
 
   static create(data) {
     const node = super.create();
+
     const denotationChar = document.createElement("span");
     denotationChar.className = "ql-mention-denotation-char";
-    denotationChar.innerHTML = data.denotationChar;
+    denotationChar.innerText = data.denotationChar;
     node.appendChild(denotationChar);
-    node.innerHTML += data.value;
+
+    if (typeof this.render === 'function') {
+      node.appendChild(this.render(data));
+    } else {
+      node.innerText += data.value;
+    }
+
     return MentionBlot.setDataValues(node, data);
   }
 
@@ -36,7 +43,7 @@ class MentionBlot extends Embed {
 
   attach() {
     super.attach();
-  
+
     if (!this.mounted) {
       this.mounted = true;
       this.clickHandler = this.getClickHandler();
@@ -89,4 +96,4 @@ MentionBlot.blotName = "mention";
 MentionBlot.tagName = "span";
 MentionBlot.className = "mention";
 
-Quill.register(MentionBlot);
+Quill.register("blots/mention", MentionBlot);

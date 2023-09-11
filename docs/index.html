@@ -47,7 +47,7 @@
 
     <br />
     <h2>Advanced Demo</h2>
-    <p>Asynchronous retrieval, disabled items (i.e. group headers), loading message, programmatic methods</p>
+    <p>Asynchronous retrieval, disabled items (i.e. group headers), loading message, programmatic methods, and custom blot rendering</p>
     <div id="editor2"></div>
     <div style="margin-top:5px">
       <button onclick="showMenu()">Show @ Menu</button>
@@ -61,6 +61,7 @@
     <!-- Include the Quill library -->
     <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
     <script src="quill.mention.min.js"></script>
+
     <!-- Initialize Quill editor -->
     <script>
       const atValues = [
@@ -86,15 +87,15 @@
       ];
 
       const advancedValues = [
-        { id: "1", value: "Manuel Neuer", team: "Bayern Munich" },
-        { id: "2", value: "Robert Lewandowski", team: "Bayern Munich" },
-        { id: "3", value: "Thomas Muller", team: "Bayern Munich" },
-        { id: "4", value: "Roman Burki", team: "Borussia Dortmund" },
-        { id: "5", value: "Jadon Sancho", team: "Borussia Dortmund" },
-        { id: "6", value: "Marco Reus", team: "Borussia Dortmund" },
-        { id: "7", value: "Alexander Nubel", team: "Schalke 04" },
-        { id: "8", value: "Bastian Oczipka", team: "Schalke 04" },
-        { id: "9", value: "Weston McKennie", team: "Schalke 04" }
+        { id: "1", value: "Manuel Neuer", team: "Bayern Munich", color: "green" },
+        { id: "2", value: "Robert Lewandowski", team: "Bayern Munich", color: "blue" },
+        { id: "3", value: "Thomas Muller", team: "Bayern Munich", color: "red" },
+        { id: "4", value: "Roman Burki", team: "Borussia Dortmund", color: "orange" },
+        { id: "5", value: "Jadon Sancho", team: "Borussia Dortmund", color: "black" },
+        { id: "6", value: "Marco Reus", team: "Borussia Dortmund", color: "yellow" },
+        { id: "7", value: "Alexander Nubel", team: "Schalke 04", color: "purple" },
+        { id: "8", value: "Bastian Oczipka", team: "Schalke 04", color: "indigo" },
+        { id: "9", value: "Weston McKennie", team: "Schalke 04", color: "violet" }
       ];
 
       var quill = new Quill("#editor", {
@@ -130,6 +131,20 @@
         }
       });
 
+      const MentionBlot = Quill.import("blots/mention");
+
+      class StyledMentionBlot extends MentionBlot {
+        static render(data) {
+          const element = document.createElement('span');
+          element.innerText = data.value;
+          element.style.color = data.color;
+          return element;
+        }
+      }
+      StyledMentionBlot.blotName = "styled-mention";
+
+      Quill.register(StyledMentionBlot);
+
       var quill2 = new Quill("#editor2", {
         placeholder: "Start by typing @ for mentions",
         modules: {
@@ -139,7 +154,10 @@
             positioningStrategy: "fixed",
             renderItem: (data) => {
               if (data.disabled) {
-                return `<div style="height:10px;line-height:10px;font-size:10px;background-color:#ccc;margin:0 -20px;padding:4px">${data.value}</div>`;
+                const div = document.createElement("div");
+                div.style = "height:10px;line-height:10px;font-size:10px;background-color:#ccc;margin:0 -20px;padding:4px";
+                div.innerText = data.value;
+                return div;
               }
               return data.value;
             },
@@ -178,6 +196,8 @@
                 renderList(matches, searchTerm);
               }, 1000);
             },
+            dataAttributes: ['id', 'value', 'denotationChar', 'link', 'target', 'disabled', 'color'],
+            blotName: 'styled-mention',
           },
         },
       });

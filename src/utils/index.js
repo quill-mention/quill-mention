@@ -10,6 +10,12 @@ function attachDataValues(element, data, dataAttributes) {
   return mention;
 }
 
+function setInnerContent (element, value) {
+  if (value === null) return;
+  if (typeof value === "object") element.appendChild(value);
+  else element.innerText = value;
+}
+
 function getMentionCharIndex(text, mentionDenotationChars, isolateChar, allowInlineMentionChar) {
   return mentionDenotationChars.reduce(
     (prev, mentionChar) => {
@@ -72,5 +78,6 @@ export {
   attachDataValues,
   getMentionCharIndex,
   hasValidChars,
-  hasValidMentionCharIndex
+  hasValidMentionCharIndex,
+  setInnerContent
 };
