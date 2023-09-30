@@ -9,19 +9,19 @@ export default [
     input: "src/quill.mention.js",
     output: [
       {
-        file: "docs/quill.mention.min.js",
+        file: "docs/quill.mention.js",
         format: "iife",
         name: "quillMention",
-        plugins: [terser()],
+        plugins: [], //[terser()]
         globals: {
           quill: "Quill"
         }
       },
       {
-        file: "dist/quill.mention.min.js",
+        file: "dist/quill.mention.js",
         format: "iife",
         name: "quillMention",
-        plugins: [terser()],
+        plugins: [], //[terser()]
         globals: {
           quill: "Quill"
         }
