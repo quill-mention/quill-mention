@@ -5,35 +5,35 @@ var quillMention = (function (Quill) {
 
   var Quill__default = /*#__PURE__*/_interopDefaultLegacy(Quill);
 
-  function ownKeys(object, enumerableOnly) {
-    var keys = Object.keys(object);
+  function ownKeys(e, r) {
+    var t = Object.keys(e);
     if (Object.getOwnPropertySymbols) {
-      var symbols = Object.getOwnPropertySymbols(object);
-      enumerableOnly && (symbols = symbols.filter(function (sym) {
-        return Object.getOwnPropertyDescriptor(object, sym).enumerable;
-      })), keys.push.apply(keys, symbols);
+      var o = Object.getOwnPropertySymbols(e);
+      r && (o = o.filter(function (r) {
+        return Object.getOwnPropertyDescriptor(e, r).enumerable;
+      })), t.push.apply(t, o);
     }
-    return keys;
+    return t;
   }
-  function _objectSpread2(target) {
-    for (var i = 1; i < arguments.length; i++) {
-      var source = null != arguments[i] ? arguments[i] : {};
-      i % 2 ? ownKeys(Object(source), !0).forEach(function (key) {
-        _defineProperty(target, key, source[key]);
-      }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) {
-        Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
+  function _objectSpread2(e) {
+    for (var r = 1; r < arguments.length; r++) {
+      var t = null != arguments[r] ? arguments[r] : {};
+      r % 2 ? ownKeys(Object(t), !0).forEach(function (r) {
+        _defineProperty(e, r, t[r]);
+      }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) {
+        Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r));
       });
     }
-    return target;
+    return e;
   }
-  function _typeof(obj) {
+  function _typeof(o) {
     "@babel/helpers - typeof";
 
-    return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) {
-      return typeof obj;
-    } : function (obj) {
-      return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
-    }, _typeof(obj);
+    return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) {
+      return typeof o;
+    } : function (o) {
+      return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o;
+    }, _typeof(o);
   }
   function _classCallCheck(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
@@ -176,70 +176,6 @@ var quillMention = (function (Quill) {
     }
     return _get.apply(this, arguments);
   }
-  function _unsupportedIterableToArray(o, minLen) {
-    if (!o) return;
-    if (typeof o === "string") return _arrayLikeToArray(o, minLen);
-    var n = Object.prototype.toString.call(o).slice(8, -1);
-    if (n === "Object" && o.constructor) n = o.constructor.name;
-    if (n === "Map" || n === "Set") return Array.from(o);
-    if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen);
-  }
-  function _arrayLikeToArray(arr, len) {
-    if (len == null || len > arr.length) len = arr.length;
-    for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i];
-    return arr2;
-  }
-  function _createForOfIteratorHelper(o, allowArrayLike) {
-    var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];
-    if (!it) {
-      if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {
-        if (it) o = it;
-        var i = 0;
-        var F = function () {};
-        return {
-          s: F,
-          n: function () {
-            if (i >= o.length) return {
-              done: true
-            };
-            return {
-              done: false,
-              value: o[i++]
-            };
-          },
-          e: function (e) {
-            throw e;
-          },
-          f: F
-        };
-      }
-      throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
-    }
-    var normalCompletion = true,
-      didErr = false,
-      err;
-    return {
-      s: function () {
-        it = it.call(o);
-      },
-      n: function () {
-        var step = it.next();
-        normalCompletion = step.done;
-        return step;
-      },
-      e: function (e) {
-        didErr = true;
-        err = e;
-      },
-      f: function () {
-        try {
-          if (!normalCompletion && it.return != null) it.return();
-        } finally {
-          if (didErr) throw err;
-        }
-      }
-    };
-  }
   function _toPrimitive(input, hint) {
     if (typeof input !== "object" || input === null) return input;
     var prim = input[Symbol.toPrimitive];
@@ -256,11 +192,11 @@ var quillMention = (function (Quill) {
   }
 
   var Keys = {
-    TAB: 9,
-    ENTER: 13,
-    ESCAPE: 27,
-    UP: 38,
-    DOWN: 40
+    TAB: 'Tab',
+    ENTER: 'Enter',
+    ESCAPE: 'Escape',
+    UP: 'ArrowUp',
+    DOWN: 'ArrowDown'
   };
 
   function attachDataValues(element, data, dataAttributes) {
@@ -456,7 +392,7 @@ var quillMention = (function (Quill) {
         onSelect: function onSelect(item, insertItem) {
           insertItem(item);
         },
-        mentionDenotationChars: ["@"],
+        mentionDenotationChars: ['@'],
         showDenotationChar: true,
         allowedChars: /^[a-zA-Z0-9_]*$/,
         minChars: 0,
@@ -466,11 +402,11 @@ var quillMention = (function (Quill) {
         isolateCharacter: false,
         allowInlineMentionChar: false,
         fixMentionsToQuill: false,
-        positioningStrategy: "normal",
-        defaultMenuOrientation: "bottom",
-        blotName: "mention",
-        dataAttributes: ["id", "value", "denotationChar", "link", "target", "disabled"],
-        linkTarget: "_blank",
+        positioningStrategy: 'normal',
+        defaultMenuOrientation: 'bottom',
+        blotName: 'mention',
+        dataAttributes: ['id', 'value', 'denotationChar', 'link', 'target', 'disabled'],
+        linkTarget: '_blank',
         onOpen: function onOpen() {
           return true;
         },
@@ -481,9 +417,9 @@ var quillMention = (function (Quill) {
           return true;
         },
         // Style options
-        listItemClass: "ql-mention-list-item",
-        mentionContainerClass: "ql-mention-list-container",
-        mentionListClass: "ql-mention-list",
+        listItemClass: 'ql-mention-list-item',
+        mentionContainerClass: 'ql-mention-list-container',
+        mentionListClass: 'ql-mention-list',
         spaceAfterInsert: true,
         selectKeys: [Keys.ENTER]
       };
@@ -499,24 +435,24 @@ var quillMention = (function (Quill) {
       }
 
       //create mention container
-      this.mentionContainer = document.createElement("div");
-      this.mentionContainer.className = this.options.mentionContainerClass ? this.options.mentionContainerClass : "";
-      this.mentionContainer.style.cssText = "display: none; position: absolute;";
+      this.mentionContainer = document.createElement('div');
+      this.mentionContainer.className = this.options.mentionContainerClass ? this.options.mentionContainerClass : '';
+      this.mentionContainer.style.cssText = 'display: none; position: absolute;';
       this.mentionContainer.onmousemove = this.onContainerMouseMove.bind(this);
       if (this.options.fixMentionsToQuill) {
-        this.mentionContainer.style.width = "auto";
+        this.mentionContainer.style.width = 'auto';
       }
-      this.mentionList = document.createElement("ul");
+      this.mentionList = document.createElement('ul');
       this.mentionList.id = 'quill-mention-list';
       quill.root.setAttribute('aria-owns', 'quill-mention-list');
-      this.mentionList.className = this.options.mentionListClass ? this.options.mentionListClass : "";
+      this.mentionList.className = this.options.mentionListClass ? this.options.mentionListClass : '';
       this.mentionContainer.appendChild(this.mentionList);
-      quill.on("text-change", this.onTextChange.bind(this));
-      quill.on("selection-change", this.onSelectionChange.bind(this));
+      quill.on('text-change', this.onTextChange.bind(this));
+      quill.on('selection-change', this.onSelectionChange.bind(this));
 
       //Pasting doesn't fire selection-change after the pasted text is
       //inserted, so here we manually trigger one
-      quill.container.addEventListener("paste", function () {
+      quill.container.addEventListener('paste', function () {
         setTimeout(function () {
           var range = quill.getSelection();
           _this.onSelectionChange(range);
@@ -526,20 +462,9 @@ var quillMention = (function (Quill) {
         key: Keys.TAB
       }, this.selectHandler.bind(this));
       quill.keyboard.bindings[Keys.TAB].unshift(quill.keyboard.bindings[Keys.TAB].pop());
-      var _iterator = _createForOfIteratorHelper(this.options.selectKeys),
-        _step;
-      try {
-        for (_iterator.s(); !(_step = _iterator.n()).done;) {
-          var selectKey = _step.value;
-          quill.keyboard.addBinding({
-            key: selectKey
-          }, this.selectHandler.bind(this));
-        }
-      } catch (err) {
-        _iterator.e(err);
-      } finally {
-        _iterator.f();
-      }
+      quill.keyboard.addBinding({
+        key: Keys.ENTER
+      }, this.selectHandler.bind(this));
       quill.keyboard.bindings[Keys.ENTER].unshift(quill.keyboard.bindings[Keys.ENTER].pop());
       quill.keyboard.addBinding({
         key: Keys.ESCAPE
@@ -593,13 +518,13 @@ var quillMention = (function (Quill) {
     }, {
       key: "showMentionList",
       value: function showMentionList() {
-        if (this.options.positioningStrategy === "fixed") {
+        if (this.options.positioningStrategy === 'fixed') {
           document.body.appendChild(this.mentionContainer);
         } else {
           this.quill.container.appendChild(this.mentionContainer);
         }
-        this.mentionContainer.style.visibility = "hidden";
-        this.mentionContainer.style.display = "";
+        this.mentionContainer.style.visibility = 'hidden';
+        this.mentionContainer.style.display = '';
         this.mentionContainer.scrollTop = 0;
         this.setMentionContainerPosition();
         this.setIsOpen(true);
@@ -608,7 +533,7 @@ var quillMention = (function (Quill) {
       key: "hideMentionList",
       value: function hideMentionList() {
         this.options.onBeforeClose();
-        this.mentionContainer.style.display = "none";
+        this.mentionContainer.style.display = 'none';
         this.mentionContainer.remove();
         this.setIsOpen(false);
         this.quill.root.removeAttribute('aria-activedescendant');
@@ -618,12 +543,12 @@ var quillMention = (function (Quill) {
       value: function highlightItem() {
         var scrollItemInView = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
         for (var i = 0; i < this.mentionList.childNodes.length; i += 1) {
-          this.mentionList.childNodes[i].classList.remove("selected");
+          this.mentionList.childNodes[i].classList.remove('selected');
         }
-        if (this.itemIndex === -1 || this.mentionList.childNodes[this.itemIndex].dataset.disabled === "true") {
+        if (this.itemIndex === -1 || this.mentionList.childNodes[this.itemIndex].dataset.disabled === 'true') {
           return;
         }
-        this.mentionList.childNodes[this.itemIndex].classList.add("selected");
+        this.mentionList.childNodes[this.itemIndex].classList.add('selected');
         this.quill.root.setAttribute('aria-activedescendant', this.mentionList.childNodes[this.itemIndex].id);
         if (scrollItemInView) {
           var itemHeight = this.mentionList.childNodes[this.itemIndex].offsetHeight;
@@ -672,7 +597,7 @@ var quillMention = (function (Quill) {
         }
         var options = _objectSpread2(_objectSpread2({}, this.options), overriddenOptions);
         if (!options.showDenotationChar) {
-          render.denotationChar = "";
+          render.denotationChar = '';
         }
         var insertAtPos;
         if (!programmaticInsert) {
@@ -683,7 +608,7 @@ var quillMention = (function (Quill) {
         }
         var delta = this.quill.insertEmbed(insertAtPos, options.blotName, render, Quill__default["default"].sources.USER);
         if (options.spaceAfterInsert) {
-          this.quill.insertText(insertAtPos + 1, " ", Quill__default["default"].sources.USER);
+          this.quill.insertText(insertAtPos + 1, ' ', Quill__default["default"].sources.USER);
           // setSelection here sets cursor position
           this.quill.setSelection(insertAtPos + 2, Quill__default["default"].sources.USER);
         } else {
@@ -738,13 +663,13 @@ var quillMention = (function (Quill) {
         if (!renderedLoading) {
           return;
         }
-        if (this.mentionContainer.getElementsByClassName("ql-mention-loading").length > 0) {
+        if (this.mentionContainer.getElementsByClassName('ql-mention-loading').length > 0) {
           this.showMentionList();
           return;
         }
-        this.mentionList.innerHTML = "";
-        var loadingDiv = document.createElement("div");
-        loadingDiv.className = "ql-mention-loading";
+        this.mentionList.innerHTML = '';
+        var loadingDiv = document.createElement('div');
+        loadingDiv.className = 'ql-mention-loading';
         setInnerContent(loadingDiv, this.options.renderLoading());
         this.mentionContainer.append(loadingDiv);
         this.showMentionList();
@@ -752,7 +677,7 @@ var quillMention = (function (Quill) {
     }, {
       key: "removeLoading",
       value: function removeLoading() {
-        var loadingDiv = this.mentionContainer.getElementsByClassName("ql-mention-loading");
+        var loadingDiv = this.mentionContainer.getElementsByClassName('ql-mention-loading');
         if (loadingDiv.length > 0) {
           loadingDiv[0].remove();
         }
@@ -763,18 +688,16 @@ var quillMention = (function (Quill) {
         if (data && data.length > 0) {
           this.removeLoading();
           this.values = data;
-          this.mentionList.innerText = "";
+          this.mentionList.innerText = '';
           var initialSelection = -1;
           for (var i = 0; i < data.length; i += 1) {
-            var li = document.createElement("li");
+            var li = document.createElement('li');
             li.id = 'quill-mention-item-' + i;
-            li.className = this.options.listItemClass ? this.options.listItemClass : "";
+            li.className = this.options.listItemClass ? this.options.listItemClass : '';
             if (data[i].disabled) {
-              li.className += " disabled";
+              li.className += ' disabled';
               li.setAttribute('aria-hidden', 'true');
-            } else if (initialSelection === -1) {
-              initialSelection = i;
-            }
+            } else if (initialSelection === -1) initialSelection = i;
             li.dataset.index = i;
             var renderedItem = this.options.renderItem(data[i], searchTerm);
             setInnerContent(li, renderedItem);
@@ -782,18 +705,14 @@ var quillMention = (function (Quill) {
               li.onmouseenter = this.onItemMouseEnter.bind(this);
               li.onmouseup = this.onItemClick.bind(this);
               li.onmousedown = this.onItemMouseDown.bind(this);
-            } else {
-              li.onmouseenter = this.onDisabledItemMouseEnter.bind(this);
-            }
+            } else li.onmouseenter = this.onDisabledItemMouseEnter.bind(this);
             li.dataset.denotationChar = mentionChar;
             this.mentionList.appendChild(attachDataValues(li, data[i], this.options.dataAttributes));
           }
           this.itemIndex = initialSelection;
           this.highlightItem();
           this.showMentionList();
-        } else {
-          this.hideMentionList();
-        }
+        } else this.hideMentionList();
       }
     }, {
       key: "nextItem",
@@ -803,7 +722,7 @@ var quillMention = (function (Quill) {
         do {
           increment++;
           newIndex = (this.itemIndex + increment) % this.values.length;
-          var disabled = this.mentionList.childNodes[newIndex].dataset.disabled === "true";
+          var disabled = this.mentionList.childNodes[newIndex].dataset.disabled === 'true';
           if (increment === this.values.length + 1) {
             //we've wrapped around w/o finding an enabled item
             newIndex = -1;
@@ -822,7 +741,7 @@ var quillMention = (function (Quill) {
         do {
           decrement++;
           newIndex = (this.itemIndex + this.values.length - decrement) % this.values.length;
-          var disabled = this.mentionList.childNodes[newIndex].dataset.disabled === "true";
+          var disabled = this.mentionList.childNodes[newIndex].dataset.disabled === 'true';
           if (decrement === this.values.length + 1) {
             //we've wrapped around w/o finding an enabled item
             newIndex = -1;
@@ -842,9 +761,7 @@ var quillMention = (function (Quill) {
     }, {
       key: "containerRightIsNotVisible",
       value: function containerRightIsNotVisible(leftPos, containerPos) {
-        if (this.options.fixMentionsToQuill) {
-          return false;
-        }
+        if (this.options.fixMentionsToQuill) return false;
         var rightPos = leftPos + this.mentionContainer.offsetWidth + containerPos.left;
         var browserWidth = window.pageXOffset + document.documentElement.clientWidth;
         return rightPos > browserWidth;
@@ -853,22 +770,14 @@ var quillMention = (function (Quill) {
       key: "setIsOpen",
       value: function setIsOpen(isOpen) {
         if (this.isOpen !== isOpen) {
-          if (isOpen) {
-            this.options.onOpen();
-          } else {
-            this.options.onClose();
-          }
+          if (isOpen) this.options.onOpen();else this.options.onClose();
           this.isOpen = isOpen;
         }
       }
     }, {
       key: "setMentionContainerPosition",
       value: function setMentionContainerPosition() {
-        if (this.options.positioningStrategy === "fixed") {
-          this.setMentionContainerPosition_Fixed();
-        } else {
-          this.setMentionContainerPosition_Normal();
-        }
+        if (this.options.positioningStrategy === 'fixed') this.setMentionContainerPosition_Fixed();else this.setMentionContainerPosition_Normal();
       }
     }, {
       key: "setMentionContainerPosition_Normal",
@@ -884,9 +793,7 @@ var quillMention = (function (Quill) {
         if (this.options.fixMentionsToQuill) {
           var rightPos = 0;
           this.mentionContainer.style.right = "".concat(rightPos, "px");
-        } else {
-          leftPos += mentionCharPos.left;
-        }
+        } else leftPos += mentionCharPos.left;
         if (this.containerRightIsNotVisible(leftPos, containerPos)) {
           var containerWidth = this.mentionContainer.offsetWidth + this.options.offsetLeft;
           var quillWidth = containerPos.width;
@@ -894,22 +801,14 @@ var quillMention = (function (Quill) {
         }
 
         // handle vertical positioning
-        if (this.options.defaultMenuOrientation === "top") {
+        if (this.options.defaultMenuOrientation === 'top') {
           // Attempt to align the mention container with the top of the quill editor
-          if (this.options.fixMentionsToQuill) {
-            topPos = -1 * (containerHeight + this.options.offsetTop);
-          } else {
-            topPos = mentionCharPos.top - (containerHeight + this.options.offsetTop);
-          }
+          if (this.options.fixMentionsToQuill) topPos = -1 * (containerHeight + this.options.offsetTop);else topPos = mentionCharPos.top - (containerHeight + this.options.offsetTop);
 
           // default to bottom if the top is not visible
           if (topPos + containerPos.top <= 0) {
             var overMentionCharPos = this.options.offsetTop;
-            if (this.options.fixMentionsToQuill) {
-              overMentionCharPos += containerPos.height;
-            } else {
-              overMentionCharPos += mentionCharPos.bottom;
-            }
+            if (this.options.fixMentionsToQuill) overMentionCharPos += containerPos.height;else overMentionCharPos += mentionCharPos.bottom;
             topPos = overMentionCharPos;
           }
         } else {
@@ -942,13 +841,13 @@ var quillMention = (function (Quill) {
         }
         this.mentionContainer.style.top = "".concat(topPos, "px");
         this.mentionContainer.style.left = "".concat(leftPos, "px");
-        this.mentionContainer.style.visibility = "visible";
+        this.mentionContainer.style.visibility = 'visible';
       }
     }, {
       key: "setMentionContainerPosition_Fixed",
       value: function setMentionContainerPosition_Fixed() {
         var _this4 = this;
-        this.mentionContainer.style.position = "fixed";
+        this.mentionContainer.style.position = 'fixed';
         this.mentionContainer.style.height = null;
         var containerPos = this.quill.container.getBoundingClientRect();
         var mentionCharPos = this.quill.getBounds(this.mentionCharPos);
@@ -981,22 +880,22 @@ var quillMention = (function (Quill) {
         var fitsBottom = this.mentionContainer.offsetHeight <= availableSpaceBottom;
         var fitsTop = this.mentionContainer.offsetHeight <= availableSpaceTop;
         var placement;
-        if (this.options.defaultMenuOrientation === "top" && fitsTop) {
-          placement = "top";
-        } else if (this.options.defaultMenuOrientation === "bottom" && fitsBottom) {
-          placement = "bottom";
+        if (this.options.defaultMenuOrientation === 'top' && fitsTop) {
+          placement = 'top';
+        } else if (this.options.defaultMenuOrientation === 'bottom' && fitsBottom) {
+          placement = 'bottom';
         } else {
           //it doesnt fit either so put it where there's the most space
-          placement = availableSpaceBottom > availableSpaceTop ? "bottom" : "top";
+          placement = availableSpaceBottom > availableSpaceTop ? 'bottom' : 'top';
         }
-        if (placement === "bottom") {
+        if (placement === 'bottom') {
           topPos = relativeToPos.top + relativeToPos.height;
           if (!fitsBottom) {
             //shrink it to fit
             //3 is a bit of a fudge factor so it doesnt touch the edge of the screen
-            this.mentionContainer.style.height = availableSpaceBottom - 3 + "px";
+            this.mentionContainer.style.height = availableSpaceBottom - 3 + 'px';
           }
-          this.options.mentionContainerClass.split(" ").forEach(function (className) {
+          this.options.mentionContainerClass.split(' ').forEach(function (className) {
             _this4.mentionContainer.classList.add("".concat(className, "-bottom"));
             _this4.mentionContainer.classList.remove("".concat(className, "-top"));
           });
@@ -1005,17 +904,17 @@ var quillMention = (function (Quill) {
           if (!fitsTop) {
             //shrink it to fit
             //3 is a bit of a fudge factor so it doesnt touch the edge of the screen
-            this.mentionContainer.style.height = availableSpaceTop - 3 + "px";
+            this.mentionContainer.style.height = availableSpaceTop - 3 + 'px';
             topPos = 3;
           }
-          this.options.mentionContainerClass.split(" ").forEach(function (className) {
+          this.options.mentionContainerClass.split(' ').forEach(function (className) {
             _this4.mentionContainer.classList.add("".concat(className, "-top"));
             _this4.mentionContainer.classList.remove("".concat(className, "-bottom"));
           });
         }
         this.mentionContainer.style.top = "".concat(topPos, "px");
         this.mentionContainer.style.left = "".concat(leftPos, "px");
-        this.mentionContainer.style.visibility = "visible";
+        this.mentionContainer.style.visibility = 'visible';
       }
     }, {
       key: "getTextBeforeCursor",
@@ -1082,8 +981,8 @@ var quillMention = (function (Quill) {
     }, {
       key: "onTextChange",
       value: function onTextChange(delta, oldDelta, source) {
-        if (source === "user") {
-          this.onSomethingChange();
+        if (source === 'user') {
+          setTimeout(this.onSomethingChange.bind(this), 1);
         }
       }
     }, {
@@ -1106,7 +1005,7 @@ var quillMention = (function (Quill) {
     }]);
     return Mention;
   }();
-  Quill__default["default"].register("modules/mention", Mention);
+  Quill__default["default"].register('modules/mention', Mention);
 
   return Mention;
 
