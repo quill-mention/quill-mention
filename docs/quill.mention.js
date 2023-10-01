@@ -982,7 +982,7 @@ var quillMention = (function (Quill) {
       key: "onTextChange",
       value: function onTextChange(delta, oldDelta, source) {
         if (source === 'user') {
-          setTimeout(this.onSomethingChange.bind(this), 1);
+          setTimeout(this.onSomethingChange.bind(this), 50);
         }
       }
     }, {

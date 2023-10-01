@@ -794,7 +794,7 @@ class Mention {
 
 	onTextChange(delta, oldDelta, source) {
 		if (source === 'user') {
-			setTimeout(this.onSomethingChange.bind(this), 1);
+			setTimeout(this.onSomethingChange.bind(this), 50);
 		}
 	}
 
