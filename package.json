@@ -38,7 +38,8 @@
   "scripts": {
     "start": "concurrently \"rollup -c -w\" \"serve docs\"",
     "build": "rollup -c",
-    "test": "ava"
+    "lint": "prettier -w src/",
+    "test": "prettier -c src/ && ava"
   },
   "ava": {
     "require": [
