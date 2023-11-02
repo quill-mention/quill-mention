@@ -243,8 +243,8 @@ class Mention {
     if (scrollItemInView) {
       this.mentionList.childNodes[this.itemIndex].scrollIntoView({
         behaviour: "smooth",
-        block: "nearest"
-      })
+        block: "nearest",
+      });
     }
   }
 
