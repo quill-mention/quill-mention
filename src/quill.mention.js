@@ -125,10 +125,10 @@ class Mention {
       {
         key: Keys.TAB,
       },
-      this.selectHandler.bind(this)
+      this.selectHandler.bind(this),
     );
     quill.keyboard.bindings[Keys.TAB].unshift(
-      quill.keyboard.bindings[Keys.TAB].pop()
+      quill.keyboard.bindings[Keys.TAB].pop(),
     );
 
     for (let selectKey of this.options.selectKeys) {
@@ -136,32 +136,32 @@ class Mention {
         {
           key: selectKey,
         },
-        this.selectHandler.bind(this)
+        this.selectHandler.bind(this),
       );
     }
     quill.keyboard.bindings[Keys.ENTER].unshift(
-      quill.keyboard.bindings[Keys.ENTER].pop()
+      quill.keyboard.bindings[Keys.ENTER].pop(),
     );
 
     quill.keyboard.addBinding(
       {
         key: Keys.ESCAPE,
       },
-      this.escapeHandler.bind(this)
+      this.escapeHandler.bind(this),
     );
 
     quill.keyboard.addBinding(
       {
         key: Keys.UP,
       },
-      this.upHandler.bind(this)
+      this.upHandler.bind(this),
     );
 
     quill.keyboard.addBinding(
       {
         key: Keys.DOWN,
       },
-      this.downHandler.bind(this)
+      this.downHandler.bind(this),
     );
   }
 
@@ -237,7 +237,7 @@ class Mention {
     this.mentionList.childNodes[this.itemIndex].classList.add("selected");
     this.quill.root.setAttribute(
       "aria-activedescendant",
-      this.mentionList.childNodes[this.itemIndex].id
+      this.mentionList.childNodes[this.itemIndex].id,
     );
 
     if (scrollItemInView) {
@@ -266,9 +266,9 @@ class Mention {
         return this.insertItem(
           asyncData,
           programmaticInsert,
-          overriddenOptions
+          overriddenOptions,
         );
-      }
+      },
     );
     this.hideMentionList();
   }
@@ -291,7 +291,7 @@ class Mention {
       this.quill.deleteText(
         this.mentionCharPos,
         this.cursorPos - this.mentionCharPos,
-        Quill.sources.USER
+        Quill.sources.USER,
       );
     } else {
       insertAtPos = this.cursorPos;
@@ -300,7 +300,7 @@ class Mention {
       insertAtPos,
       options.blotName,
       render,
-      Quill.sources.USER
+      Quill.sources.USER,
     );
     if (options.spaceAfterInsert) {
       this.quill.insertText(insertAtPos + 1, " ", Quill.sources.USER);
@@ -414,7 +414,7 @@ class Mention {
         }
         li.dataset.denotationChar = mentionChar;
         this.mentionList.appendChild(
-          attachDataValues(li, data[i], this.options.dataAttributes)
+          attachDataValues(li, data[i], this.options.dataAttributes),
         );
       }
       this.itemIndex = initialSelection;
@@ -683,7 +683,7 @@ class Mention {
     const startPos = Math.max(0, this.cursorPos - this.options.maxChars);
     const textBeforeCursorPos = this.quill.getText(
       startPos,
-      this.cursorPos - startPos
+      this.cursorPos - startPos,
     );
     return textBeforeCursorPos;
   }
@@ -704,7 +704,7 @@ class Mention {
       textBeforeCursor,
       this.options.mentionDenotationChars,
       this.options.isolateCharacter,
-      this.options.allowInlineMentionChar
+      this.options.allowInlineMentionChar,
     );
 
     if (
@@ -712,14 +712,14 @@ class Mention {
         mentionCharIndex,
         textBeforeCursor,
         this.options.isolateCharacter,
-        textPrefix
+        textPrefix,
       )
     ) {
       const mentionCharPos =
         this.cursorPos - (textBeforeCursor.length - mentionCharIndex);
       this.mentionCharPos = mentionCharPos;
       const textAfter = textBeforeCursor.substring(
-        mentionCharIndex + mentionChar.length
+        mentionCharIndex + mentionChar.length,
       );
       if (
         textAfter.length >= this.options.minChars &&
@@ -742,7 +742,7 @@ class Mention {
             this.existingSourceExecutionToken = null;
             this.renderList(mentionChar, data, searchTerm);
           },
-          mentionChar
+          mentionChar,
         );
       } else {
         if (this.existingSourceExecutionToken) {

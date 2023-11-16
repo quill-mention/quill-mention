@@ -20,7 +20,7 @@ function getMentionCharIndex(
   text,
   mentionDenotationChars,
   isolateChar,
-  allowInlineMentionChar
+  allowInlineMentionChar,
 ) {
   return mentionDenotationChars.reduce(
     (prev, mentionChar) => {
@@ -58,7 +58,7 @@ function getMentionCharIndex(
         mentionCharIndex: prev.mentionCharIndex,
       };
     },
-    { mentionChar: null, mentionCharIndex: -1 }
+    { mentionChar: null, mentionCharIndex: -1 },
   );
 }
 
@@ -70,7 +70,7 @@ function hasValidMentionCharIndex(
   mentionCharIndex,
   text,
   isolateChar,
-  textPrefix
+  textPrefix,
 ) {
   if (mentionCharIndex === -1) {
     return false;
