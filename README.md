@@ -32,14 +32,23 @@ yarn add quill-mention
 ### Import package
 
 ```javascript
-import "quill-mention";
+import "quill-mention/autoregister";
 // or
-require("quill-mention");
+require("quill-mention/autoregister");
 ```
 
 Importing quill-mention automatically adds it to Quill modules.
 
 Now you only need to pass quill-mention config to quill.
+
+Or you can manually import module and register it
+
+```javascript
+import Quill from "quill";
+import {Mention, MentionBlot} from "quill-mention";
+
+Quill.register({ "blots/mention": MentionBlot, "modules/mention": Mention });
+```
 
 ### Example
 
@@ -170,7 +179,7 @@ const quill = new Quill("#editor", {
 | `mentionContainerClass`                       | `'ql-mention-list-container'`                                | Style class to be used for the mention list container (may be null) |
 | `mentionListClass`                            | `'ql-mention-list'`                                          | Style class to be used for the mention list (may be null)    |
 | `spaceAfterInsert`                            | `true`                                                       | Whether or not insert 1 space after mention block in text    |
-| `positioningStrategy`                         | `'absolute'`                                                 | Options are `'normal'` and `'fixed'`. When `'fixed'`, the menu will be appended to the body and use fixed positioning. Use this if the menu is clipped by a parent element that's using `overflow:hidden|scroll`. |
+| `positioningStrategy`                         | `'normal'`                                                 | Options are `'normal'` and `'fixed'`. When `'fixed'`, the menu will be appended to the body and use fixed positioning. Use this if the menu is clipped by a parent element that's using `overflow:hidden|scroll`. |
 | `renderLoading`                               | `function`                                                   | A function that returns the HTML for a loading message during async calls from `source`. The function will need to return either a string possibly containing unsanitized user content, or a class implementing the [Node](https://developer.mozilla.org/en-US/docs/Web/API/Node) interface which will be treated as a sanitized DOM node. The default functions returns `null` to prevent a loading message. |
 | `selectKeys`                                  | `[13]`                                                       | An array of keyboard key codes that will trigger the select action for the mention dropdown. Default is ENTER key. See [this reference](http://gcctech.org/csc/javascript/javascript_keycodes.htm) for a list of numbers for each keyboard key. |
 

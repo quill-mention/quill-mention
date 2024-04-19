@@ -3,13 +3,32 @@
   "version": "5.0.1",
   "description": "@mentions for the Quill rich text editor",
   "homepage": "https://quill-mention.com/",
-  "main": "dist/quill.mention.csj.js",
-  "module": "dist/quill.mention.esm.js",
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.mjs",
+  "typings": "dist/esm/index.d.ts",
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "types": "./dist/esm/index.d.ts",
+      "import": "./dist/esm/index.mjs",
+      "require": "./dist/cjs/index.js"
+    },
+    "./autoregister": {
+      "types": "./dist/esm/autoregister.d.ts",
+      "import": "./dist/esm/autoregister.mjs",
+      "require": "./dist/cjs/autoregister.js"
+    },
+    "./dist/quill.mention.min.css": {
+      "import": "./dist/quill.mention.min.css",
+      "require": "./dist/quill.mention.min.css"
+    }
+  },
   "repository": "https://github.com/quill-mention/quill-mention.git",
   "author": "Fredrik Sundqvist <fsundqvist@gmail.com>",
   "license": "MIT",
   "files": [
     "dist",
+    "src",
     "LICENSE",
     "README.md"
   ],
@@ -17,33 +36,36 @@
     "quill": "^2.0.1"
   },
   "devDependencies": {
-    "@ava/babel": "^2.0.0",
-    "@babel/core": "^7.16.0",
-    "@babel/plugin-transform-object-assign": "^7.10.1",
-    "@babel/preset-env": "^7.10.2",
-    "@babel/register": "^7.10.1",
-    "@rollup/plugin-babel": "^5.3.0",
-    "ava": "^5.3.1",
-    "concurrently": "^6.3.0",
-    "eslint": "^8.1.0",
-    "eslint-config-prettier": "^8.3.0",
-    "eslint-plugin-prettier": "^4.0.0",
-    "prettier": "2.4.1",
-    "rollup": "^2.58.3",
-    "rollup-plugin-local-resolve": "^1.0.7",
-    "rollup-plugin-postcss": "^4.0.0",
-    "rollup-plugin-terser": "^7.0.2",
-    "serve": "^14.2.1"
+    "@ava/typescript": "^4.1.0",
+    "@rollup/plugin-terser": "^0.4.4",
+    "@rollup/plugin-typescript": "^11.1.6",
+    "ava": "^6.1.2",
+    "concurrently": "^8.2.2",
+    "eslint": "^9.0.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-prettier": "^5.1.3",
+    "parchment": "^3.0.0",
+    "prettier": "3.2.5",
+    "rollup": "^4.14.3",
+    "rollup-plugin-postcss": "^4.0.2",
+    "serve": "^14.2.1",
+    "tslib": "^2.6.2",
+    "typescript": "^5.4.5"
   },
   "scripts": {
+    "clean": "rimraf dist",
     "start": "concurrently \"rollup -c -w\" \"serve docs\"",
     "build": "rollup -c",
     "lint": "prettier -w src/",
-    "test": "prettier -c src/ && ava"
+    "test": "npx tsc test/*.ts --outDir dist && ava"
   },
   "ava": {
-    "require": [
-      "@babel/register"
+    "typescript": {
+      "compile": false,
+      "rewritePaths": {}
+    },
+    "files": [
+      "dist/test/*.js"
     ]
   },
   "keywords": [
