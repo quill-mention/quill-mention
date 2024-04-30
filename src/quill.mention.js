@@ -94,8 +94,10 @@ class Mention {
 		this.mentionContainer.className = this.options.mentionContainerClass
 			? this.options.mentionContainerClass
 			: '';
-		this.mentionContainer.style.cssText = 'display: none; position: absolute;';
-		this.mentionContainer.onmousemove = this.onContainerMouseMove.bind(this);
+		this.mentionContainer.style.cssText =
+			'display: none; position: absolute;';
+		this.mentionContainer.onmousemove =
+			this.onContainerMouseMove.bind(this);
 
 		if (this.options.fixMentionsToQuill) {
 			this.mentionContainer.style.width = 'auto';
@@ -137,7 +139,7 @@ class Mention {
 		);
 		quill.keyboard.bindings[Keys.ENTER].unshift(
 			quill.keyboard.bindings[Keys.ENTER].pop()
-		); 
+		);
 
 		quill.keyboard.addBinding(
 			{
