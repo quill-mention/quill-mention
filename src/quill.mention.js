@@ -131,14 +131,10 @@ class Mention {
       quill.keyboard.bindings[Keys.TAB].pop()
     );
 
-    for (let selectKey of this.options.selectKeys) {
-      quill.keyboard.addBinding(
-        {
-          key: selectKey,
-        },
-        this.selectHandler.bind(this)
-      );
-    }
+    quill.keyboard.addBinding(
+      { key: Keys.ENTER },
+      this.selectHandler.bind(this)
+    );
     quill.keyboard.bindings[Keys.ENTER].unshift(
       quill.keyboard.bindings[Keys.ENTER].pop()
     );
@@ -241,10 +237,20 @@ class Mention {
     );
 
     if (scrollItemInView) {
-      this.mentionList.childNodes[this.itemIndex].scrollIntoView({
-        behaviour: "smooth",
-        block: "nearest",
-      });
+      const itemHeight =
+        this.mentionList.childNodes[this.itemIndex].offsetHeight;
+      const itemPos = this.mentionList.childNodes[this.itemIndex].offsetTop;
+      const containerTop = this.mentionContainer.scrollTop;
+      const containerBottom = containerTop + this.mentionContainer.offsetHeight;
+
+      if (itemPos < containerTop) {
+        // Scroll up if the item is above the top of the container
+        this.mentionContainer.scrollTop = itemPos;
+      } else if (itemPos > containerBottom - itemHeight) {
+        // scroll down if any part of the element is below the bottom of the container
+        this.mentionContainer.scrollTop +=
+          itemPos - containerBottom + itemHeight;
+      }
     }
   }
 
@@ -768,7 +774,7 @@ class Mention {
 
   onTextChange(delta, oldDelta, source) {
     if (source === "user") {
-      this.onSomethingChange();
+      setTimeout(this.onSomethingChange.bind(this), 50);
     }
   }
 
