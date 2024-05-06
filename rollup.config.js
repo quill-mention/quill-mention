@@ -25,6 +25,24 @@ export default [
         globals: {
           quill: "Quill"
         }
+      },
+      {
+        file: "docs/quill.mention.min.js",
+        format: "iife",
+        name: "quillMention",
+        plugins: [terser()],
+        globals: {
+          quill: "Quill"
+        }
+      },
+      {
+        file: "dist/quill.mention.min.js",
+        format: "iife",
+        name: "quillMention",
+        plugins: [terser()],
+        globals: {
+          quill: "Quill"
+        }
       }
     ],
     external: ["quill"],
