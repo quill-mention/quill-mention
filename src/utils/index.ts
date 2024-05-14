@@ -1,4 +1,12 @@
-function attachDataValues(element, data, dataAttributes) {
+function attachDataValues(
+  element: HTMLElement,
+  data: {
+    [key: string]: string | undefined;
+    id: string;
+    value: string;
+  },
+  dataAttributes: string[]
+) {
   const mention = element;
   Object.keys(data).forEach((key) => {
     if (dataAttributes.indexOf(key) > -1) {
@@ -10,18 +18,21 @@ function attachDataValues(element, data, dataAttributes) {
   return mention;
 }
 
-function setInnerContent(element, value) {
+function setInnerContent(
+  element: HTMLElement,
+  value: HTMLElement | string | null
+) {
   if (value === null) return;
   if (typeof value === "object") element.appendChild(value);
   else element.innerText = value;
 }
 
 function getMentionCharIndex(
-  text,
-  mentionDenotationChars,
-  isolateChar,
-  allowInlineMentionChar
-) {
+  text: string,
+  mentionDenotationChars: string[],
+  isolateChar: boolean,
+  allowInlineMentionChar: boolean
+): { mentionChar: string | null; mentionCharIndex: number } {
   return mentionDenotationChars.reduce(
     (prev, mentionChar) => {
       let mentionCharIndex;
@@ -58,19 +69,19 @@ function getMentionCharIndex(
         mentionCharIndex: prev.mentionCharIndex,
       };
     },
-    { mentionChar: null, mentionCharIndex: -1 }
+    { mentionChar: null as string | null, mentionCharIndex: -1 }
   );
 }
 
-function hasValidChars(text, allowedChars) {
+function hasValidChars(text: string, allowedChars: RegExp) {
   return allowedChars.test(text);
 }
 
 function hasValidMentionCharIndex(
-  mentionCharIndex,
-  text,
-  isolateChar,
-  textPrefix
+  mentionCharIndex: number,
+  text: string,
+  isolateChar: boolean,
+  textPrefix: string
 ) {
   if (mentionCharIndex === -1) {
     return false;
