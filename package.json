@@ -3,24 +3,21 @@
   "version": "6.0.0",
   "description": "@mentions for the Quill rich text editor",
   "homepage": "https://quill-mention.com/",
-  "main": "dist/cjs/index.js",
   "module": "dist/esm/index.mjs",
+  "type": "module",
   "typings": "dist/esm/index.d.ts",
   "exports": {
     "./package.json": "./package.json",
     ".": {
       "types": "./dist/esm/index.d.ts",
-      "import": "./dist/esm/index.mjs",
-      "require": "./dist/cjs/index.js"
+      "import": "./dist/esm/index.mjs"
     },
     "./autoregister": {
       "types": "./dist/esm/autoregister.d.ts",
-      "import": "./dist/esm/autoregister.mjs",
-      "require": "./dist/cjs/autoregister.js"
+      "import": "./dist/esm/autoregister.mjs"
     },
-    "./dist/quill.mention.min.css": {
-      "import": "./dist/quill.mention.min.css",
-      "require": "./dist/quill.mention.min.css"
+    "./dist/*.css": {
+      "import": "./dist/*.css"
     }
   },
   "repository": "https://github.com/quill-mention/quill-mention.git",
