@@ -35,21 +35,17 @@ export const iifeTSOptions = {
 
 /** @type {import("rollup").OutputOptions}*/
 export const esmOutput = {
-  dir: "dist/esm",
-  format: "es",
+  dir: "dist",
+  format: "esm",
   entryFileNames: "[name].mjs",
   preserveModules: true,
-  preserveModulesRoot: "src",
   sourcemap: true,
-  sourcemapPathTransform: (relativePath) => {
-    return relativePath.replace('../src', 'src');
-  },
 };
 
 /** @type {import("@rollup/plugin-typescript").RollupTypescriptOptions} */
 export const esmTSOptions = {
   compilerOptions: {
-    outDir: "dist/esm",
+    outDir: "dist",
     declaration: true,
     declarationMap: true,
   },

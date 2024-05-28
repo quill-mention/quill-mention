@@ -4,7 +4,7 @@
     "strict": true,
     "noImplicitAny": true,
     "esModuleInterop": true,
-    "sourceMap": false,
+    "sourceMap": true,
     "lib": ["es2017", "dom"],
     "downlevelIteration": true,
     "target": "es2020",
@@ -15,5 +15,5 @@
     "skipLibCheck": true,
     "strictPropertyInitialization": false
   },
-  "include": ["./src/**/*.ts"]
+  "include": ["./src/**/*"]
 }
