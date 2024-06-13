@@ -1,6 +1,5 @@
 {
   "compilerOptions": {
-    "sourceRoot": "../src/",
     "importHelpers": true,
     "strict": true,
     "noImplicitAny": true,
@@ -16,5 +15,5 @@
     "skipLibCheck": true,
     "strictPropertyInitialization": false
   },
-  "include": ["./src/**/*.ts"]
+  "include": ["./src/**/*"]
 }

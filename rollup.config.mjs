@@ -33,39 +33,19 @@ export const iifeTSOptions = {
   },
 };
 
-/** @type {import("rollup").OutputOptions} */
-export const cjsOutput = {
-  dir: "dist/cjs",
-  format: "cjs",
-  entryFileNames: "[name].js",
-  preserveModules: true,
-  preserveModulesRoot: "src",
-  sourcemap: true,
-};
-
-/** @type {import("@rollup/plugin-typescript").RollupTypescriptOptions} */
-export const cjsTSOptions = {
-  compilerOptions: {
-    outDir: "dist/cjs",
-    declaration: true, // declarations are handled by the ESM build
-    module: "CommonJS",
-  },
-};
-
 /** @type {import("rollup").OutputOptions}*/
 export const esmOutput = {
-  dir: "dist/esm",
-  format: "es",
+  dir: "dist",
+  format: "esm",
   entryFileNames: "[name].mjs",
   preserveModules: true,
-  preserveModulesRoot: "src",
   sourcemap: true,
 };
 
 /** @type {import("@rollup/plugin-typescript").RollupTypescriptOptions} */
 export const esmTSOptions = {
   compilerOptions: {
-    outDir: "dist/esm",
+    outDir: "dist",
     declaration: true,
     declarationMap: true,
   },
@@ -103,13 +83,6 @@ export default [
         minimize: true,
       }),
     ],
-  },
-  // CJS config
-  {
-    input,
-    output: cjsOutput,
-    plugins: [typescript(cjsTSOptions)],
-    external,
   },
   // ESM config
   {

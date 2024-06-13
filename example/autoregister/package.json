@@ -1,0 +1,24 @@
+{
+  "name": "example-esm",
+  "version": "1.0.0",
+  "main": "src/index.js",
+  "scripts": {
+    "build": "webpack --mode development",
+    "start": "http-server ./dist"
+  },
+  "dependencies": {
+    "quill": "^2.0.2",
+    "http-server": "^14.1.1",
+    "quill-mention": "file:../.."
+  },
+  "devDependencies": {
+    "webpack": "^5.39.1",
+    "webpack-cli": "^4.7.2",
+    "babel-loader": "^8.2.2",
+    "@babel/core": "^7.14.6",
+    "@babel/preset-env": "^7.14.7",
+    "html-webpack-plugin": "^5.3.1",
+    "css-loader": "^5.2.6",
+    "style-loader": "^2.0.0"
+  }
+}
