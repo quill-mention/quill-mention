@@ -1,6 +1,6 @@
 {
   "name": "quill-mention",
-  "version": "6.0.0",
+  "version": "6.0.1",
   "description": "@mentions for the Quill rich text editor",
   "homepage": "https://quill-mention.com/",
   "module": "dist/index.mjs",
