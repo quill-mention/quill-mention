@@ -10,14 +10,17 @@
     "./package.json": "./package.json",
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.mjs"
+      "import": "./dist/index.mjs",
+      "default": "./dist/index.mjs"
     },
     "./autoregister": {
       "types": "./dist/autoregister.d.ts",
-      "import": "./dist/autoregister.mjs"
+      "import": "./dist/autoregister.mjs",
+      "default": "./dist/autoregister.mjs"
     },
     "./dist/*.css": {
-      "import": "./dist/*.css"
+      "import": "./dist/*.css",
+      "default": "./dist/autoregister.mjs"
     }
   },
   "repository": "https://github.com/quill-mention/quill-mention.git",
