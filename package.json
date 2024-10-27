@@ -50,10 +50,10 @@
     "typescript": "^5.4.5"
   },
   "scripts": {
-    "clean": "rimraf dist",
-    "start": "concurrently \"rollup -c -w\" \"serve docs\"",
     "build": "rollup -c",
+    "clean": "rimraf dist",
     "lint": "prettier -w src/",
+    "start": "concurrently \"rollup -c -w\" \"serve docs\"",
     "test": "ava"
   },
   "ava": {
