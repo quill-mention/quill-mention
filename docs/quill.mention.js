@@ -66,6 +66,10 @@
                 this.domNode.removeEventListener("click", this.clickHandler);
                 this.clickHandler = undefined;
             }
+            if (this.hoverHandler) {
+                this.domNode.removeEventListener('mouseenter', this.hoverHandler);
+                this.hoverHandler = undefined;
+            }
         }
         getClickHandler() {
             return (e) => {
