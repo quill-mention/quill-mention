@@ -58,7 +58,7 @@ class MentionBlot extends Embed {
     if (typeof this.render === "function") {
       node.appendChild(this.render(data));
     } else {
-      node.innerText += data.value;
+      node.innerHTML += data.value;
     }
 
     return MentionBlot.setDataValues(node, data);
