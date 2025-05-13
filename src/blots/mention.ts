@@ -58,7 +58,10 @@ class MentionBlot extends Embed {
     if (typeof this.render === "function") {
       node.appendChild(this.render(data));
     } else {
-      node.innerText += data.value;
+      const mentionValue = document.createElement("span");
+      mentionValue.className = "ql-mention-value";
+      mentionValue.innerText = data.value;
+      node.appendChild(mentionValue);
     }
 
     return MentionBlot.setDataValues(node, data);
