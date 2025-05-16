@@ -30,7 +30,9 @@
     "dist",
     "src",
     "LICENSE",
-    "README.md"
+    "README.md",
+    "rollup.config.mjs",
+    "tsconfig.json"
   ],
   "dependencies": {
     "quill": "^2.0.2"
