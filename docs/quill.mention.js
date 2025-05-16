@@ -439,9 +439,7 @@
             for (let i = 0; i < this.mentionList.childNodes.length; i += 1) {
                 const element = this.mentionList.childNodes[i];
                 element.classList.add("disabled");
-                element.onmouseenter = null;
-                element.onmouseup = null;
-                element.onmousedown = null;
+                element.style.pointerEvents = "none";
             }
             this.mentionList.classList.add("loading");
         }
