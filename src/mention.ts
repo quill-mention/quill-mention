@@ -615,9 +615,6 @@ export class Mention extends Module<MentionOption> {
     if (this.itemIndex === -1) {
       return;
     }
-    const elementAtItemIndex = this.mentionList.childNodes[
-      this.itemIndex
-    ] as HTMLElement;
     for (let i = 0; i < this.mentionList.childNodes.length; i += 1) {
       const element = this.mentionList.childNodes[i] as HTMLElement;
       element.classList.add("disabled");

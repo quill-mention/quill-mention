@@ -35,7 +35,10 @@
                 node.appendChild(this.render(data));
             }
             else {
-                node.innerText += data.value;
+                const mentionValue = document.createElement("span");
+                mentionValue.className = "ql-mention-value";
+                mentionValue.innerText = data.value;
+                node.appendChild(mentionValue);
             }
             return MentionBlot.setDataValues(node, data);
         }
@@ -435,7 +438,6 @@
             if (this.itemIndex === -1) {
                 return;
             }
-            this.mentionList.childNodes[this.itemIndex];
             for (let i = 0; i < this.mentionList.childNodes.length; i += 1) {
                 const element = this.mentionList.childNodes[i];
                 element.classList.add("disabled");
