@@ -20,7 +20,7 @@
     },
     "./dist/*.css": {
       "import": "./dist/*.css",
-      "default": "./dist/autoregister.mjs"
+      "default": "./dist/*.css"
     }
   },
   "repository": "https://github.com/quill-mention/quill-mention.git",
