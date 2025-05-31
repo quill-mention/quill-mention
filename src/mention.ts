@@ -497,6 +497,17 @@ export class Mention extends Module<MentionOption> {
     overriddenOptions = {}
   ) {
     const render = data;
+
+    if (
+      programmaticInsert &&
+      (this.mentionCharPos === undefined || this.cursorPos === undefined)
+    ) {
+      const cursorPos =
+        this.quill.getSelection()?.index ?? this.quill.getLength() - 1;
+      this.mentionCharPos = cursorPos;
+      this.cursorPos = cursorPos;
+    }
+
     if (
       render === null ||
       this.mentionCharPos === undefined ||
