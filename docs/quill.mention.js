@@ -35,7 +35,10 @@
                 node.appendChild(this.render(data));
             }
             else {
-                node.innerText += data.value;
+                const mentionValue = document.createElement("span");
+                mentionValue.className = "ql-mention-value";
+                mentionValue.innerText = data.value;
+                node.appendChild(mentionValue);
             }
             return MentionBlot.setDataValues(node, data);
         }
@@ -344,6 +347,12 @@
         }
         insertItem(data, programmaticInsert, overriddenOptions = {}) {
             const render = data;
+            if (programmaticInsert &&
+                (this.mentionCharPos === undefined || this.cursorPos === undefined)) {
+                const cursorPos = this.quill.getSelection()?.index ?? this.quill.getLength() - 1;
+                this.mentionCharPos = cursorPos;
+                this.cursorPos = cursorPos;
+            }
             if (render === null ||
                 this.mentionCharPos === undefined ||
                 this.cursorPos === undefined) {
